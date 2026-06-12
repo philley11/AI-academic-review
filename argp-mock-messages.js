@@ -1,4 +1,4 @@
-/* ARGP Demo — 消息中心统一 Mock 数据 */
+﻿/* ARGP Demo — 消息中心统一 Mock 数据 */
 (function () {
   var CATEGORIES = {
     sys: {
@@ -41,7 +41,7 @@
       category: 'flow',
       tag: '流程通知',
       title: '答辩安排通知 · 联邦学习隐私保护',
-      desc: '2025-03-22 14:30 · 第三会议室，请提前准备答辩材料。',
+      desc: '2026-03-22 14:30 · 第三会议室，请提前准备答辩材料。',
       time: '今天',
       unread: true,
       roles: ['student'],
@@ -60,11 +60,23 @@
       href: 'index.html#mentor'
     },
     {
+      id: 'flow-expert-invite',
+      category: 'flow',
+      tag: '评审邀请',
+      title: '新的评审邀请 · 待确认',
+      desc: '您收到一项评审邀请：强化学习在机器人路径规划中的应用研究（PROJ-2026-0087）。请在 2026-03-25 前响应是否接受。',
+      time: '今天',
+      unread: true,
+      roles: ['teacher'],
+      teacherCaps: ['expert', 'chair'],
+      href: 'review.html#expert-invite-PROJ-2026-0087'
+    },
+    {
       id: 'flow-expert-assign',
       category: 'flow',
       tag: '流程通知',
-      title: '专家评审任务分配 · 多模态情感分析',
-      desc: '请在 2025-03-20 前完成线上评审并提交意见。',
+      title: '专家评审任务 · 多模态情感分析',
+      desc: '您已接受邀请，请在 2026-03-20 前完成线上评审并提交意见。',
       time: '今天',
       unread: true,
       roles: ['teacher'],
@@ -110,8 +122,8 @@
       id: 'pub-batch',
       category: 'pub',
       tag: '公示公告',
-      title: '项目结果公示 · 2025年春季第二批次',
-      desc: '本批次共 38 项目参评，公示期 7 天（2025-03-17 至 2025-03-24）。',
+      title: '项目结果公示 · 2026年春季第二批次',
+      desc: '本批次共 38 项目参评，公示期 7 天（2026-03-17 至 2026-03-24）。',
       time: '2天前',
       unread: false,
       roles: ['student', 'teacher', 'secretary'],
@@ -134,7 +146,7 @@
       category: 'obj',
       tag: '异议',
       title: '量子计算项目立项等级异议待处理',
-      desc: '需在 2025-03-22 前处理，关联项目 PROJ-2025-0029。',
+      desc: '需在 2026-03-22 前处理，关联项目 PROJ-2026-0029。',
       time: '3天前',
       unread: true,
       roles: ['secretary'],
@@ -145,7 +157,7 @@
       category: 'obj',
       tag: '异议',
       title: '对《多模态情感分析》立项等级的异议',
-      desc: '关联项目 PROJ-2025-0031 · 公示结果：院级立项，处理中。',
+      desc: '关联项目 PROJ-2026-0031 · 公示结果：院级立项，处理中。',
       time: '5天前',
       unread: false,
       roles: ['secretary'],
@@ -167,7 +179,7 @@
       category: 'sys',
       tag: '系统通知',
       title: '平台维护公告',
-      desc: '2025-03-18 凌晨 02:00-04:00 进行系统升级维护，期间平台暂停服务。',
+      desc: '2026-03-18 凌晨 02:00-04:00 进行系统升级维护，期间平台暂停服务。',
       time: '5天前',
       unread: false,
       roles: ['student', 'teacher', 'secretary'],

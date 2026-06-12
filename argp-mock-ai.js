@@ -1,13 +1,13 @@
-/* ARGP Demo — 学生 AI 助手 Mock 数据 */
+﻿/* ARGP Demo — 学生 AI 助手 Mock 数据 */
 (function () {
-  var DEFAULT_PROJ = 'PROJ-2025-0087';
+  var DEFAULT_PROJ = 'PROJ-2026-0087';
 
   var QUALITY_REPORTS = {
-    'PROJ-2025-0087': {
+    'PROJ-2026-0087': {
       title: '强化学习在机器人路径规划中的应用研究',
       total: 82,
       summary: '整体质量良好，存在2处中等风险问题需要关注：第3章研究假设与绪论背景存在潜在逻辑矛盾；参考文献部分存在1处格式不规范。已通过学术诚信检测，无重复率风险。建议修改后提交。',
-      checkedAt: '2025-03-14 16:42',
+      checkedAt: '2026-03-14 16:42',
       redCount: 1,
       yellowCount: 2,
       greenCount: 2,
@@ -19,18 +19,81 @@
         { name: '格式规范', val: 95, cls: 'sv-green' }
       ],
       issues: [
-        { level: 'red', title: '【学术诚信】参考文献 [12] 疑似不当引用，需人工核实', desc: '系统检测到参考文献 [12] 与已有成果高度相似（相似度 89%），存在不当引用风险。提交前须确认引用来源并知悉风险。', actions: ['定位原文'] },
-        { level: 'yellow', title: '【逻辑一致性】第3章研究假设与绪论存在潜在矛盾', desc: '绪论第2段提出"现有深度学习方法在动态环境中表现优秀"，而第3章假设H2却指出"现有方法无法处理动态障碍物"。建议统一表述立场。', actions: ['定位原文', 'AI建议修改'] },
-        { level: 'yellow', title: '【引用规范】参考文献 [7] 格式不完整', desc: '参考文献第7条缺少出版年份和DOI信息，建议补充完整以符合学院规范。', actions: ['查看引用'] },
-        { level: 'green', title: '【创新性分析】研究方向具有较好创新潜力', desc: '基于知识图谱分析，课程学习与强化学习结合的研究在本院近5年项目中尚属首次。识别到2个已有相似研究，建议在文中进行差异化对比说明。', actions: [] },
-        { level: 'green', title: '【学术诚信】通过重复率检测', desc: '全文学术重复率 4.2%，低于 15% 警戒线，通过检测。', actions: [] }
+        {
+          id: 'iss-ref12',
+          level: 'red',
+          title: '【学术诚信】参考文献 [12] 疑似不当引用，需人工核实',
+          desc: '系统检测到参考文献 [12] 与已有成果高度相似（相似度 89%），存在不当引用风险。提交前须确认引用来源并知悉风险。',
+          actions: ['定位原文'],
+          locateSection: 'bg',
+          detail: {
+            method: '引用溯源 Agent 对参考文献条目进行语义向量比对，并交叉验证 OpenAlex / CrossRef 元数据与正文引用上下文的一致性。',
+            evidence: '参考文献 [12] 与 Zhang et al. (2021) 预印本 arXiv:2103.xxxxx 摘要及方法段重合相似度 89%；正文第 2 章第 3 段未标注直接引述出处。',
+            confidence: '87%',
+            limitations: '无法访问部分付费数据库全文；相似度阈值基于段落级匹配，逐句人工核对仍必要。'
+          }
+        },
+        {
+          id: 'iss-logic',
+          level: 'yellow',
+          title: '【逻辑一致性】第3章研究假设与绪论存在潜在矛盾',
+          desc: '绪论第2段提出"现有深度学习方法在动态环境中表现优秀"，而第3章假设H2却指出"现有方法无法处理动态障碍物"。建议统一表述立场。',
+          actions: ['定位原文'],
+          locateSection: 'goal',
+          detail: {
+            method: 'ConsistencyService 对申请书全文进行立场抽取与假设-论据链一致性校验，识别跨章节语义冲突。',
+            evidence: '绪论段落实体「深度学习方法→表现优秀」与假设 H2「无法处理动态障碍物」构成直接对立；共现置信冲突评分 0.82（阈值 0.65）。',
+            confidence: '82%',
+            limitations: '未区分「部分场景优秀」与「全面优秀」的限定语义，建议结合上下文人工判断。'
+          }
+        },
+        {
+          id: 'iss-cite7',
+          level: 'yellow',
+          title: '【引用规范】参考文献 [7] 格式不完整',
+          desc: '参考文献第7条缺少出版年份和DOI信息，建议补充完整以符合学院规范。',
+          actions: ['定位原文'],
+          locateSection: 'bg',
+          detail: {
+            method: 'CitationAgent 依据学院 IEEE 引用模板对参考文献列表进行字段完整性检测。',
+            evidence: '条目 [7] 缺少 publicationYear、DOI 字段；作者姓名字段格式为「名 姓」，与模板要求的「姓, 名缩写」不一致。',
+            confidence: '94%',
+            limitations: '无法自动补全缺失 DOI，需作者手动查询并填写。'
+          }
+        },
+        {
+          id: 'iss-innov',
+          level: 'green',
+          title: '【创新性分析】研究方向具有较好创新潜力',
+          desc: '基于知识图谱分析，课程学习与强化学习结合的研究在本院近5年项目中尚属首次。识别到2个已有相似研究，建议在文中进行差异化对比说明。',
+          actions: [],
+          detail: {
+            method: 'InnovationAgent 基于学院近 5 年项目知识图谱与公开文献库进行研究方向相似度聚类。',
+            evidence: '本院历史项目中无「课程学习 + 强化学习 + 路径规划」三元组合；外部相似工作 2 篇，差异化空间明确。',
+            confidence: '76%',
+            limitations: '知识图谱覆盖范围限于本院与公开摘要数据，未包含未公开在研项目。'
+          }
+        },
+        {
+          id: 'iss-dup',
+          level: 'green',
+          title: '【学术诚信】通过重复率检测',
+          desc: '全文学术重复率 4.2%，低于 15% 警戒线，通过检测。',
+          actions: [],
+          detail: {
+            method: 'IntegrityService 对全文进行学术重复率检测，比对来源包括期刊库、学位论文库及互联网公开资源。',
+            evidence: '全文重复率 4.2%；最高单源相似段落占比 1.8%（研究背景部分），属合理引用范围。',
+            confidence: '96%',
+            limitations: '未检测图片、公式等非文本内容；预印本库更新可能存在延迟。'
+          }
+        }
       ]
     },
-    'PROJ-2025-0063': {
+    'PROJ-2026-0063': {
       title: '基于Transformer的中文医学文本理解',
       total: 91,
       summary: '整体质量优秀，逻辑结构清晰，引用规范良好。建议补充与通用 NLP 模型的对比实验说明。',
-      checkedAt: '2025-03-10 09:30',
+      checkedAt: '2026-03-10 09:30',
       redCount: 0,
       yellowCount: 1,
       greenCount: 3,
@@ -48,11 +111,11 @@
         { level: 'green', title: '【格式规范】章节结构完整', desc: '符合学院申请书格式要求。', actions: [] }
       ]
     },
-    'PROJ-2025-0045': {
+    'PROJ-2026-0045': {
       title: '联邦学习框架下的数据隐私保护',
       total: 88,
       summary: '技术路线成熟，论证充分。隐私保护方案设计合理，已通过学术诚信检测。',
-      checkedAt: '2025-03-08 14:15',
+      checkedAt: '2026-03-08 14:15',
       redCount: 0,
       yellowCount: 0,
       greenCount: 4,
@@ -70,11 +133,11 @@
         { level: 'green', title: '【引用规范】参考文献充分', desc: '共引用 22 篇，覆盖领域核心文献。', actions: [] }
       ]
     },
-    'PROJ-2025-0029': {
+    'PROJ-2026-0029': {
       title: '量子计算在密码学中的应用探索',
       total: 93,
       summary: '论证严谨，创新性强，格式与引用均符合规范。',
-      checkedAt: '2025-03-01 11:00',
+      checkedAt: '2026-03-01 11:00',
       redCount: 0,
       yellowCount: 0,
       greenCount: 3,
@@ -91,11 +154,11 @@
         { level: 'green', title: '【团队能力】导师指导经验丰富', desc: '指导教师在该领域有连续3年相关项目产出。', actions: [] }
       ]
     },
-    'PROJ-2025-0110': {
+    'PROJ-2026-0110': {
       title: '边缘计算下的物联网安全协议研究',
       total: 78,
       summary: '基本框架完整，存在1处逻辑表述待完善，引用格式需微调。',
-      checkedAt: '2025-03-15 10:22',
+      checkedAt: '2026-03-15 10:22',
       redCount: 0,
       yellowCount: 2,
       greenCount: 2,
@@ -112,32 +175,11 @@
         { level: 'green', title: '【可行性】技术路线可行', desc: '边缘节点仿真方案设计合理。', actions: [] },
         { level: 'green', title: '【学术诚信】通过重复率检测', desc: '重复率 5.1%。', actions: [] }
       ]
-    },
-    'PROJ-2024-0198': {
-      title: '深度学习图像分割新方法研究',
-      total: 89,
-      summary: '历史归档项目，自检报告只读保留。',
-      checkedAt: '2024-12-18 15:40',
-      redCount: 0,
-      yellowCount: 0,
-      greenCount: 3,
-      dims: [
-        { name: '学术质量', val: 89, cls: 'sv-green' },
-        { name: '创新性', val: 86, cls: 'sv-green' },
-        { name: '逻辑一致性', val: 88, cls: 'sv-green' },
-        { name: '引用规范', val: 90, cls: 'sv-green' },
-        { name: '格式规范', val: 91, cls: 'sv-green' }
-      ],
-      issues: [
-        { level: 'green', title: '【整体评价】质量良好', desc: '已通过导师审核与评审流程。', actions: [] },
-        { level: 'green', title: '【学术诚信】通过重复率检测', desc: '重复率 3.5%。', actions: [] },
-        { level: 'green', title: '【格式规范】符合要求', desc: '格式检测通过。', actions: [] }
-      ]
     }
   };
 
   var WRITING_ASSIST = {
-    'PROJ-2025-0087': {
+    'PROJ-2026-0087': {
       locked: false,
       sections: [
         { id: 'bg', label: '研究背景与意义', text: '近年来，随着深度强化学习技术的快速发展，智能机器人在复杂动态环境中的自主导航能力得到了显著提升。传统路径规划算法在静态已知地图上表现良好，但在动态障碍物频繁出现的真实场景中存在明显局限性。' },
@@ -150,9 +192,9 @@
         logic: '【逻辑检查】检测到潜在矛盾：第一章称"现有深度学习方法表现优秀"，第三章假设H2称"无法有效处理动态障碍物"。建议统一为"在部分静态场景表现良好，但在高动态障碍环境下仍存在局限"。'
       },
       lastAction: 'logic',
-      lastAt: '2025-03-14 15:20'
+      lastAt: '2026-03-14 15:20'
     },
-    'PROJ-2025-0091': {
+    'PROJ-2026-0091': {
       locked: false,
       sections: [
         { id: 'bg', label: '研究背景与意义', text: '科研文献推荐系统能够帮助研究者快速发现相关成果，知识图谱可提供结构化语义关联……' },
@@ -165,9 +207,9 @@
         logic: '【逻辑检查】当前内容过短，暂无法进行全面逻辑一致性分析，建议先完成研究目标章节。'
       },
       lastAction: 'cite',
-      lastAt: '2025-03-16 09:10'
+      lastAt: '2026-03-16 09:10'
     },
-    'PROJ-2025-0063': {
+    'PROJ-2026-0063': {
       locked: true,
       sections: [
         { id: 'bg', label: '研究背景与意义', text: '中文医学文本理解对于临床决策支持具有重要意义……（材料已锁定）' },
@@ -180,13 +222,13 @@
         logic: '【历史建议】逻辑一致性检查通过，无待处理项。'
       },
       lastAction: 'optimize',
-      lastAt: '2025-03-09 14:00'
+      lastAt: '2026-03-09 14:00'
     }
   };
 
   var DEFENSE_ASSIST = {
-    'PROJ-2025-0045': {
-      time: '2025-03-22 14:30',
+    'PROJ-2026-0045': {
+      time: '2026-03-22 14:30',
       room: '第三会议室',
       duration: '20 分钟陈述 + 10 分钟问答',
       summary: '联邦学习隐私保护框架，差分隐私与安全聚合结合，在医疗数据场景验证有效性。核心创新：自适应噪声注入、轻量级安全聚合协议。',
@@ -207,7 +249,7 @@
         '准备 Demo 视频或截图（若网络不稳定）'
       ]
     },
-    'PROJ-2025-0063': {
+    'PROJ-2026-0063': {
       time: '待定（专家评审阶段）',
       room: '—',
       duration: '—',
@@ -355,6 +397,326 @@
   var _qualityDetail = false;
   var _writingSection = 'bg';
   var _writingAction = null;
+  var _applyWritingSection = null;
+  var _applyWritingAction = null;
+  var _expandedIssues = {};
+  var _redAcks = {};
+  var _submitAt = null;
+
+  var LEVEL_LABELS = { red: '红色', yellow: '黄色', green: '绿色' };
+
+  function normalizeIssue(iss, idx, projId) {
+    var id = iss.id || (projId + '-iss-' + idx);
+    var detail = iss.detail || {
+      method: 'Academic Agent 多维度质量检测流水线对该项进行自动分析。',
+      evidence: iss.desc || '—',
+      confidence: iss.level === 'red' ? '85%' : iss.level === 'yellow' ? '78%' : '92%',
+      limitations: 'AI 检测结果仅供参考，最终结论须由人工审核确认。'
+    };
+    return {
+      id: id,
+      level: iss.level,
+      title: iss.title,
+      desc: iss.desc,
+      actions: iss.actions || [],
+      locateSection: iss.locateSection || null,
+      detail: detail
+    };
+  }
+
+  function formatNow() {
+    var d = new Date();
+    var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
+      pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+
+  function resetAiCheckState() {
+    _expandedIssues = {};
+    _redAcks = {};
+  }
+
+  function canSubmitFromAiCheck() {
+    var report = getQualityReport(_currentProjId);
+    var p = getProject(_currentProjId);
+    if (!report || !p) return false;
+    if (p.status === 'review' || p.status === 'defense' || p.status === 'archived') return false;
+    var redIssues = report.issues.filter(function (i) { return i.level === 'red'; });
+    if (!redIssues.length) return true;
+    return redIssues.every(function (iss, idx) {
+      var n = normalizeIssue(iss, idx, _currentProjId);
+      return !!_redAcks[n.id];
+    });
+  }
+
+  function renderIssueCard(iss, idx, projId) {
+    var n = normalizeIssue(iss, idx, projId);
+    var expanded = !!_expandedIssues[n.id];
+    var acked = !!_redAcks[n.id];
+    var levelLbl = LEVEL_LABELS[n.level] || n.level;
+    var locateBtn = n.locateSection
+      ? '<button class="btn btn-sm btn-secondary" type="button" onclick="ARGP_AI.locateIssue(\'' + n.id + '\')">定位原文</button>' +
+        '<button class="btn btn-sm btn-ghost" type="button" onclick="ARGP_AI.returnToEdit(\'' + (n.locateSection || 'bg') + '\')">返回修改</button>'
+      : '';
+    var redAckBlock = '';
+    if (n.level === 'red') {
+      redAckBlock = acked
+        ? '<div class="qc-ack-done"><span class="qc-ack-check">✓</span> 已于 <span class="mono">' + _redAcks[n.id] + '</span> 确认知悉</div>'
+        : '<button class="btn btn-sm qc-ack-btn" type="button" onclick="ARGP_AI.ackRedIssue(\'' + n.id + '\')">已知悉，继续提交</button>';
+    }
+    return '<div class="qc-issue-card qc-' + n.level + (expanded ? ' expanded' : '') + '" id="qc-card-' + n.id + '">' +
+      '<div class="qc-issue-hd">' +
+        '<span class="qc-level-badge qc-lb-' + n.level + '">' + levelLbl + '</span>' +
+        '<div class="qc-issue-title">' + n.title + '</div>' +
+      '</div>' +
+      '<div class="qc-issue-body">' +
+        '<p class="qc-issue-desc">' + n.desc + '</p>' +
+        (locateBtn ? '<div class="qc-issue-actions">' + locateBtn + '</div>' : '') +
+        redAckBlock +
+        '<button type="button" class="qc-expand-btn" onclick="ARGP_AI.toggleAiCheckIssue(\'' + n.id + '\')">' +
+          (expanded ? '收起 AI 判断依据 ▲' : '查看 AI 判断依据 ▼') +
+        '</button>' +
+        (expanded
+          ? '<div class="qc-issue-detail">' +
+              '<div class="qc-detail-grid">' +
+                '<div class="qc-detail-item"><div class="qc-detail-lbl">方法说明</div><div class="qc-detail-val">' + n.detail.method + '</div></div>' +
+                '<div class="qc-detail-item"><div class="qc-detail-lbl">证据摘要</div><div class="qc-detail-val">' + n.detail.evidence + '</div></div>' +
+                '<div class="qc-detail-item qc-detail-half"><div class="qc-detail-lbl">置信度</div><div class="qc-detail-val mono">' + n.detail.confidence + '</div></div>' +
+                '<div class="qc-detail-item qc-detail-half"><div class="qc-detail-lbl">局限性</div><div class="qc-detail-val">' + n.detail.limitations + '</div></div>' +
+              '</div></div>'
+          : '') +
+      '</div></div>';
+  }
+
+  function renderAiCheckPage() {
+    var root = document.getElementById('ai-check-root');
+    if (!root) return;
+    var projId = _currentProjId;
+    var p = getProject(projId);
+    var report = getQualityReport(projId);
+    if (!report || !hasQualityReport(p)) {
+      root.innerHTML =
+        '<div class="ai-cap-empty">' +
+          '<div style="font-size:14px;font-weight:600;margin-bottom:8px;">暂无质量检测报告</div>' +
+          '<p class="text-xs text-muted" style="line-height:1.6;margin-bottom:14px;">请先在项目申请中完成材料填写，再进行 AI 质量自检。</p>' +
+          '<button class="btn btn-primary" type="button" onclick="showPage(\'proj-new\')">前往项目申请</button>' +
+        '</div>';
+      return;
+    }
+    var title = p ? p.title : report.title;
+    var totalCls = scoreTotalClass(report.total);
+    var dimsHtml = report.dims.map(function (d) {
+      return '<div class="score-cell"><div class="score-val ' + d.cls + '">' + d.val + '</div><div class="score-name">' + d.name + '</div></div>';
+    }).join('');
+    var cardsHtml = report.issues.map(function (iss, idx) {
+      return renderIssueCard(iss, idx, projId);
+    }).join('');
+    var canSubmit = canSubmitFromAiCheck();
+    var redCount = report.redCount || report.issues.filter(function (i) { return i.level === 'red'; }).length;
+    var submitHint = redCount > 0 && !canSubmit
+      ? '<p class="qc-submit-hint">请先对全部 <strong>' + redCount + '</strong> 项红色问题点击「已知悉，继续提交」后再提交导师审核。</p>'
+      : '';
+    var rerunBtn = canRerunQuality(p)
+      ? '<button class="btn btn-sm btn-secondary" type="button" onclick="runAiCheck()">重新自检</button>'
+      : '';
+    root.innerHTML =
+      '<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;">' +
+        '<div>' +
+          '<div class="page-title">AI 质量自检</div>' +
+          '<div class="page-sub">Academic Agent · 提交导师前质量报告 · AI 生成 · 仅供参考</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;align-items:center;">' +
+          '<button class="btn btn-sm btn-ghost" type="button" onclick="showPage(\'proj-new\')">← 返回项目申请</button>' +
+          rerunBtn +
+        '</div></div>' +
+      '<div class="report-card">' +
+        '<div class="report-hd">' +
+          '<div><div class="report-hd-title">AI 学术质量自检报告</div>' +
+          '<div class="report-hd-sub">' + title + ' · ' + projId + '</div></div>' +
+          '<div style="margin-left:auto;text-align:right;">' +
+            '<div class="ai-quality-total ' + totalCls + '" style="color:#fff;">' + report.total + '</div>' +
+            '<div style="font-size:11px;color:var(--blue-200);">综合质量得分</div></div></div>' +
+        '<div class="ai-report-summary">' + report.summary + '</div>' +
+        '<div class="score-strip">' + dimsHtml + '</div>' +
+        '<div class="ai-quality-risk-row" style="padding:14px 20px 0;">' +
+          '<span class="badge b-red">' + report.redCount + ' 红色</span>' +
+          '<span class="badge b-yellow">' + report.yellowCount + ' 黄色</span>' +
+          '<span class="badge b-green">' + report.greenCount + ' 绿色</span></div>' +
+        '<div class="qc-issue-list">' +
+          '<div class="qc-list-title">问题清单 · 共 ' + report.issues.length + ' 项</div>' +
+          cardsHtml +
+        '</div>' +
+        '<div class="ai-report-meta">' +
+          '<span>Academic Agent · ConsistencyService</span>' +
+          '<span>检测时间：' + report.checkedAt + '</span>' +
+          '<span>AI 生成 · 仅供参考</span></div></div>' +
+      submitHint +
+      '<div class="qc-submit-bar">' +
+        '<button class="btn btn-secondary" type="button" onclick="showPage(\'proj-new\')">返回修改申请书</button>' +
+        '<button class="btn btn-primary" id="btn-ai-check-submit" type="button"' +
+          (canSubmit ? '' : ' disabled') +
+          ' onclick="ARGP_AI.submitFromAiCheck()">确认提交导师审核</button>' +
+      '</div>';
+  }
+
+  function renderSubmitSuccessPage() {
+    var root = document.getElementById('submit-success-root');
+    if (!root) return;
+    var projId = _currentProjId;
+    var p = getProject(projId);
+    var title = p ? p.title : '项目申请书';
+    var ts = _submitAt || formatNow();
+    root.innerHTML =
+      '<div class="submit-success-wrap">' +
+        '<div class="submit-success-icon">✓</div>' +
+        '<div class="submit-success-title">提交成功</div>' +
+        '<p class="submit-success-desc">您的项目申请书已正式提交导师审核，Advisor Agent 将向指导教师推送材料摘要与 AI 检测报告。</p>' +
+        '<div class="meta-card" style="max-width:480px;margin:24px auto;text-align:left;">' +
+          '<div class="meta-row"><span class="meta-k">项目</span><span class="meta-v">' + title + '</span></div>' +
+          '<div class="meta-row"><span class="meta-k">编号</span><span class="meta-v mono">' + projId + '</span></div>' +
+          '<div class="meta-row"><span class="meta-k">提交时间</span><span class="meta-v mono text-xs">' + ts + '</span></div>' +
+          '<div class="meta-row"><span class="meta-k">状态</span><span class="meta-v"><span class="my-proj-status st-submitted">待导师审核</span></span></div>' +
+        '</div>' +
+        '<div class="btn-group" style="justify-content:center;border-top:none;padding-top:0;">' +
+          '<button class="btn btn-secondary" type="button" onclick="showPage(\'my-proj\')">返回我的项目</button>' +
+          '<button class="btn btn-primary" type="button" onclick="showPage(\'proj-detail\')">查看项目详情</button>' +
+        '</div></div>';
+  }
+
+  function toggleAiCheckIssue(issueId) {
+    _expandedIssues[issueId] = !_expandedIssues[issueId];
+    renderAiCheckPage();
+  }
+
+  function ackRedIssue(issueId) {
+    _redAcks[issueId] = formatNow();
+    if (typeof showToast === 'function') {
+      showToast('已记录知悉确认 · ' + _redAcks[issueId], 'success');
+    }
+    renderAiCheckPage();
+  }
+
+  function getSectionLabel(sectionId) {
+    var map = { bg: '研究背景与意义', goal: '研究目标与内容', innov: '创新点与预期成果' };
+    return map[sectionId] || sectionId;
+  }
+
+  function returnToEdit(sectionId) {
+    sectionId = sectionId || 'bg';
+    if (typeof showPage === 'function') showPage('proj-new');
+    setTimeout(function () {
+      initApplyPage();
+      if (typeof goApplyStep === 'function') goApplyStep(2, true);
+      var el = document.getElementById('apply-text-' + sectionId);
+      if (el) {
+        el.focus();
+        el.classList.add('locate-flash');
+        setTimeout(function () { el.classList.remove('locate-flash'); }, 2000);
+      }
+      if (typeof showToast === 'function') {
+        showToast('已跳转至「' + getSectionLabel(sectionId) + '」，请修改后重新自检', 'info');
+      }
+    }, 80);
+  }
+
+  function locateIssue(issueId) {
+    var report = getQualityReport(_currentProjId);
+    if (!report) return;
+    var sectionId = 'bg';
+    report.issues.forEach(function (iss, idx) {
+      var n = normalizeIssue(iss, idx, _currentProjId);
+      if (n.id === issueId && n.locateSection) sectionId = n.locateSection;
+    });
+    if (typeof showPage === 'function') showPage('proj-new');
+    setTimeout(function () {
+      initApplyPage();
+      if (typeof goApplyStep === 'function') goApplyStep(2, true);
+      var el = document.getElementById('apply-text-' + sectionId);
+      if (el) {
+        el.focus();
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('locate-flash');
+        setTimeout(function () { el.classList.remove('locate-flash'); }, 2000);
+      }
+      if (typeof showToast === 'function') {
+        showToast('已定位至「' + getSectionLabel(sectionId) + '」相关段落', 'info');
+      }
+    }, 80);
+  }
+
+  function submitFromAiCheck() {
+    if (!canSubmitFromAiCheck()) {
+      if (typeof showToast === 'function') showToast('请先确认全部红色风险问题', 'warn');
+      return;
+    }
+    _submitAt = formatNow();
+    if (typeof showPage === 'function') showPage('submit-success');
+    renderSubmitSuccessPage();
+  }
+
+  function getApplyProjId() {
+    if (window.ARGP_MOCK && window.ARGP_MOCK.getCurrentDetailId) {
+      var detailId = window.ARGP_MOCK.getCurrentDetailId();
+      if (detailId) return detailId;
+    }
+    return _currentProjId || DEFAULT_PROJ;
+  }
+
+  function renderApplySuggestPanel() {
+    var container = document.getElementById('apply-ai-suggest-panel');
+    if (!container) return;
+    var assist = getWritingAssist(getApplyProjId());
+    if (!assist) {
+      container.innerHTML =
+        '<div class="ai-suggest-hd">AI 建议结果</div>' +
+        '<div class="ai-suggest-body">暂无写作数据</div>';
+      return;
+    }
+    if (!_applyWritingAction) {
+      container.innerHTML =
+        '<div class="ai-suggest-hd">AI 建议结果</div>' +
+        '<div class="ai-suggest-body" style="opacity:0.75;">在左侧申请书正文中点击「优化表达」「补充引用」或「逻辑检查」，将在此显示 Academic Agent 的建议。</div>' +
+        '<div class="ai-suggest-meta">AI 生成 · 仅供参考</div>';
+      return;
+    }
+    var section = assist.sections.filter(function (s) { return s.id === _applyWritingSection; })[0];
+    var sectionLabel = section ? section.label : '';
+    var action = _applyWritingAction;
+    var suggest = assist.suggestions[action] || assist.suggestions.logic;
+    container.innerHTML =
+      '<div class="ai-suggest-hd">AI 建议结果 <span class="text-xs" style="opacity:0.85;">· ' +
+        (WRITING_ACTIONS[action] || '') +
+        (sectionLabel ? ' · ' + sectionLabel : '') +
+      '</span></div>' +
+      '<div class="ai-suggest-body">' + suggest + '</div>' +
+      '<div class="ai-suggest-meta">最近更新：' + assist.lastAt + ' · AI 生成 · 仅供参考</div>';
+  }
+
+  function initApplyPage() {
+    var projId = getApplyProjId();
+    _currentProjId = projId;
+    var assist = getWritingAssist(projId);
+    if (assist && assist.sections) {
+      assist.sections.forEach(function (s) {
+        var el = document.getElementById('apply-text-' + s.id);
+        if (el && s.text) el.value = s.text;
+      });
+    }
+    renderApplySuggestPanel();
+  }
+
+  function runApplyWritingAction(sectionId, action) {
+    _applyWritingSection = sectionId;
+    _applyWritingAction = action;
+    _writingSection = sectionId;
+    _writingAction = action;
+    if (typeof showToast === 'function') {
+      showToast('Academic Agent 已生成' + (WRITING_ACTIONS[action] || '') + '建议', 'info');
+    }
+    renderApplySuggestPanel();
+    var panel = document.getElementById('apply-step-ai');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   function fillProjectSelect() {
     var sel = document.getElementById('ai-proj-select');
@@ -576,6 +938,19 @@
     onProjectChange: onProjectChange,
     selectWritingSection: selectWritingSection,
     runWritingAction: runWritingAction,
+    runApplyWritingAction: runApplyWritingAction,
+    initApplyPage: initApplyPage,
+    renderApplySuggestPanel: renderApplySuggestPanel,
+    getApplyProjId: getApplyProjId,
+    renderAiCheckPage: renderAiCheckPage,
+    renderSubmitSuccessPage: renderSubmitSuccessPage,
+    toggleAiCheckIssue: toggleAiCheckIssue,
+    ackRedIssue: ackRedIssue,
+    locateIssue: locateIssue,
+    returnToEdit: returnToEdit,
+    submitFromAiCheck: submitFromAiCheck,
+    resetAiCheckState: resetAiCheckState,
+    canSubmitFromAiCheck: canSubmitFromAiCheck,
     showQualityDetail: showQualityDetail,
     showQualityList: showQualityList,
     openAssistant: openAssistant,

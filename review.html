@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -83,11 +83,14 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .tab-item{padding:9px 18px;font-size:13px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500;transition:color .13s,border-color .13s;white-space:nowrap;}
 .tab-item:hover{color:var(--ink);}
 .tab-item.active{color:var(--primary);border-bottom-color:var(--primary);}
+#gov-tabs.tabs{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:stretch;width:100%;overflow-x:auto;}
+#gov-tabs .tab-item{flex:0 0 auto;display:inline-flex;align-items:center;}
 
 /* ─── BADGE ─── */
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500;white-space:nowrap;}
 .b-green{background:var(--success-bg);color:var(--success);}
 .b-yellow{background:var(--warn-bg);color:var(--warn);}
+.b-blue{background:var(--blue-100);color:var(--blue-800);}
 .b-red{background:var(--danger-bg);color:var(--danger);}
 .b-blue{background:var(--blue-100);color:var(--blue-800);}
 .b-done{background:#f3f4f6;color:#6b7280;}
@@ -177,6 +180,69 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .sbf{height:100%;border-radius:4px;}
 .sbv{width:28px;text-align:right;font-family:'DM Mono',monospace;font-size:12px;flex-shrink:0;color:var(--ink);}
 
+/* ─── EXPERT REVIEW ─── */
+.expert-review-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start;}
+@media (max-width:960px){.expert-review-layout{grid-template-columns:1fr;}}
+.expert-review-main{min-width:0;}
+.expert-review-sidebar .expert-ai-block{margin-bottom:12px;}
+.expert-ai-stack{display:flex;flex-direction:column;gap:10px;}
+.expert-ai-stack .ai-cell{width:100%;box-sizing:border-box;}
+.er-doc-toolbar{flex-wrap:wrap;gap:8px;}
+.er-ver-switch{display:flex;gap:4px;margin-left:auto;}
+.er-ver-btn{font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);color:var(--text-2);cursor:pointer;font-family:inherit;}
+.er-ver-btn.active{border-color:var(--primary);background:var(--blue-50);color:var(--primary);font-weight:600;}
+.er-doc-body{max-height:480px;}
+.er-score-row .er-score-range{flex:1;min-width:80px;accent-color:var(--primary);}
+.er-score-num{width:52px;padding:4px 6px;border:1px solid var(--border);border-radius:var(--radius);font-family:'DM Mono',monospace;font-size:12px;text-align:center;}
+.er-attach-list{display:flex;flex-direction:column;gap:6px;}
+.er-attach-list-horizontal{flex-direction:row;flex-wrap:wrap;gap:8px;}
+.er-attach-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bg-2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.er-attach-bar-label{font-size:12px;font-weight:600;color:var(--ink-2);flex-shrink:0;}
+.er-attach-list-horizontal .er-attach-btn{width:auto;flex:0 1 auto;}
+.er-attach-btn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--white);cursor:pointer;font-family:inherit;font-size:12.5px;color:var(--text);transition:border-color .12s,background .12s;}
+.er-opinion-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.er-opinion-hd .er-draft-btn{flex-shrink:0;font-size:12px;padding:4px 10px;}
+.er-attach-btn:hover{border-color:var(--primary);background:var(--blue-50);}
+.er-attach-btn.active{border-color:var(--primary);background:var(--blue-50);color:var(--primary);font-weight:500;}
+.er-attach-type{font-size:9px;font-family:'DM Mono',monospace;padding:2px 5px;border-radius:3px;background:var(--bg-2);color:var(--text-3);flex-shrink:0;}
+.er-attach-btn.active .er-attach-type{background:var(--primary);color:#fff;}
+.er-ai-mark{cursor:pointer;border-radius:2px;padding:0 1px;transition:opacity .15s;}
+.er-ai-yellow{background:#fef08a;border-bottom:2px solid #ca8a04;}
+.er-ai-red{background:#fecaca;border-bottom:2px solid #dc2626;}
+.er-ai-mark.is-invalid{opacity:.35;text-decoration:line-through;cursor:default;}
+.er-ref-mark{display:inline;}
+.er-annot-popover{position:fixed;z-index:5000;width:360px;max-width:calc(100vw - 24px);background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 12px 40px rgba(15,31,61,.15);padding:14px 16px;}
+.er-pop-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.er-pop-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.er-pop-red{background:var(--danger-bg);color:var(--danger);}
+.er-pop-yellow{background:var(--warn-bg);color:var(--warn);}
+.er-pop-conf{font-size:10px;color:var(--text-3);margin-left:auto;}
+.er-pop-close{margin-left:auto;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-3);line-height:1;}
+.er-pop-reason{font-size:12.5px;line-height:1.65;color:var(--text);margin-bottom:10px;}
+.er-pop-compare{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+.er-pop-para{padding:8px 10px;background:var(--bg-2);border-radius:var(--radius);font-size:12px;line-height:1.6;border-left:3px solid var(--border);}
+.er-pop-para-lbl{font-size:10px;font-weight:600;color:var(--text-3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+.er-pop-basis{font-size:11.5px;line-height:1.6;color:var(--text-2);margin-bottom:10px;}
+.er-pop-dismiss{width:100%;margin-top:4px;}
+.er-invite-wrap{max-width:760px;}
+.er-invite-anon{background:var(--blue-50);border:1px solid var(--blue-200);border-radius:var(--radius);padding:10px 14px;font-size:12.5px;color:var(--blue-800);line-height:1.6;margin-bottom:16px;}
+.er-invite-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-bottom:18px;}
+.er-invite-meta .meta-k{font-size:11px;color:var(--text-3);margin-bottom:2px;}
+.er-invite-meta .meta-v{font-size:13.5px;font-weight:500;}
+.er-conflict-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.er-conflict-opt{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .12s,background .12s;}
+.er-conflict-opt:hover{border-color:var(--primary);}
+.er-conflict-opt.is-selected{border-color:var(--primary);background:var(--blue-50);}
+.er-conflict-opt input{margin-top:3px;flex-shrink:0;accent-color:var(--primary);}
+.er-conflict-opt label{font-size:13px;line-height:1.5;cursor:pointer;flex:1;}
+.er-invite-warn{background:var(--warn-bg);border:1px solid #fcd34d;border-radius:var(--radius);padding:10px 13px;font-size:12.5px;color:#78350f;line-height:1.55;margin-bottom:14px;}
+.er-reject-panel{border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-top:14px;background:var(--bg-2);}
+.er-reject-reason{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.er-reject-reason label{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;}
+.sec-avoid-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.sec-avoid-item:last-child{border-bottom:none;}
+.er-yellow-tip{position:fixed;z-index:4999;max-width:320px;padding:10px 12px;background:var(--ink);color:#fff;border-radius:var(--radius);font-size:12px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,.2);pointer-events:none;}
+
 /* ─── EXPERT CARD ─── */
 .expert-card{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:9px;}
 .expert-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#fff;flex-shrink:0;}
@@ -250,6 +316,86 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 
 .expert-card.expert-selected{border-color:var(--primary);background:var(--blue-50);}
 .expert-card.expert-selected .btn-primary{background:var(--success);border-color:var(--success);}
+.expert-card.is-disabled{opacity:.55;pointer-events:none;}
+
+/* ─── SECRETARY ─── */
+.sec-academic-card{background:rgba(26,86,219,.06);border:1px solid var(--blue-200);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;}
+.sec-academic-hd{font-size:12px;font-weight:600;color:var(--blue-800);margin-bottom:6px;}
+.sec-academic-body{font-size:12.5px;line-height:1.7;color:var(--text);margin:0;}
+.sec-overall-risk{background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;}
+.sec-overall-risk-lbl{font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:6px;}
+.sec-overall-risk p{font-size:12.5px;line-height:1.65;color:var(--text);margin:0;}
+.sec-risk-dims{display:flex;flex-direction:column;gap:6px;}
+.sec-risk-dim{border:1px solid var(--border-2);border-radius:var(--radius);overflow:hidden;background:var(--white);}
+.sec-risk-dim-hd{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--bg-2);border:none;cursor:pointer;font-family:inherit;font-size:12.5px;text-align:left;}
+.sec-risk-dim-hd:hover{background:#eef2f9;}
+.sec-risk-dim-lbl{font-weight:500;color:var(--ink-2);}
+.sec-risk-dim-meta{display:flex;align-items:center;gap:8px;}
+.sec-risk-lvl{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;}
+.sec-risk-lvl.is-ok{background:var(--success-bg);color:var(--success);}
+.sec-risk-lvl.is-warn{background:var(--warn-bg);color:var(--warn);}
+.sec-risk-lvl.is-danger{background:var(--danger-bg);color:var(--danger);}
+.sec-risk-chevron{color:var(--text-3);transition:transform .15s;}
+.sec-risk-dim.open .sec-risk-chevron{transform:rotate(90deg);}
+.sec-risk-dim-body{display:none;padding:10px 12px;border-top:1px solid var(--border-2);}
+.sec-risk-dim.open .sec-risk-dim-body{display:block;}
+.sec-risk-basis{font-size:12px;line-height:1.65;color:var(--text);margin-bottom:6px;}
+.sec-risk-conf{font-size:10px;color:var(--text-3);}
+.sec-mat-item{display:flex;gap:7px;align-items:center;}
+.sec-exp-link{display:inline-block;margin-top:6px;font-size:11px;color:var(--primary);background:none;border:none;padding:0;cursor:pointer;font-family:inherit;}
+.sec-exp-link.is-warn{color:var(--warn);}
+.sec-exp-link.open{font-weight:600;}
+.sec-exp-panel{display:none;margin-top:6px;padding:8px 10px;background:var(--bg-2);border-radius:var(--radius);font-size:11.5px;line-height:1.6;color:var(--text-2);border:1px solid var(--border-2);}
+.sec-exp-panel.is-warn{background:#fffbeb;border-color:#fcd34d;}
+.sec-exp-panel.open{display:block;}
+.sec-manual-expert .form-input{font-size:13px;}
+.sec-manual-pick-btn{border-style:dashed;}
+.sec-manual-modal-box{max-width:640px;}
+.sec-manual-college-filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 10px;}
+.sec-manual-college-btn{padding:4px 10px;font-size:11.5px;border:1px solid var(--border);border-radius:20px;background:var(--white);color:var(--text-2);cursor:pointer;font-family:inherit;transition:all .13s;}
+.sec-manual-college-btn:hover{border-color:var(--primary);color:var(--primary);}
+.sec-manual-college-btn.active{background:var(--primary-light);border-color:var(--primary);color:var(--primary);font-weight:600;}
+.sec-manual-modal-list{max-height:52vh;overflow-y:auto;border:1px solid var(--border-2);border-radius:var(--radius);padding:8px;background:var(--bg);}
+.sec-manual-result{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border-2);border-radius:var(--radius);margin-bottom:8px;background:var(--white);}
+.sec-manual-result:last-child{margin-bottom:0;}
+.sec-manual-result-body{flex:1;min-width:0;}
+.sec-manual-result-hd{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:2px;}
+.sec-manual-match-badge{font-size:11px;font-family:'DM Mono',monospace;padding:1px 7px;border-radius:10px;background:var(--bg-2);}
+.sec-manual-avoid-badge{font-size:11px;padding:1px 7px;border-radius:10px;background:var(--bg-2);}
+.sec-manual-empty{padding:24px 8px;text-align:center;}
+.match-high{color:var(--success);font-weight:600;}
+.match-mid{color:var(--warn);font-weight:600;}
+.sec-finalize-bar .btn-primary:not(:disabled){min-width:140px;}
+.sec-intake-actions .btn-group{margin-top:0;padding-top:0;border-top:none;}
+.sec-prog-group{border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;background:var(--white);}
+.sec-prog-group-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.sec-prog-title{font-weight:600;font-size:13.5px;color:var(--ink);}
+.sec-prog-experts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.sec-prog-exp{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg-2);border-radius:var(--radius);font-size:12px;}
+.sec-prog-bar-row{display:flex;align-items:center;gap:14px;}
+.sec-prog-actions{display:flex;gap:6px;flex-shrink:0;}
+.sec-deadline-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.sec-deadline-date{font-size:10.5px;color:var(--text-3);}
+.sec-remind-panel .sec-remind-toggle{width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;border-bottom:1px solid var(--border-2);cursor:pointer;font-family:inherit;text-align:left;padding:13px 18px;}
+.sec-remind-panel .sec-remind-toggle:hover{background:var(--bg-2);}
+.sec-remind-panel .panel-title{flex:1;}
+.sec-remind-count{font-family:'DM Mono',monospace;}
+.sec-remind-chevron{color:var(--text-3);font-size:12px;transition:transform .15s;}
+.sec-remind-panel.is-open .sec-remind-chevron{transform:rotate(90deg);}
+.sec-remind-body{padding:0 16px 14px;}
+.sec-remind-log{margin-top:8px;}
+.sec-remind-item{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid var(--border-2);font-size:12px;line-height:1.55;}
+.sec-remind-item:last-child{border-bottom:none;}
+.sec-remind-tag{font-size:10px;padding:1px 6px;border-radius:8px;font-weight:500;}
+.sec-remind-tag.is-auto{background:var(--blue-100);color:var(--blue-800);}
+.sec-remind-tag.is-manual{background:var(--warn-bg);color:var(--warn);}
+.sec-remind-text{flex:1;min-width:200px;color:var(--text-2);}
+.sec-modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,31,61,.45);align-items:center;justify-content:center;padding:24px;}
+.sec-modal-overlay.open{display:flex;}
+.sec-modal-box{background:var(--white);border-radius:var(--radius-lg);padding:22px 24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(15,31,61,.18);}
+.sec-modal-title{font-family:'Noto Serif SC',serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.sec-modal-desc{font-size:12.5px;color:var(--text-2);line-height:1.65;margin-bottom:14px;}
+.sec-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;}
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
 .toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--radius);font-size:13px;box-shadow:0 4px 20px rgba(15,31,61,.18);animation:toast-in .25s ease;max-width:340px;line-height:1.5;}
 .toast.success{border-left:3px solid #059669;}
@@ -279,7 +425,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="gh-feed-wrap" id="gh-feed-wrap">
       <button class="gh-text-btn" type="button" id="gh-feed-btn">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a6 6 0 00-6 6v.5L1 10h14l-1-2.5V7a6 6 0 00-6-6zm-1.5 13a1.5 1.5 0 003 0h-3z"/></svg>
-        站内信
+        <span class="gh-text-btn-label">站内信息</span>
         <span class="gh-badge-inline" id="gh-feed-badge" style="display:none">0</span>
       </button>
       <div class="gh-feed-panel" id="gh-feed-panel">
@@ -396,7 +542,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;">
     <div>
       <div class="page-title">秘书受理工作台</div>
-      <div class="page-sub">2025年春季批次 · 第二评审周期</div>
+      <div class="page-sub">2026年春季批次 · 第二评审周期</div>
     </div>
     <a class="section-action" onclick="showPage('sec-progress')">查看进度监控 →</a>
   </div>
@@ -406,126 +552,11 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="stat-card c-green stat-card-with-icon"><div class="stat-icon ic-green"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.3 5.3l-4 4a1 1 0 01-1.4 0l-2-2a1 1 0 011.4-1.4L7 8.6l3.3-3.3a1 1 0 011.4 1.4z"/></svg></div><div class="stat-body"><div class="stat-lbl">已完成受理</div><div class="stat-num">22</div><div class="stat-hint">本批次累计</div></div></div>
     <div class="stat-card c-blue stat-card-with-icon"><div class="stat-icon" style="background:#fff2f0;color:#ff4d4f;"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L1 13h14L8 1zm0 3l4.5 7h-9L8 4zm0 6a1 1 0 100 2 1 1 0 000-2z"/></svg></div><div class="stat-body"><div class="stat-lbl">红色预警项目</div><div class="stat-num">1</div><div class="stat-hint">需人工处理</div></div></div>
   </div>
-  <div class="tabs" data-tab-group="sec-desk">
-    <div class="tab-item active" data-filter="pending" onclick="activeTab(this)">待受理 (4)</div>
-    <div class="tab-item" data-filter="accepted" onclick="activeTab(this)">已受理 (8)</div>
-    <div class="tab-item" data-filter="reviewing" onclick="activeTab(this)">评审中 (3)</div>
-    <div class="tab-item" data-filter="done" onclick="activeTab(this)">已完成 (22)</div>
-  </div>
+  <div class="tabs" data-tab-group="sec-desk" id="sec-desk-tabs"></div>
   <div class="data-table-wrap" data-tab-panel="sec-desk">
     <table class="data-table">
       <thead><tr><th>项目信息</th><th>申请人</th><th>AI预审等级</th><th>主要风险</th><th>材料完整性</th><th>提交时间</th><th>操作</th></tr></thead>
-      <tbody>
-        <tr data-tab="pending" style="background:#fffbeb;">
-          <td><div class="td-name" onclick="showPage('sec-detail')">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031 · 国创计划</div></td>
-          <td>赵磊 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-yellow">黄色预警</span></td>
-          <td class="text-xs text-danger">逻辑矛盾 · 引用不足</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">今天 09:15</td>
-          <td><button class="btn btn-sm btn-secondary" onclick="showPage('sec-detail')">受理详情</button></td>
-        </tr>
-        <tr data-tab="pending" style="background:#fff5f5;">
-          <td><div class="td-name" onclick="showPage('sec-detail')">基于图神经网络的知识推理研究</div><div class="td-id">PROJ-2025-0041 · 校级项目</div></td>
-          <td>刘洋 <span class="text-xs text-muted">研一</span></td>
-          <td><span class="badge b-red">红色预警</span></td>
-          <td class="text-xs text-danger">材料不完整</td>
-          <td class="text-xs text-danger">缺少附件</td>
-          <td class="text-xs text-muted">今天 08:40</td>
-          <td style="display:flex;gap:5px;">
-            <button class="btn btn-sm btn-secondary" onclick="showPage('sec-detail')">详情</button>
-            <button class="btn btn-sm btn-danger" type="button" onclick="rejectProject('PROJ-2025-0041')">退件</button>
-          </td>
-        </tr>
-        <tr data-tab="pending">
-          <td><div class="td-name" onclick="showPage('sec-detail')">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055 · 国创计划</div></td>
-          <td>黄晨 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">无重大风险</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">昨天 17:30</td>
-          <td style="display:flex;gap:5px;">
-            <button class="btn btn-sm btn-secondary" onclick="showPage('sec-detail')">详情</button>
-            <button class="btn btn-sm btn-success" type="button" onclick="quickAccept('PROJ-2025-0055')">一键受理</button>
-          </td>
-        </tr>
-        <tr data-tab="pending">
-          <td><div class="td-name" onclick="showPage('sec-detail')">深度学习对抗样本防御机制</div><div class="td-id">PROJ-2025-0062 · 院级重点</div></td>
-          <td>吴雪 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">无重大风险</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">昨天 14:20</td>
-          <td style="display:flex;gap:5px;">
-            <button class="btn btn-sm btn-secondary" onclick="showPage('sec-detail')">详情</button>
-            <button class="btn btn-sm btn-success" type="button" onclick="quickAccept('PROJ-2025-0062')">一键受理</button>
-          </td>
-        </tr>
-        <tr data-tab="accepted">
-          <td><div class="td-name" onclick="showPage('sec-detail')">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045 · 国创计划</div></td>
-          <td>陈浩 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">无重大风险</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">03-05 10:20</td>
-          <td><button class="btn btn-sm btn-secondary" onclick="showPage('sec-detail')">分配专家</button></td>
-        </tr>
-        <tr data-tab="accepted">
-          <td><div class="td-name">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063 · 校级项目</div></td>
-          <td>王芳 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">无重大风险</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">03-02 14:00</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="reviewing">
-          <td><div class="td-name">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031 · 国创计划</div></td>
-          <td>赵磊 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-yellow">黄色预警</span></td>
-          <td class="text-xs text-muted">专家评审 1/3</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">02-28 09:00</td>
-          <td><button class="btn btn-sm btn-secondary" onclick="showPage('sec-progress')">进度</button></td>
-        </tr>
-        <tr data-tab="reviewing">
-          <td><div class="td-name">强化学习在机器人路径规划中的应用研究</div><div class="td-id">PROJ-2025-0087 · 国创计划</div></td>
-          <td>李明 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-muted">专家评审 2/3</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">02-25 16:30</td>
-          <td><button class="btn btn-sm btn-secondary" onclick="showPage('sec-progress')">进度</button></td>
-        </tr>
-        <tr data-tab="reviewing">
-          <td><div class="td-name">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055 · 国创计划</div></td>
-          <td>黄晨 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-muted">待分配专家</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">02-20 11:00</td>
-          <td><button class="btn btn-sm btn-primary" onclick="showPage('sec-detail')">分配专家</button></td>
-        </tr>
-        <tr data-tab="done">
-          <td><div class="td-name">量子计算在密码学中的应用</div><div class="td-id">PROJ-2024-0198 · 校级项目</div></td>
-          <td>孙杰 <span class="text-xs text-muted">已毕业</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">—</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">2024-12-18</td>
-          <td><button class="btn btn-sm btn-secondary">归档</button></td>
-        </tr>
-        <tr data-tab="done">
-          <td><div class="td-name">深度学习图像分割新方法研究</div><div class="td-id">PROJ-2024-0176 · 院级重点</div></td>
-          <td>林晓 <span class="text-xs text-muted">已毕业</span></td>
-          <td><span class="badge b-green">绿色通过</span></td>
-          <td class="text-xs text-green">—</td>
-          <td class="text-xs text-green">完整</td>
-          <td class="text-xs text-muted">2024-11-30</td>
-          <td><button class="btn btn-sm btn-secondary">归档</button></td>
-        </tr>
-        <tr class="tab-empty-row" data-tab-empty style="display:none;"><td colspan="7" class="tab-empty-cell">该分类下暂无项目</td></tr>
-      </tbody>
+      <tbody id="sec-desk-tbody"></tbody>
     </table>
   </div>
 </div>
@@ -538,7 +569,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;">
     <div>
       <div class="page-title">评审进度监控</div>
-      <div class="page-sub">2025年春季批次 · 实时跟踪评审与答辩进度</div>
+      <div class="page-sub">2026年春季批次 · 实时跟踪评审与答辩进度</div>
     </div>
     <button class="btn btn-sm btn-secondary" type="button" onclick="showToast('进度数据已刷新','success')">刷新</button>
   </div>
@@ -548,324 +579,41 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="stat-card c-blue stat-card-with-icon"><div class="stat-icon ic-blue"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a3 3 0 100 6 3 3 0 000-6zm-5 9a1 1 0 011-1h8a1 1 0 011 1v1c0 1.657-2.015 3-4.5 3S3 12.657 3 11v-1z"/></svg></div><div class="stat-body"><div class="stat-lbl">待分配专家</div><div class="stat-num">1</div><div class="stat-hint">已受理未匹配</div></div></div>
     <div class="stat-card c-green stat-card-with-icon"><div class="stat-icon ic-green"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.3 5.3l-4 4a1 1 0 01-1.4 0l-2-2a1 1 0 011.4-1.4L7 8.6l3.3-3.3a1 1 0 011.4 1.4z"/></svg></div><div class="stat-body"><div class="stat-lbl">本周完成</div><div class="stat-num">5</div><div class="stat-hint">进入答辩或公示</div></div></div>
   </div>
-  <div class="tabs" data-tab-group="sec-progress">
-    <div class="tab-item active" data-filter="reviewing" onclick="activeTab(this)">专家评审中 (2)</div>
-    <div class="tab-item" data-filter="defense" onclick="activeTab(this)">待答辩 (1)</div>
-    <div class="tab-item" data-filter="assign" onclick="activeTab(this)">待分配 (1)</div>
-  </div>
+  <div id="sec-avoidance-wrap"></div>
+  <div class="tabs" data-tab-group="sec-progress" id="sec-progress-tabs"></div>
   <div class="panel" data-tab-panel="sec-progress">
-    <div class="panel-hd"><div class="panel-title">项目进度列表</div></div>
-    <div class="rev-prog-item" data-tab="reviewing" style="background:#fffbeb;">
-      <div style="flex:1;"><div style="font-weight:500;">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045 · 专家评审中</div></div>
-      <div style="width:110px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span class="text-muted">进度</span><span class="mono">2/3</span></div><div class="prog-wrap"><div class="prog-fill" style="width:67%;background:var(--warn);"></div></div></div>
-      <span class="badge b-yellow">剩余 3 天</span>
-      <button class="btn btn-sm btn-secondary" type="button" style="margin-left:6px;" onclick="showToast('已向未完成专家发送催办通知','info')">催办</button>
+    <div class="panel-hd"><div class="panel-title">进度看板 · 按项目分组</div></div>
+    <div style="padding:14px 16px;" id="sec-progress-board"></div>
+  </div>
+  <div class="panel sec-remind-panel" id="sec-remind-panel">
+    <button type="button" class="sec-remind-toggle panel-hd" onclick="ARGP_SECRETARY.toggleReminderLog()">
+      <div class="panel-title">系统自动催办日志</div>
+      <span class="sec-remind-count text-xs text-muted" id="sec-remind-count">—</span>
+      <span class="sec-remind-chevron" id="sec-remind-chevron">›</span>
+    </button>
+    <div class="sec-remind-body" id="sec-reminder-log-wrap" style="display:none;">
+      <div id="sec-reminder-log" class="sec-remind-log"></div>
     </div>
-    <div class="rev-prog-item" data-tab="reviewing">
-      <div style="flex:1;"><div style="font-weight:500;">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031 · 专家评审中</div></div>
-      <div style="width:110px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span class="text-muted">进度</span><span class="mono">1/3</span></div><div class="prog-wrap"><div class="prog-fill" style="width:33%;background:var(--warn);"></div></div></div>
-      <span class="badge b-yellow">剩余 5 天</span>
-      <button class="btn btn-sm btn-secondary" type="button" style="margin-left:6px;" onclick="showToast('已向未完成专家发送催办通知','info')">催办</button>
-    </div>
-    <div class="rev-prog-item" data-tab="defense">
-      <div style="flex:1;"><div style="font-weight:500;">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063 · 专家评审完成</div></div>
-      <div style="width:110px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span class="text-muted">进度</span><span class="mono">3/3</span></div><div class="prog-wrap"><div class="prog-fill" style="width:100%;background:#059669;"></div></div></div>
-      <span class="badge b-green">全部完成</span>
-      <button class="btn btn-sm btn-success" style="margin-left:6px;" onclick="showPage('defense-list')">进入答辩</button>
-    </div>
-    <div class="rev-prog-item" data-tab="assign">
-      <div style="flex:1;"><div style="font-weight:500;">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055 · 等待分配专家</div></div>
-      <div style="width:110px;"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span class="text-muted">进度</span><span class="mono">0/3</span></div><div class="prog-wrap"><div class="prog-fill" style="width:0%;"></div></div></div>
-      <span class="badge b-done">待分配</span>
-      <button class="btn btn-sm btn-primary" style="margin-left:6px;" onclick="showPage('sec-detail')">分配专家</button>
-    </div>
-    <div class="tab-empty-msg" data-tab-empty style="display:none;">该分类下暂无项目</div>
   </div>
 </div>
 
 
 <!-- ══════════════════════════════════
-     PAGE: SECRETARY DETAIL
+     PAGE: SECRETARY DETAIL (dynamic)
 ══════════════════════════════════ -->
-<div class="page" id="page-sec-detail">
-  <div class="breadcrumb">
-    <span class="bc-link" onclick="showPage('secretary')">秘书受理台</span>
-    <span class="bc-sep">›</span><span>受理详情</span>
-  </div>
-  <div style="margin-bottom:18px;">
-    <div class="page-title">受理详情 · 多模态情感分析系统设计</div>
-    <div style="display:flex;gap:8px;margin-top:5px;"><span class="mono text-xs text-muted">PROJ-2025-0031</span><span class="badge b-yellow">黄色预警</span></div>
-  </div>
-  <div class="detail-layout">
-    <div>
-      <div class="form-card">
-        <div class="form-section-title">AI 预审结果（Secretary Agent）
-          <span style="float:right;font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;font-weight:400;">AI 生成 · 仅供参考</span>
-        </div>
-        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;">
-          <div style="text-align:center;padding:14px 16px;background:var(--warn-bg);border-radius:var(--radius-lg);min-width:96px;border:1px solid #fcd34d;">
-            <div style="font-size:28px;font-weight:700;color:var(--warn);">!</div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--warn);">黄色预警</div>
-            <div style="font-size:11px;color:var(--text-3);margin-top:2px;">建议人工复审</div>
-          </div>
-          <div style="flex:1;">
-            <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:10px;">AI预审识别出2处中等风险问题。材料完整性检查通过，无缺失文件。建议人工确认逻辑矛盾问题后再决定是否受理。</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span class="tag" style="background:var(--warn-bg);color:var(--warn);">逻辑矛盾 (1处)</span>
-              <span class="tag" style="background:var(--warn-bg);color:var(--warn);">引用不足 (1处)</span>
-              <span class="tag" style="background:var(--success-bg);color:var(--success);">材料完整</span>
-              <span class="tag" style="background:var(--success-bg);color:var(--success);">格式规范</span>
-            </div>
-          </div>
-        </div>
-        <div style="background:var(--bg-2);border-radius:var(--radius);padding:13px;border:1px solid var(--border-2);">
-          <div style="font-size:12.5px;font-weight:600;margin-bottom:8px;color:var(--ink-2);">材料完整性检查</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12.5px;">
-            <div style="display:flex;gap:7px;"><span class="text-green">✓</span> 申请书正文</div>
-            <div style="display:flex;gap:7px;"><span class="text-green">✓</span> 导师签字确认</div>
-            <div style="display:flex;gap:7px;"><span class="text-green">✓</span> 技术路线图</div>
-            <div style="display:flex;gap:7px;"><span class="text-green">✓</span> 参考文献列表</div>
-            <div style="display:flex;gap:7px;"><span class="text-green">✓</span> 实验方案文件</div>
-            <div style="display:flex;gap:7px;"><span class="text-muted">—</span> 预算申请表（可选）</div>
-          </div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-section-title">AI 专家匹配与选用
-          <span style="float:right;font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;font-weight:400;">AI 生成 · 仅供参考</span>
-        </div>
-        <div style="font-size:12.5px;color:var(--text-2);margin-bottom:14px;">推荐依据：研究方向匹配度 · 历史评审质量 · 当前工作负荷 · 回避关系分析</div>
-        <div class="expert-card expert-selected" data-expert="chen">
-          <div class="expert-av" style="background:var(--primary);">陈</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-weight:600;font-size:13.5px;">陈志远 教授</span><span class="match-high">匹配度 94%</span><span class="tag" style="background:var(--success-bg);color:var(--success);">推荐首选</span></div>
-            <div class="text-xs text-muted">计算机学院 · 自然语言处理、多模态学习 · 历史评审质量 92分</div>
-            <div class="text-xs" style="margin-top:4px;">回避检测：<span class="text-green">无冲突</span> · 当前负荷：2项（低）</div>
-          </div>
-          <button class="btn btn-sm btn-primary" type="button" onclick="toggleExpert(this)">已选</button>
-        </div>
-        <div class="expert-card" data-expert="wang">
-          <div class="expert-av" style="background:#7c3aed;">王</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-weight:600;font-size:13.5px;">王秀芳 副教授</span><span class="match-high">匹配度 88%</span></div>
-            <div class="text-xs text-muted">信息学院 · 情感计算、深度学习 · 历史评审质量 88分</div>
-            <div class="text-xs" style="margin-top:4px;">回避检测：<span class="text-warn">2度合作关系</span> · 当前负荷：3项（中）</div>
-          </div>
-          <button class="btn btn-sm btn-secondary" type="button" onclick="toggleExpert(this)">选用</button>
-        </div>
-        <div class="expert-card" data-expert="liu">
-          <div class="expert-av" style="background:#0891b2;">刘</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-weight:600;font-size:13.5px;">刘宇航 副教授</span><span class="match-high">匹配度 85%</span></div>
-            <div class="text-xs text-muted">人工智能学院 · 多模态学习、情感计算 · 历史评审质量 86分</div>
-            <div class="text-xs" style="margin-top:4px;">回避检测：<span class="text-green">无冲突</span> · 当前负荷：4项（中）</div>
-          </div>
-          <button class="btn btn-sm btn-secondary" type="button" onclick="toggleExpert(this)">选用</button>
-        </div>
-        <div class="expert-card" style="opacity:.55;pointer-events:none;">
-          <div class="expert-av" style="background:#dc2626;">李</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-weight:600;font-size:13.5px;">李明辉 教授</span><span class="match-mid">匹配度 71%</span><span class="tag" style="background:var(--danger-bg);color:var(--danger);">强制回避</span></div>
-            <div class="text-xs text-muted">软件学院 · 软件工程</div>
-            <div class="text-xs text-danger" style="margin-top:4px;">回避原因：与申请人存在导师-学生历史关系</div>
-          </div>
-          <button class="btn btn-sm btn-ghost" disabled>不可选</button>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border-2);margin-top:4px;">
-          <span class="text-xs text-muted" id="expert-count">已选 1/3 位专家</span>
-          <button class="btn btn-primary btn-sm" type="button" onclick="confirmExperts()">确认名单，发送邀请</button>
-        </div>
-      </div>
-      <div class="btn-group" style="border-top:none;padding-top:0;">
-        <button class="btn btn-ghost" onclick="showPage('secretary')">返回</button>
-        <button class="btn btn-secondary" type="button" onclick="rejectProject('PROJ-2025-0031')">退件</button>
-        <button class="btn btn-primary" type="button" onclick="confirmIntake()">确认受理，进入评审流程</button>
-      </div>
-    </div>
-    <div>
-      <div class="meta-card">
-        <div class="meta-title">项目信息</div>
-        <div class="meta-row"><span class="meta-k">申请人</span><span class="meta-v">赵磊</span></div>
-        <div class="meta-row"><span class="meta-k">申报类型</span><span class="meta-v text-xs">国家级创新训练</span></div>
-        <div class="meta-row"><span class="meta-k">导师</span><span class="meta-v">陈教授</span></div>
-        <div class="meta-row"><span class="meta-k">提交时间</span><span class="meta-v text-xs">今天 09:15</span></div>
-        <div class="meta-row"><span class="meta-k">AI质量分</span><span class="meta-v mono text-warn">61分</span></div>
-      </div>
-      <div class="meta-card">
-        <div class="meta-title">风险分析摘要 <span style="float:right;font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;font-weight:400;">AI 生成</span></div>
-        <div style="font-size:12.5px;color:var(--text);line-height:1.7;">Secretary Agent 识别到2处中等风险：第3章假设与绪论存在逻辑矛盾；参考文献引用密度偏低（建议≥15篇，当前9篇）。</div>
-        <div style="font-size:10.5px;color:var(--text-3);font-family:'DM Mono',monospace;margin-top:8px;padding-top:8px;border-top:1px solid var(--border-2);">confidence: 0.82 · fallback: false</div>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-sec-detail"></div>
 
 
 <!-- ══════════════════════════════════
      PAGE: EXPERT LIST
 ══════════════════════════════════ -->
-<div class="page" id="page-expert-list">
-  <div style="margin-bottom:18px;">
-    <div class="page-title">专家评审工作台</div>
-    <div class="page-sub">我的评审任务 · 共 4 项</div>
-  </div>
-  <div class="tabs" data-tab-group="expert-desk">
-    <div class="tab-item active" data-filter="pending" onclick="activeTab(this)">待处理 (2)</div>
-    <div class="tab-item" data-filter="done" onclick="activeTab(this)">已处理 (2)</div>
-  </div>
-  <div class="data-table-wrap" data-tab-panel="expert-desk">
-    <table class="data-table">
-      <thead><tr><th>项目信息</th><th>申报类型</th><th>研究方向</th><th>截止时间</th><th>状态</th><th>操作</th></tr></thead>
-      <tbody>
-        <tr data-tab="pending" style="background:#fffbeb;">
-          <td><div class="td-name" onclick="showPage('expert-review')">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031</div></td>
-          <td class="text-xs">国创计划</td>
-          <td><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">NLP</span><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">多模态</span></td>
-          <td><span class="text-danger mono text-xs">3天后</span></td>
-          <td><span class="badge b-yellow">待评审</span></td>
-          <td><button class="btn btn-sm btn-primary" onclick="showPage('expert-review')">进入评审</button></td>
-        </tr>
-        <tr data-tab="pending" style="background:#fffbeb;">
-          <td><div class="td-name" onclick="showPage('expert-review')">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045</div></td>
-          <td class="text-xs">国创计划</td>
-          <td><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">联邦学习</span><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">隐私</span></td>
-          <td><span class="mono text-xs text-muted">7天后</span></td>
-          <td><span class="badge b-yellow">待评审</span></td>
-          <td><button class="btn btn-sm btn-primary" onclick="showPage('expert-review')">进入评审</button></td>
-        </tr>
-        <tr data-tab="done">
-          <td><div class="td-name">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063</div></td>
-          <td class="text-xs">校级项目</td>
-          <td><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">NLP</span></td>
-          <td class="text-xs text-muted">2025-03-08</td>
-          <td><span class="badge b-green">已提交</span></td>
-          <td><button class="btn btn-sm btn-secondary">查看意见</button></td>
-        </tr>
-        <tr data-tab="done">
-          <td><div class="td-name">深度学习对抗样本防御机制</div><div class="td-id">PROJ-2025-0062</div></td>
-          <td class="text-xs">院级重点</td>
-          <td><span class="tag" style="background:var(--blue-100);color:var(--blue-800);">安全</span></td>
-          <td class="text-xs text-muted">2025-03-01</td>
-          <td><span class="badge b-green">已提交</span></td>
-          <td><button class="btn btn-sm btn-secondary">查看意见</button></td>
-        </tr>
-        <tr class="tab-empty-row" data-tab-empty style="display:none;"><td colspan="6" class="tab-empty-cell">该分类下暂无任务</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
+<div class="page" id="page-expert-list"></div>
+<div class="page" id="page-expert-invite"></div>
 
 <!-- ══════════════════════════════════
-     PAGE: EXPERT REVIEW
+     PAGE: EXPERT REVIEW (dynamic)
 ══════════════════════════════════ -->
-<div class="page" id="page-expert-review">
-  <div class="breadcrumb">
-    <span class="bc-link" onclick="showPage('expert-list')">专家评审</span>
-    <span class="bc-sep">›</span><span>线上评审工作台</span>
-  </div>
-  <div style="margin-bottom:18px;">
-    <div class="page-title">线上评审工作台</div>
-    <div style="display:flex;gap:8px;margin-top:5px;"><span class="mono text-xs text-muted">PROJ-2025-0031</span><span class="badge b-yellow">待提交意见</span></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;">
-    <div>
-      <div class="ai-block">
-        <div class="ai-block-hd">
-          <div class="ai-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="white"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.5 4a.5.5 0 011 0v3.5l2.5 1.5a.5.5 0 01-.5.866L8 9.268V5z"/></svg></div>
-          <div class="ai-block-title">Review Agent · AI 一页纸摘要</div>
-          <span class="ai-tag" style="margin-left:auto;">AI 生成 · 仅供参考</span>
-        </div>
-        <div class="ai-grid">
-          <div class="ai-cell"><div class="ai-cell-lbl">项目摘要</div>本项目构建多模态情感分析系统，融合文本、语音、面部表情三类信号，使用Transformer架构进行跨模态融合，在公开数据集上达到SOTA精度。</div>
-          <div class="ai-cell"><div class="ai-cell-lbl">创新点提取</div>1. 提出跨模态注意力门控机制<br>2. 设计情感-语义解耦表征方法<br>3. 构建中文多模态情感数据集</div>
-          <div class="ai-cell"><div class="ai-cell-lbl">风险提示</div>第3章假设与绪论存在逻辑矛盾；数据集规模（5000条）是否足够支撑实验结论存疑。</div>
-          <div class="ai-cell"><div class="ai-cell-lbl">研究价值</div>在智能客服、心理健康监测领域有明确应用前景，与当前学院研究重点高度契合。</div>
-        </div>
-      </div>
-      <div class="doc-viewer">
-        <div class="doc-viewer-toolbar">
-          <div class="doc-viewer-title">申请书全文</div>
-          <span class="text-xs text-muted mono">PROJ-2025-0031 · v2</span>
-          <button class="btn btn-sm btn-secondary" onclick="toggleFullText(this,'er-fulltext')">展开全文</button>
-        </div>
-        <div class="doc-body" id="er-fulltext" style="max-height:200px;">
-          <h3>一、研究背景与意义</h3>
-          <p>情感计算（Affective Computing）是人机交互领域的重要研究方向，旨在使计算机能够识别、理解和表达人类情感。随着深度学习技术的迅猛发展，基于多模态融合的情感分析方法因其能够综合利用文本、语音、面部表情等多源信息，受到学界的广泛关注。</p>
-          <p>当前多模态情感分析研究存在以下主要挑战：（1）<span class="hl-yellow">跨模态信息融合方式粗糙，难以捕捉模态间细粒度交互</span>；（2）中文多模态情感数据集匮乏；（3）模型可解释性不足，限制了实际应用部署。</p>
-          <div class="annotation a-blue">Review Agent：此处背景分析充分，符合研究动机要求 · <span style="font-size:10px;font-family:'DM Mono',monospace;">AI 生成 · 仅供参考</span></div>
-          <h3>二、研究目标与内容</h3>
-          <p>本研究目标为：（1）构建基于Transformer架构的跨模态融合框架；（2）设计跨模态注意力门控机制，实现细粒度模态交互；（3）构建包含5000条标注数据的中文多模态情感数据集；（4）在公开基准数据集CMU-MOSI和CMU-MOSEI上进行实验验证。</p>
-          <h3>三、研究假设</h3>
-          <p><span class="hl-red">H1：单模态方法在复杂情境下存在信息盲区，多模态融合能够显著提升情感识别精度。</span></p>
-          <p>H2：基于注意力门控的跨模态交互机制能够比简单拼接或加权平均方法更有效地建模模态间语义关系。</p>
-          <div class="annotation">AI预审：H1与绪论第1段描述存在细微矛盾，建议复核措辞 · <span style="font-size:10px;font-family:'DM Mono',monospace;">AI 生成 · 仅供参考</span></div>
-          <h3>四、创新点</h3>
-          <p>（1）<strong>跨模态注意力门控机制</strong>：提出一种新型注意力门控结构，自适应控制不同模态信息的融合权重。</p>
-          <p>（2）<strong>情感-语义解耦表征</strong>：设计双路编码器分别提取情感特征与语义特征，通过对比学习约束特征解耦程度。</p>
-          <h3>五、预期成果</h3>
-          <p>在CMU-MOSI数据集上达到Acc-2≥86%；发表CCF-B以上级别期刊/会议论文1篇；开源模型代码及数据集；申请发明专利1项。</p>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-section-title">评分（各维度 1-100 分）</div>
-        <div class="score-bar-row"><div class="sbl">创新性</div><div class="sbw"><div class="sbf" style="width:75%;background:#b45309;"></div></div><div class="sbv">75</div></div>
-        <div class="score-bar-row"><div class="sbl">研究价值</div><div class="sbw"><div class="sbf" style="width:82%;background:var(--primary);"></div></div><div class="sbv">82</div></div>
-        <div class="score-bar-row"><div class="sbl">可行性</div><div class="sbw"><div class="sbf" style="width:70%;background:#0891b2;"></div></div><div class="sbv">70</div></div>
-        <div class="score-bar-row"><div class="sbl">学术规范</div><div class="sbw"><div class="sbf" style="width:65%;background:#dc2626;"></div></div><div class="sbv">65</div></div>
-        <div class="score-bar-row"><div class="sbl">团队能力</div><div class="sbw"><div class="sbf" style="width:80%;background:#7c3aed;"></div></div><div class="sbv">80</div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--bg-2);border-radius:var(--radius);margin-top:6px;"><span class="text-muted">综合得分</span><span class="mono text-warn fw-6" style="font-size:24px;">74</span></div>
-      </div>
-      <div class="form-card">
-        <div class="form-section-title">评审意见</div>
-        <div class="form-grid form-grid-1" style="margin-bottom:14px;">
-          <div>
-            <label class="form-label">意见正文 <span style="color:#dc2626;">*</span></label>
-            <textarea class="form-textarea" style="min-height:130px;">本项目研究方向明确，多模态情感分析在智能服务领域有较强应用价值。主要问题：
-
-1. 第3章研究假设与绪论表述存在逻辑矛盾，建议统一；
-2. 数据集规模（5000条）相对偏小，建议扩充或提供更强的实验验证；
-3. 创新点中的"跨模态注意力门控机制"描述过于笼统，建议补充技术细节。
-
-综合建议：通过院级立项，建议进一步扩充数据规模后争取校级。</textarea>
-          </div>
-        </div>
-        <div style="background:var(--blue-50);border:1px solid var(--blue-200);border-radius:var(--radius);padding:10px 13px;margin-bottom:10px;">
-          <div style="font-size:12px;font-weight:600;color:var(--blue-800);margin-bottom:7px;">意见覆盖度检测 <span style="font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;font-weight:400;margin-left:6px;">AI 生成 · 仅供参考</span></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:12px;">
-            <div class="text-green">✓ 已覆盖：创新性评价</div>
-            <div class="text-green">✓ 已覆盖：可行性分析</div>
-            <div class="text-green">✓ 已覆盖：风险问题回应</div>
-            <div class="text-muted">— 未覆盖：研究团队评价</div>
-          </div>
-        </div>
-        <div class="btn-group"><button class="btn btn-ghost" type="button" onclick="showToast('评审意见草稿已保存','success')">保存草稿</button><button class="btn btn-primary" type="button" onclick="submitExpertReview()">提交评审意见</button></div>
-      </div>
-    </div>
-    <div>
-      <div class="meta-card">
-        <div class="meta-title">项目信息</div>
-        <div class="meta-row"><span class="meta-k">申请人</span><span class="meta-v">赵磊</span></div>
-        <div class="meta-row"><span class="meta-k">指导导师</span><span class="meta-v">陈教授</span></div>
-        <div class="meta-row"><span class="meta-k">申报类型</span><span class="meta-v text-xs">国创计划</span></div>
-        <div class="meta-row"><span class="meta-k">评审截止</span><span class="meta-v text-danger">3天后</span></div>
-        <div class="meta-row"><span class="meta-k">AI质量分</span><span class="meta-v mono text-warn">61分</span></div>
-      </div>
-      <div class="meta-card" style="background:var(--warn-bg);border-color:#fcd34d;">
-        <div class="meta-title" style="color:var(--warn);">评审隔离提示</div>
-        <div class="text-xs" style="color:#78350f;line-height:1.65;">本工作台仅显示您个人的AI洞察。其他专家的评审意见在答辩前不可见，防止锚定效应影响独立评审。</div>
-      </div>
-      <div class="meta-card">
-        <div class="meta-title">申请书附件材料</div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <button class="btn btn-sm btn-secondary" style="justify-content:flex-start;" onclick="toggleFullText(document.querySelector('[onclick*=er-fulltext]'),'er-fulltext')">申请书全文（点击展开）</button>
-          <button class="btn btn-sm btn-secondary" style="justify-content:flex-start;">附件1：技术路线图</button>
-          <button class="btn btn-sm btn-secondary" style="justify-content:flex-start;">附件2：实验预期数据</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-expert-review"></div>
 
 
 <!-- ══════════════════════════════════
@@ -874,7 +622,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 <div class="page" id="page-defense-list">
   <div style="margin-bottom:20px;">
     <div class="page-title">答辩评审</div>
-    <div class="page-sub">2025-03-22 · 第三会议室 · 本场共 3 个答辩项目</div>
+    <div class="page-sub">2026-03-22 · 第三会议室 · 本场共 3 个答辩项目</div>
   </div>
 
   <div class="stats-row" style="grid-template-columns:repeat(4,1fr);">
@@ -889,7 +637,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="def-proj-order">14:00<br><span style="font-size:10px;">第 1 项</span></div>
     <div class="def-proj-info">
       <div class="def-proj-title">多模态情感分析系统设计</div>
-      <div class="def-proj-meta">PROJ-2025-0031 · 申请人：赵磊 · 指导导师：陈教授 · 线上评审均分 78分</div>
+      <div class="def-proj-meta">PROJ-2026-0031 · 申请人：赵磊 · 指导导师：陈教授 · 线上评审均分 78分</div>
     </div>
     <span class="badge" style="background:#dbeafe;color:#1e40af;margin-right:4px;">答辩中</span>
     <div class="def-proj-actions">
@@ -903,7 +651,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="def-proj-order">14:30<br><span style="font-size:10px;">第 2 项</span></div>
     <div class="def-proj-info">
       <div class="def-proj-title">联邦学习框架下的数据隐私保护</div>
-      <div class="def-proj-meta">PROJ-2025-0045 · 申请人：陈浩 · 指导导师：王教授 · 线上评审均分 85分</div>
+      <div class="def-proj-meta">PROJ-2026-0045 · 申请人：陈浩 · 指导导师：王教授 · 线上评审均分 85分</div>
     </div>
     <span class="badge b-done" style="margin-right:4px;">待答辩</span>
     <div class="def-proj-actions">
@@ -917,7 +665,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div class="def-proj-order">15:00<br><span style="font-size:10px;">第 3 项</span></div>
     <div class="def-proj-info">
       <div class="def-proj-title">智能合约形式化验证方法</div>
-      <div class="def-proj-meta">PROJ-2025-0055 · 申请人：黄晨 · 指导导师：李教授 · 线上评审均分 82分</div>
+      <div class="def-proj-meta">PROJ-2026-0055 · 申请人：黄晨 · 指导导师：李教授 · 线上评审均分 82分</div>
     </div>
     <span class="badge b-green" style="margin-right:4px;">已评分</span>
     <div class="def-proj-actions">
@@ -941,7 +689,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div style="margin-bottom:18px;">
     <div class="page-title">答辩准备包</div>
-    <div class="page-sub">多模态情感分析系统设计 · PROJ-2025-0031</div>
+    <div class="page-sub">多模态情感分析系统设计 · PROJ-2026-0031</div>
   </div>
 
   <!-- One-page summary (AI) -->
@@ -1145,7 +893,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div style="margin-bottom:18px;">
     <div class="page-title">答辩评分</div>
-    <div class="page-sub">多模态情感分析系统设计 · PROJ-2025-0031</div>
+    <div class="page-sub">多模态情感分析系统设计 · PROJ-2026-0031</div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;">
     <div>
@@ -1166,7 +914,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <!-- My online review summary -->
         <div style="background:var(--bg-2);border-radius:var(--radius);padding:10px 13px;margin-top:12px;font-size:12.5px;border:1px solid var(--border-2);">
           <span class="fw-6 text-xs" style="color:var(--ink-2);">我的线上评审记录（参考）</span><br>
-          <span style="color:var(--text-2);">综合得分：74分 · 提交时间：2025-03-15 · 主要意见：逻辑矛盾需修改；数据集规模偏小；创新点描述笼统</span>
+          <span style="color:var(--text-2);">综合得分：74分 · 提交时间：2026-03-15 · 主要意见：逻辑矛盾需修改；数据集规模偏小；创新点描述笼统</span>
         </div>
         <div class="btn-group">
           <button class="btn btn-ghost">暂存</button>
@@ -1207,7 +955,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div style="margin-bottom:18px;">
     <div class="page-title">现场投票</div>
-    <div class="page-sub">多模态情感分析系统设计 · PROJ-2025-0031 · 评分完成后投票</div>
+    <div class="page-sub">多模态情感分析系统设计 · PROJ-2026-0031 · 评分完成后投票</div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;">
     <div>
@@ -1268,7 +1016,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 <div class="page" id="page-chair">
   <div style="margin-bottom:18px;">
     <div class="page-title">评审组长台</div>
-    <div class="page-sub">2025-03-22 · 本场答辩总览与最终确认</div>
+    <div class="page-sub">2026-03-22 · 本场答辩总览与最终确认</div>
   </div>
 
   <!-- Overview stats -->
@@ -1292,7 +1040,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="def-proj-order">14:00<br><span style="font-size:10px;">第 1 项</span></div>
         <div class="def-proj-info">
           <div class="def-proj-title">多模态情感分析系统设计</div>
-          <div class="def-proj-meta">PROJ-2025-0031 · 赵磊 · 院级立项（2票）· 均分 78</div>
+          <div class="def-proj-meta">PROJ-2026-0031 · 赵磊 · 院级立项（2票）· 均分 78</div>
         </div>
         <span class="badge b-green" style="margin-right:6px;">投票完成</span>
         <div class="def-proj-actions">
@@ -1308,7 +1056,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="def-proj-order">14:30<br><span style="font-size:10px;">第 2 项</span></div>
         <div class="def-proj-info">
           <div class="def-proj-title">联邦学习框架下的数据隐私保护</div>
-          <div class="def-proj-meta">PROJ-2025-0045 · 陈浩 · 校级立项（3票）· 均分 85</div>
+          <div class="def-proj-meta">PROJ-2026-0045 · 陈浩 · 校级立项（3票）· 均分 85</div>
         </div>
         <span class="badge b-green" style="margin-right:6px;">投票完成</span>
         <div class="def-proj-actions">
@@ -1324,7 +1072,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="def-proj-order">15:00<br><span style="font-size:10px;">第 3 项</span></div>
         <div class="def-proj-info">
           <div class="def-proj-title">智能合约形式化验证方法</div>
-          <div class="def-proj-meta">PROJ-2025-0055 · 黄晨 · 投票进行中 · 均分 82</div>
+          <div class="def-proj-meta">PROJ-2026-0055 · 黄晨 · 投票进行中 · 均分 82</div>
         </div>
         <span class="badge b-yellow" style="margin-right:6px;">投票中 2/3</span>
         <div class="def-proj-actions">
@@ -1371,7 +1119,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div style="margin-bottom:18px;">
     <div class="page-title">多模态情感分析系统设计</div>
-    <div style="display:flex;gap:8px;margin-top:5px;"><span class="mono text-xs text-muted">PROJ-2025-0031</span><span class="badge b-green">投票完成</span></div>
+    <div style="display:flex;gap:8px;margin-top:5px;"><span class="mono text-xs text-muted">PROJ-2026-0031</span><span class="badge b-green">投票完成</span></div>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 300px;gap:18px;">
@@ -1397,7 +1145,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="opinion-card">
           <div class="opinion-hd">
             <div class="expert-av-sm" style="background:var(--primary);">陈</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">陈志远 教授（组长）</div><div class="text-xs text-muted">提交时间：2025-03-14</div></div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">陈志远 教授（组长）</div><div class="text-xs text-muted">提交时间：2026-03-14</div></div>
             <div class="opinion-score">82</div>
           </div>
           <div class="opinion-body">本项目研究方向有价值，跨模态机制设计思路清晰。主要关注点：数据集5000条偏少，且逻辑假设问题需答辩时重点澄清。建议院级立项，未来扩充数据后可争取校级。</div>
@@ -1410,7 +1158,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="opinion-card">
           <div class="opinion-hd">
             <div class="expert-av-sm" style="background:#7c3aed;">王</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">王秀芳 副教授</div><div class="text-xs text-muted">提交时间：2025-03-15</div></div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">王秀芳 副教授</div><div class="text-xs text-muted">提交时间：2026-03-15</div></div>
             <div class="opinion-score" style="color:#7c3aed;">74</div>
           </div>
           <div class="opinion-body">创新点中门控机制与已有工作区分度不够明显，建议在答辩中进一步说明与基线方法的差异。情感-语义解耦方案有一定创意，但实验验证方案仍较薄弱。综合评定为院级。</div>
@@ -1423,7 +1171,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="opinion-card">
           <div class="opinion-hd">
             <div class="expert-av-sm" style="background:#059669;">张</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">张明远 教授</div><div class="text-xs text-muted">提交时间：2025-03-15</div></div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:600;">张明远 教授</div><div class="text-xs text-muted">提交时间：2026-03-15</div></div>
             <div class="opinion-score" style="color:#059669;">78</div>
           </div>
           <div class="opinion-body">研究价值明确，技术路线整体可行。逻辑矛盾问题建议在答辩时当场澄清。数据集规模可通过爬取公开数据集扩充。综合考虑建议院级立项，研究执行能力较强。</div>
@@ -1500,15 +1248,15 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 <div class="page" id="page-gov-review">
   <div style="margin-bottom:18px;">
     <div class="page-title">治理分析</div>
-    <div class="page-sub">2025年春季批次 · 数据截至 2025-03-17</div>
+    <div class="page-sub">2026年春季批次 · 数据截至 2026-03-17</div>
   </div>
-  <div id="gov-tabs" style="display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;">
-    <div class="tab-item active" onclick="setGovTab(this,'gov-review')">评审分析</div>
-    <div class="tab-item" onclick="setGovTab(this,'gov-expert')">专家分析</div>
-    <div class="tab-item" onclick="setGovTab(this,'gov-risk')">风险分析</div>
-    <div class="tab-item" onclick="setGovTab(this,'gov-ai')">AI治理助手</div>
+  <div id="gov-tabs" class="tabs">
+    <div class="tab-item active" onclick="setGovTab(this,'gov-panel-review')">评审分析</div>
+    <div class="tab-item" onclick="setGovTab(this,'gov-panel-expert')">专家分析</div>
+    <div class="tab-item" onclick="setGovTab(this,'gov-panel-risk')">风险分析</div>
+    <div class="tab-item" onclick="setGovTab(this,'gov-panel-ai')">AI治理助手</div>
   </div>
-  <div id="gov-review">
+  <div id="gov-panel-review">
     <div class="stats-row">
       <div class="stat-card c-blue stat-card-with-icon"><div class="stat-icon ic-blue"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v1H2V3zm0 3h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/></svg></div><div class="stat-body"><div class="stat-lbl">本批次总项目</div><div class="stat-num">38</div><div class="stat-hint">↑ 较上批次 +6</div></div></div>
       <div class="stat-card c-green stat-card-with-icon"><div class="stat-icon ic-green"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.3 5.3l-4 4a1 1 0 01-1.4 0l-2-2a1 1 0 011.4-1.4L7 8.6l3.3-3.3a1 1 0 011.4 1.4z"/></svg></div><div class="stat-body"><div class="stat-lbl">整体通过率</div><div class="stat-num">73%</div><div class="stat-hint">上批次 68%</div></div></div>
@@ -1581,12 +1329,12 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
           </svg>
         </div>
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);">
-          <span>2024春</span><span>2024秋</span><span>2025春批1</span><span>2025春批2</span>
+          <span>2026春</span><span>2026秋</span><span>2026春批1</span><span>2026春批2</span>
         </div>
       </div>
     </div>
   </div>
-  <div id="gov-expert" style="display:none;">
+  <div id="gov-panel-expert" style="display:none;">
     <div class="stats-row">
       <div class="stat-card c-blue"><div class="stat-num">24</div><div class="stat-lbl">本批次参与专家</div><div class="stat-hint">较上批次 +3</div></div>
       <div class="stat-card c-green"><div class="stat-num">88.2</div><div class="stat-lbl">平均评审质量</div><div class="stat-hint">满分100</div></div>
@@ -1635,7 +1383,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
   </div>
-  <div id="gov-risk" style="display:none;">
+  <div id="gov-panel-risk" style="display:none;">
     <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
       <div class="stat-card c-red"><div class="stat-num">3</div><div class="stat-lbl">高风险项目</div><div class="stat-hint">需人工处理</div></div>
       <div class="stat-card c-teal"><div class="stat-num">5</div><div class="stat-lbl">评分异常提醒</div><div class="stat-hint">待核查</div></div>
@@ -1646,7 +1394,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       <div class="risk-item">
         <div class="risk-level"><div class="risk-level-dot" style="background:#dc2626;"></div><div class="risk-level-txt text-danger">高风险</div></div>
         <div class="risk-body">
-          <div class="risk-title">基于图神经网络的知识推理研究 · PROJ-2025-0041</div>
+          <div class="risk-title">基于图神经网络的知识推理研究 · PROJ-2026-0041</div>
           <div class="risk-desc">材料不完整（缺少附件2项）；AI质量得分 48 分（低于60分阈值）；格式问题 3 处。</div>
           <div class="risk-meta">申请人：刘洋 · 提交时间：今天 08:40</div>
         </div>
@@ -1655,7 +1403,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       <div class="risk-item">
         <div class="risk-level"><div class="risk-level-dot" style="background:var(--warn);"></div><div class="risk-level-txt text-warn">中等</div></div>
         <div class="risk-body">
-          <div class="risk-title">多模态情感分析系统设计 · PROJ-2025-0031</div>
+          <div class="risk-title">多模态情感分析系统设计 · PROJ-2026-0031</div>
           <div class="risk-desc">检测到论点一致性得分 61 分；第3章与第1章研究假设矛盾；参考文献数量不足（9篇）。</div>
           <div class="risk-meta">申请人：赵磊 · 已由秘书人工复审</div>
         </div>
@@ -1666,7 +1414,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="risk-body">
           <div class="risk-title">专家王秀芳 · 评分偏差预警</div>
           <div class="risk-desc">本批次评分较历史均值低 6.3%，已连续2个批次偏低。属正常偏低倾向范围（≤10%），暂无需干预。</div>
-          <div class="risk-meta">触发时间：2025-03-15</div>
+          <div class="risk-meta">触发时间：2026-03-15</div>
         </div>
         <span class="badge b-yellow">观察中</span>
       </div>
@@ -1675,13 +1423,13 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
         <div class="risk-body">
           <div class="risk-title">回避关系冲突 · 专家王博士 × 申请人李同学</div>
           <div class="risk-desc">检测到专家王博士与申请人李同学存在2度合作关系（共同通讯作者，2023年），违反回避规则。</div>
-          <div class="risk-meta">PROJ-2025-0078 · 待重新分配专家</div>
+          <div class="risk-meta">PROJ-2026-0078 · 待重新分配专家</div>
         </div>
         <button class="btn btn-sm btn-secondary" type="button" onclick="showToast('已触发专家重新分配流程','info')">重新分配</button>
       </div>
     </div>
   </div>
-  <div id="gov-ai" style="display:none;">
+  <div id="gov-panel-ai" style="display:none;">
     <div class="nl-box">
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px;">
         <div style="width:28px;height:28px;background:rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1692,7 +1440,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       </div>
       <input class="nl-input" id="gov-nl-input" value="近三年人工智能方向项目通过率变化？" placeholder="输入问题，例如：近三年各方向项目通过率变化？哪些专家评分偏离均值最大？">
       <div class="nl-result" id="gov-nl-result">
-        <strong>查询结果</strong>：近三年（2022-2025）人工智能方向项目通过率呈稳步上升趋势：2022年 <strong>54%</strong>，2023年 <strong>61%</strong>，2024年 <strong>68%</strong>，2025年至今（含本批次） <strong>72%</strong>。提升主要来源于：AI辅助预审介入（约贡献+6%）以及导师指导质量提升（约贡献+3%）。深度学习子方向通过率最高（79%），知识图谱方向相对较低（58%）。<br><br>
+        <strong>查询结果</strong>：近三年（2022-2026）人工智能方向项目通过率呈稳步上升趋势：2022年 <strong>54%</strong>，2023年 <strong>61%</strong>，2026年 <strong>68%</strong>，2026年至今（含本批次） <strong>72%</strong>。提升主要来源于：AI辅助预审介入（约贡献+6%）以及导师指导质量提升（约贡献+3%）。深度学习子方向通过率最高（79%），知识图谱方向相对较低（58%）。<br><br>
         <span style="font-size:10.5px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;">Governance Agent · NL2SQL · confidence: 0.89 · AI 生成 · 仅供参考</span>
       </div>
       <div class="nl-chips">
@@ -1748,10 +1496,10 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <span>项目结果公示详情</span>
   </div>
   <div style="margin-bottom:18px;">
-    <div class="page-title">2025年春季第二批次项目结果公示</div>
+    <div class="page-title">2026年春季第二批次项目结果公示</div>
     <div style="display:flex;gap:8px;margin-top:5px;">
       <span class="badge b-green">公示中</span>
-      <span class="text-xs text-muted">公示期：2025-03-17 至 2025-03-24</span>
+      <span class="text-xs text-muted">公示期：2026-03-17 至 2026-03-24</span>
     </div>
   </div>
   <div class="detail-layout">
@@ -1759,17 +1507,17 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       <div class="form-card">
         <div class="form-section-title">公示内容</div>
         <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:16px;">
-          经2025年春季第二批次科研项目评审委员会审议，本批次共受理项目申请38项，经AI预审、专家线上评审、答辩评审及现场投票，最终结果如下：
+          经2026年春季第二批次科研项目评审委员会审议，本批次共受理项目申请38项，经AI预审、专家线上评审、答辩评审及现场投票，最终结果如下：
         </div>
         <div class="data-table-wrap" style="margin-bottom:0;">
           <table class="data-table">
             <thead><tr><th>项目名称</th><th>申请人</th><th>学院</th><th>立项等级</th><th>综合评分</th></tr></thead>
             <tbody>
-              <tr><td><div style="font-weight:500;">量子计算在密码学中的应用探索</div><div class="td-id">PROJ-2025-0029</div></td><td>孙杰</td><td>计算机学院</td><td><span class="badge" style="background:#fef3c7;color:#b45309;">国家级</span></td><td><span class="mono text-green">93分</span></td></tr>
-              <tr><td><div style="font-weight:500;">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045</div></td><td>陈浩</td><td>计算机学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">88分</span></td></tr>
-              <tr><td><div style="font-weight:500;">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063</div></td><td>王芳</td><td>信息学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">91分</span></td></tr>
-              <tr><td><div style="font-weight:500;">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055</div></td><td>黄晨</td><td>软件学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">82分</span></td></tr>
-              <tr><td><div style="font-weight:500;">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031</div></td><td>赵磊</td><td>信息学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">74分</span></td></tr>
+              <tr><td><div style="font-weight:500;">量子计算在密码学中的应用探索</div><div class="td-id">PROJ-2026-0029</div></td><td>孙杰</td><td>计算机学院</td><td><span class="badge" style="background:#fef3c7;color:#b45309;">国家级</span></td><td><span class="mono text-green">93分</span></td></tr>
+              <tr><td><div style="font-weight:500;">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2026-0045</div></td><td>陈浩</td><td>计算机学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">88分</span></td></tr>
+              <tr><td><div style="font-weight:500;">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2026-0063</div></td><td>王芳</td><td>信息学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">91分</span></td></tr>
+              <tr><td><div style="font-weight:500;">智能合约形式化验证方法</div><div class="td-id">PROJ-2026-0055</div></td><td>黄晨</td><td>软件学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">82分</span></td></tr>
+              <tr><td><div style="font-weight:500;">多模态情感分析系统设计</div><div class="td-id">PROJ-2026-0031</div></td><td>赵磊</td><td>信息学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">74分</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -1777,7 +1525,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
       <div class="form-card">
         <div class="form-section-title">提出异议</div>
         <div style="background:var(--warn-bg);border-radius:var(--radius);padding:10px 13px;font-size:12.5px;color:var(--warn);border-left:3px solid #b45309;margin-bottom:14px;">
-          公示期内（2025-03-17 至 2025-03-24），如对评审结果有异议，可填写异议申请。异议将由学术委员会审查，结果将在 10 个工作日内答复。
+          公示期内（2026-03-17 至 2026-03-24），如对评审结果有异议，可填写异议申请。异议将由学术委员会审查，结果将在 10 个工作日内答复。
         </div>
         <div class="form-grid form-grid-2" style="margin-bottom:12px;">
           <div><label class="form-label">关联项目</label><select class="form-select"><option>请选择异议项目</option><option>量子计算在密码学中的应用探索</option><option>多模态情感分析系统设计</option></select></div>
@@ -1792,9 +1540,9 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
     <div>
       <div class="meta-card">
         <div class="meta-title">公示信息</div>
-        <div class="meta-row"><span class="meta-k">批次</span><span class="meta-v text-xs">2025年春季第二批次</span></div>
-        <div class="meta-row"><span class="meta-k">公示开始</span><span class="meta-v mono text-xs">2025-03-17</span></div>
-        <div class="meta-row"><span class="meta-k">公示截止</span><span class="meta-v mono text-xs">2025-03-24</span></div>
+        <div class="meta-row"><span class="meta-k">批次</span><span class="meta-v text-xs">2026年春季第二批次</span></div>
+        <div class="meta-row"><span class="meta-k">公示开始</span><span class="meta-v mono text-xs">2026-03-17</span></div>
+        <div class="meta-row"><span class="meta-k">公示截止</span><span class="meta-v mono text-xs">2026-03-24</span></div>
         <div class="meta-row"><span class="meta-k">公示状态</span><span class="meta-v text-green">公示中</span></div>
         <div class="meta-row"><span class="meta-k">收到异议</span><span class="meta-v">1条</span></div>
       </div>
@@ -1816,14 +1564,77 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 
 </div><!-- /app-body -->
 
+<!-- 秘书端弹窗 -->
+<div class="sec-modal-overlay" id="sec-reject-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box">
+    <div class="sec-modal-title">AI 退件通知 · 预览与发送</div>
+    <div class="sec-modal-desc">系统已根据 Academic Agent 自检结论与材料完整性检查，自动起草精确退件说明。您可在下方修改后一键发送给申请人。</div>
+    <textarea class="form-textarea" id="sec-reject-draft" style="min-height:220px;font-size:12.5px;line-height:1.65;"></textarea>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeRejectModal()">取消</button>
+      <button class="btn btn-danger" type="button" onclick="ARGP_SECRETARY.sendRejectNotice()">确认发送退件通知</button>
+    </div>
+  </div>
+</div>
+<div class="sec-modal-overlay" id="sec-invite-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box" style="max-width:560px;">
+    <div class="sec-modal-title">发送评审邀请 · 确认</div>
+    <div class="sec-modal-desc">将向已选 3 位专家发送评审邀请邮件，请预览并确认内容。</div>
+    <label class="form-label">邀请邮件预览</label>
+    <textarea class="form-textarea" id="sec-invite-preview" style="min-height:200px;font-size:12px;line-height:1.65;"></textarea>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeExpertConfirmModal()">取消</button>
+      <button class="btn btn-primary" type="button" onclick="ARGP_SECRETARY.sendExpertInvites()">确认发送邀请</button>
+    </div>
+  </div>
+</div>
+<div class="sec-modal-overlay" id="sec-manual-expert-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box sec-manual-modal-box">
+    <div class="sec-modal-title">手动选择专家</div>
+    <div class="sec-modal-desc">从全校专家库中检索并添加至当前评审名单。每位专家显示与当前申请的即时匹配分数与回避状态。</div>
+    <input type="text" class="form-input" id="sec-manual-expert-input" placeholder="搜索专家姓名、学院或研究方向…" oninput="ARGP_SECRETARY.onManualExpertSearch(this.value)">
+    <div class="sec-manual-college-filters" id="sec-manual-college-filters"></div>
+    <div class="sec-manual-modal-list" id="sec-manual-expert-results"></div>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeManualExpertModal()">关闭</button>
+    </div>
+  </div>
+</div>
+<div class="sec-modal-overlay" id="sec-remind-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box">
+    <div class="sec-modal-title">手动催办 · 确认</div>
+    <div class="sec-modal-desc" id="sec-remind-body"></div>
+    <div style="background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius);padding:10px 12px;font-size:12px;line-height:1.6;color:var(--text-2);">【标准催办模板】您好，您负责的项目评审任务即将到期，请尽快登录平台提交评审意见。如有困难请联系秘书处。—— 学术委员会秘书处</div>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeRemindModal()">取消</button>
+      <button class="btn btn-primary" type="button" onclick="ARGP_SECRETARY.confirmRemind()">确认发送</button>
+    </div>
+  </div>
+</div>
+<div class="sec-modal-overlay" id="sec-overdue-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box">
+    <div class="sec-modal-title">超期处理</div>
+    <div class="sec-modal-desc">该项目已超过评审截止日期。请选择处理方式：</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-secondary" type="button" style="justify-content:flex-start;text-align:left;" onclick="ARGP_SECRETARY.confirmOverdueExtend()">延期 — 重设截止日期并通知专家</button>
+      <button class="btn btn-ghost" type="button" id="sec-overdue-proceed" style="justify-content:flex-start;text-align:left;" onclick="ARGP_SECRETARY.confirmOverdueProceed()">以现有意见推进 — 需半数以上专家已提交</button>
+    </div>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeOverdueModal()">取消</button>
+    </div>
+  </div>
+</div>
+
 <script src="argp-mock-messages.js"></script>
 <script src="argp-ui.js"></script>
 <script src="argp-breadcrumb.js"></script>
 <script src="argp-auth.js"></script>
+<script src="argp-mock-secretary.js"></script>
+<script src="argp-mock-expert.js"></script>
 <script>
 const subs = {
   secretary:'秘书受理台','sec-detail':'受理详情','sec-progress':'进度监控',
-  'expert-list':'专家评审','expert-review':'线上评审工作台',
+  'expert-list':'专家评审','expert-invite':'邀请响应','expert-review':'线上评审工作台',
   'defense-list':'答辩评审','defense-detail':'答辩详情','defense-prep':'答辩准备包',
   'defense-score':'答辩评分',vote:'现场投票',
   chair:'评审组长台','chair-proj-detail':'项目详情',
@@ -1853,7 +1664,7 @@ function showPage(id) {
   if (typeof updateBreadcrumb === 'function') updateBreadcrumb(id);
   const navMap = {
     secretary:'nav-sec','sec-detail':'nav-sec','sec-progress':'nav-progress',
-    'expert-list':'nav-exp','expert-review':'nav-exp',
+    'expert-list':'nav-exp','expert-invite':'nav-exp','expert-review':'nav-exp',
     'defense-list':'nav-def','defense-detail':'nav-def','defense-prep':'nav-def','defense-score':'nav-def',vote:'nav-def',
     chair:'nav-chair','chair-proj-detail':'nav-chair',
     'gov-review':'nav-gov','pub-detail':'nav-gov'
@@ -1867,14 +1678,33 @@ function showPage(id) {
   if (id === 'gov-review') {
     const tabs = document.getElementById('gov-tabs');
     if (tabs) tabs.style.display = '';
-    const panel = document.getElementById('gov-review');
+    const panel = document.getElementById('gov-panel-review');
     if (panel) panel.style.display = '';
   }
   window.scrollTo(0, 0);
+  if (id === 'secretary' && window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.renderSecretaryDesk();
+  }
+  if (id === 'sec-detail' && window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.renderDetailPage('PROJ-2026-0031');
+  }
+  if (id === 'sec-progress' && window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.renderProgressPage();
+  }
+  if (id === 'expert-list' && window.ARGP_EXPERT) {
+    window.ARGP_EXPERT.renderExpertList();
+  }
+  if (id === 'expert-invite' && window.ARGP_EXPERT) {
+    window.ARGP_EXPERT.renderExpertInvite();
+  }
+  if (id === 'expert-review' && window.ARGP_EXPERT) {
+    window.ARGP_EXPERT.resetReviewState();
+    window.ARGP_EXPERT.renderExpertReview();
+  }
 }
 
 function setGovTab(el, id) {
-  ['gov-review','gov-expert','gov-risk','gov-ai'].forEach(function(i) {
+  ['gov-panel-review','gov-panel-expert','gov-panel-risk','gov-panel-ai'].forEach(function(i) {
     var e = document.getElementById(i);
     if (e) e.style.display = 'none';
   });
@@ -1942,52 +1772,57 @@ function updateExpertCount() {
   if (el) el.textContent = '已选 ' + getExpertCount() + '/3 位专家';
 }
 
-function toggleExpert(btn) {
-  var card = btn.closest('.expert-card');
-  if (!card || card.style.pointerEvents === 'none') return;
-  var selected = card.classList.toggle('expert-selected');
-  if (selected) {
-    btn.className = 'btn btn-sm btn-primary';
-    btn.textContent = '已选';
-  } else {
-    btn.className = 'btn btn-sm btn-secondary';
-    btn.textContent = '选用';
-  }
-  updateExpertCount();
-}
-
-function confirmExperts() {
-  var n = getExpertCount();
-  if (n < 3) {
-    showToast('请选择 3 位专家（当前已选 ' + n + ' 位）', 'warn');
-    return;
-  }
-  showToast('评审邀请已发送至 3 位专家', 'success');
-}
-
-function confirmIntake() {
-  var n = getExpertCount();
-  if (n < 1) {
-    showToast('请至少选用 1 位专家', 'warn');
-    return;
-  }
-  showToast('受理成功，项目已进入专家评审流程', 'success');
-  setTimeout(function() { showPage('expert-list'); }, 1200);
-}
-
 function rejectProject(id) {
-  if (confirm('确认退件？系统将生成 AI 退件说明草稿（Demo）。\n项目：' + id)) {
-    showToast('退件通知已发送，项目已退回草稿状态', 'warn');
-    setTimeout(function() { showPage('secretary'); }, 1200);
+  if (window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.openRejectModal(id);
+    return;
+  }
+  if (confirm('确认退件？\n项目：' + id)) {
+    showToast('退件通知已发送', 'warn');
   }
 }
 
 function quickAccept(id) {
-  showToast('已一键受理 ' + id + '，请分配评审专家', 'success');
-  setTimeout(function() { showPage('sec-detail'); }, 800);
+  if (window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.quickAccept(id);
+    return;
+  }
+  showToast('已一键受理 ' + id, 'success');
+}
+
+function confirmExperts() {
+  if (window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.openExpertConfirmModal();
+    return;
+  }
+  showToast('评审邀请已发送', 'success');
+}
+
+function confirmIntake() {
+  if (window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.confirmIntake();
+    return;
+  }
+  showToast('受理成功', 'success');
+}
+
+function toggleExpert(btn) {
+  if (window.ARGP_SECRETARY) {
+    window.ARGP_SECRETARY.toggleExpert(btn);
+    return;
+  }
+  var card = btn.closest('.expert-card');
+  if (!card) return;
+  var selected = card.classList.toggle('expert-selected');
+  btn.className = 'btn btn-sm ' + (selected ? 'btn-primary' : 'btn-secondary');
+  btn.textContent = selected ? '已选' : '选用';
+  updateExpertCount();
 }
 
 function submitExpertReview() {
+  if (window.ARGP_EXPERT && window.ARGP_EXPERT.markCurrentSubmitted) {
+    window.ARGP_EXPERT.markCurrentSubmitted();
+  }
   showToast('评审意见已提交，感谢您的评审', 'success');
   setTimeout(function() { showPage('expert-list'); }, 1200);
 }
@@ -1995,7 +1830,7 @@ function submitExpertReview() {
 var DEFENSE_DETAIL = {
   P0031: {
     title: '多模态情感分析系统设计',
-    code: 'PROJ-2025-0031',
+    code: 'PROJ-2026-0031',
     status: '答辩中',
     statusClass: 'background:#dbeafe;color:#1e40af;',
     slot: '14:00 · 第 1 项',
@@ -2018,7 +1853,7 @@ var DEFENSE_DETAIL = {
       ],
       total: 74,
       opinion: '本项目研究方向明确，多模态情感分析在智能服务领域有较强应用价值。主要问题：\n\n1. 第3章研究假设与绪论表述存在逻辑矛盾，建议统一；\n2. 数据集规模（5000条）相对偏小；\n3. 创新点描述过于笼统，建议补充技术细节。\n\n综合建议：通过院级立项。',
-      meta: '提交时间：2025-03-15 16:42 · 状态：已锁定'
+      meta: '提交时间：2026-03-15 16:42 · 状态：已锁定'
     },
     defense: null,
     vote: null,
@@ -2026,7 +1861,7 @@ var DEFENSE_DETAIL = {
   },
   P0045: {
     title: '联邦学习框架下的数据隐私保护',
-    code: 'PROJ-2025-0045',
+    code: 'PROJ-2026-0045',
     status: '待答辩',
     statusClass: '',
     statusBadge: 'b-done',
@@ -2050,7 +1885,7 @@ var DEFENSE_DETAIL = {
       ],
       total: 85,
       opinion: '技术路线清晰，联邦学习与差分隐私结合具有明确应用价值。实验设计完整，建议在答辩中进一步说明与现有方案的对比优势。综合建议：推荐校级立项。',
-      meta: '提交时间：2025-03-14 11:20 · 状态：已锁定'
+      meta: '提交时间：2026-03-14 11:20 · 状态：已锁定'
     },
     defense: null,
     vote: null,
@@ -2058,7 +1893,7 @@ var DEFENSE_DETAIL = {
   },
   P0055: {
     title: '智能合约形式化验证方法',
-    code: 'PROJ-2025-0055',
+    code: 'PROJ-2026-0055',
     status: '已评分',
     statusClass: '',
     statusBadge: 'b-green',
@@ -2082,7 +1917,7 @@ var DEFENSE_DETAIL = {
       ],
       total: 80,
       opinion: '形式化验证方向契合学院区块链研究布局。符号执行与模型检测结合思路合理，建议在答辩中展示原型系统演示。综合建议：院级立项。',
-      meta: '提交时间：2025-03-13 09:15 · 状态：已锁定'
+      meta: '提交时间：2026-03-13 09:15 · 状态：已锁定'
     },
     defense: {
       dims: [
@@ -2092,7 +1927,7 @@ var DEFENSE_DETAIL = {
       ],
       total: 84,
       opinion: '答辩陈述条理清晰，对形式化验证工具链问题回答到位。原型演示增强了可行性说服力。',
-      meta: '提交时间：2025-03-22 15:18 · 状态：已锁定'
+      meta: '提交时间：2026-03-22 15:18 · 状态：已锁定'
     },
     vote: '您已于 15:22 投票「院级立项」。3/3 位专家已完成投票，等待组长确认。',
     canScore: false
@@ -2176,7 +2011,7 @@ function confirmChairResult() {
 }
 
 var GOV_NL = {
-  '近三年人工智能方向项目通过率变化？': '近三年（2022-2025）人工智能方向项目通过率呈稳步上升趋势：2022年 <strong>54%</strong>，2023年 <strong>61%</strong>，2024年 <strong>68%</strong>，2025年至今（含本批次） <strong>72%</strong>。提升主要来源于 AI 辅助预审介入（约贡献+6%）以及导师指导质量提升（约贡献+3%）。',
+  '近三年人工智能方向项目通过率变化？': '近三年（2022-2026）人工智能方向项目通过率呈稳步上升趋势：2022年 <strong>54%</strong>，2023年 <strong>61%</strong>，2026年 <strong>68%</strong>，2026年至今（含本批次） <strong>72%</strong>。提升主要来源于 AI 辅助预审介入（约贡献+6%）以及导师指导质量提升（约贡献+3%）。',
   '哪些专家评分偏离均值最大？': '本批次偏离最大的专家为 <strong>刘宇航</strong>（+10.1%）与 <strong>王秀芳</strong>（-6.3%），均在正常观察范围内，暂无需干预。',
   '哪些学院项目风险最高？': '风险最高学院为 <strong>人工智能学院</strong>（高风险项目 2 项、通过率 60%），其次为信息学院（黄色预警 3 项）。',
   '本批次与上批次通过率对比': '本批次通过率 <strong>73%</strong>，上批次 <strong>68%</strong>，提升 <strong>+5%</strong>。平均受理时长缩短 0.8 天。',
@@ -2229,6 +2064,13 @@ window.addEventListener('load', () => {
   const role = window.ARGP_AUTH && window.ARGP_AUTH.getRole();
   const h = window.location.hash;
   if (h === '#expert') showPage('expert-list');
+  else if (h.indexOf('#expert-invite') === 0) {
+    var invitePid = h.replace('#expert-invite', '').replace(/^-/, '');
+    if (window.ARGP_EXPERT) {
+      if (invitePid && invitePid.indexOf('PROJ') >= 0) window.ARGP_EXPERT.openInvite(invitePid);
+      else window.ARGP_EXPERT.openInvite('PROJ-2026-0087');
+    } else showPage('expert-invite');
+  }
   else if (h === '#defense') showPage('defense-list');
   else if (h === '#vote') showPage('vote');
   else if (h === '#chair') showPage('chair');
@@ -2241,7 +2083,10 @@ window.addEventListener('load', () => {
     }
   }
   else if (h === '#progress') navTo(document.getElementById('nav-progress'), 'sec-progress');
-  else if (role === 'secretary') navTo(document.getElementById('nav-sec'), 'secretary');
+  else if (role === 'secretary') {
+    navTo(document.getElementById('nav-sec'), 'secretary');
+    if (window.ARGP_SECRETARY) window.ARGP_SECRETARY.renderSecretaryDesk();
+  }
   else if (role === 'teacher' && window.ARGP_AUTH && window.ARGP_AUTH.getTeacherCap() === 'chair') {
     navTo(document.getElementById('nav-chair'), 'chair');
   }

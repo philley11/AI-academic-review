@@ -1,4 +1,4 @@
-/* ARGP Demo — 学生「我的项目」Mock 数据 */
+﻿/* ARGP Demo — 学生「我的项目」Mock 数据 */
 (function () {
   var STATUS = {
     draft:     { badge: 'b-draft',     label: '草稿',   cls: 'st-draft' },
@@ -14,79 +14,68 @@
 
   var STUDENT_PROJECTS = [
     {
-      id: 'PROJ-2025-0087',
+      id: 'PROJ-2026-0087',
       title: '强化学习在机器人路径规划中的应用研究',
       mentor: '张明远 教授',
       status: 'guidance',
       stage: '导师审阅',
       aiScore: 82,
-      updated: '2025-03-14',
+      updated: '2026-03-14',
       hasAiReport: true,
       showOnHome: true
     },
     {
-      id: 'PROJ-2025-0063',
+      id: 'PROJ-2026-0063',
       title: '基于Transformer的中文医学文本理解',
       mentor: '刘教授',
       status: 'review',
       stage: '专家评审',
       aiScore: 91,
-      updated: '2025-03-10',
+      updated: '2026-03-10',
       hasAiReport: true,
       showOnHome: true
     },
     {
-      id: 'PROJ-2025-0045',
+      id: 'PROJ-2026-0045',
       title: '联邦学习框架下的数据隐私保护',
       mentor: '王教授',
       status: 'defense',
       stage: '答辩',
       aiScore: 88,
-      updated: '2025-03-08',
+      updated: '2026-03-08',
       hasAiReport: true,
       showOnHome: true
     },
     {
-      id: 'PROJ-2025-0029',
+      id: 'PROJ-2026-0029',
       title: '量子计算在密码学中的应用探索',
       mentor: '张教授',
       status: 'pub',
       stage: '公示',
       aiScore: 93,
-      updated: '2025-03-01',
+      updated: '2026-03-01',
       hasAiReport: true,
       showOnHome: true
     },
     {
-      id: 'PROJ-2025-0091',
+      id: 'PROJ-2026-0091',
       title: '知识图谱驱动的科研文献推荐系统',
       mentor: '张明远 教授',
       status: 'draft',
       stage: '撰写中',
       aiScore: null,
-      updated: '2025-03-16',
+      updated: '2026-03-16',
       hasAiReport: false,
       showOnHome: false
     },
     {
-      id: 'PROJ-2025-0110',
+      id: 'PROJ-2026-0110',
       title: '边缘计算下的物联网安全协议研究',
       mentor: '王教授',
       status: 'submitted',
       stage: '待导师审核',
       aiScore: 78,
-      updated: '2025-03-15',
-      hasAiReport: true,
-      showOnHome: false
-    },
-    {
-      id: 'PROJ-2024-0198',
-      title: '深度学习图像分割新方法研究',
-      mentor: '张教授',
-      status: 'archived',
-      stage: '已归档',
-      aiScore: 89,
-      updated: '2024-12-20',
+      updated: '2026-03-15',
       hasAiReport: true,
       showOnHome: false
     }
@@ -118,7 +107,9 @@
     return isPreGuidance(p) && p.hasAiReport;
   }
 
-  var _currentDetailId = 'PROJ-2025-0087';
+  var _currentDetailId = 'PROJ-2026-0087';
+  var _studentCompareVersionId = null;
+  var _studentCompareReturnTo = 'list';
 
   function getProjectById(id) {
     for (var i = 0; i < STUDENT_PROJECTS.length; i++) {
@@ -179,12 +170,46 @@
     renderVersionList();
   }
 
+  function getStudentListTab(p) {
+    if (p.status === 'draft') return 'draft';
+    if (p.status === 'guidance') return 'guidance';
+    if (p.status === 'submitted' || p.status === 'review') return 'submitted';
+    if (p.status === 'defense') return 'defense';
+    if (p.status === 'pub' || p.status === 'archived') return 'pub';
+    return 'all';
+  }
+
+  function countStudentListTab(tabKey) {
+    if (tabKey === 'all') return STUDENT_PROJECTS.length;
+    return STUDENT_PROJECTS.filter(function (p) { return getStudentListTab(p) === tabKey; }).length;
+  }
+
+  function renderMyProjTabs() {
+    var el = document.getElementById('my-proj-tabs');
+    if (!el) return;
+    var defs = [
+      { key: 'all', label: '所有' },
+      { key: 'draft', label: '草稿' },
+      { key: 'guidance', label: '指导中' },
+      { key: 'submitted', label: '已提交' },
+      { key: 'defense', label: '已答辩' },
+      { key: 'pub', label: '已公示' }
+    ];
+    el.innerHTML = defs.map(function (d, i) {
+      var n = countStudentListTab(d.key);
+      return '<div class="tab-item' + (i === 0 ? ' active' : '') + '" data-filter="' + d.key + '" onclick="activeTab(this)">' +
+        d.label + ' (' + n + ')</div>';
+    }).join('');
+  }
+
   function renderMyProjCard(p) {
     var st = STATUS[p.status] || STATUS.draft;
-    return '<div class="my-proj-card" role="button" tabindex="0" data-proj-id="' + p.id + '" onclick="ARGP_MOCK.openProjectDetail(\'' + p.id + '\')">' +
+    var tab = getStudentListTab(p);
+    var stageHint = p.stage ? '<span class="text-xs text-muted">' + p.stage + '</span>' : '';
+    return '<div class="my-proj-card" data-tab="' + tab + '" role="button" tabindex="0" data-proj-id="' + p.id + '" onclick="ARGP_MOCK.openProjectDetail(\'' + p.id + '\')">' +
       '<div class="my-proj-card-main">' +
         '<div class="my-proj-card-title">' + p.title + '</div>' +
-        '<div class="my-proj-card-meta"><span class="mono">' + p.id + '</span><span>' + p.updated + '</span></div>' +
+        '<div class="my-proj-card-meta"><span class="mono">' + p.id + '</span><span>' + p.updated + '</span>' + stageHint + '</div>' +
       '</div>' +
       '<span class="my-proj-status ' + st.cls + '">' + st.label + '</span>' +
     '</div>';
@@ -208,6 +233,10 @@
       return b.updated.localeCompare(a.updated);
     });
     el.innerHTML = sorted.map(renderMyProjCard).join('');
+    if (window.ARGP_UI && window.ARGP_UI.initTabGroups) {
+      var page = document.getElementById('page-my-proj');
+      if (page) window.ARGP_UI.initTabGroups(page);
+    }
   }
 
   function renderStudentProjectSummary() {
@@ -273,8 +302,68 @@
     }).join('');
   }
 
+  function syncAfterSubmitToMentor(projId) {
+    var p = getProjectById(projId);
+    if (p && p.status === 'draft') {
+      p.status = 'submitted';
+      p.stage = '待导师审核';
+      p.updated = '2026-03-17';
+      p.hasAiReport = true;
+    }
+    initStudentProjects();
+  }
+
+  function syncAfterMentorApprove(projId, mentorProj) {
+    var p = getProjectById(projId);
+    if (p) {
+      p.status = 'submitted';
+      p.stage = '秘书处受理';
+      p.updated = '2026-03-17';
+    }
+    if (window.ARGP_SECRETARY && window.ARGP_SECRETARY.upsertPendingFromMentor) {
+      window.ARGP_SECRETARY.upsertPendingFromMentor(projId, {
+        title: p ? p.title : (mentorProj ? mentorProj.title : projId),
+        type: mentorProj ? mentorProj.type : '—',
+        applicant: mentorProj ? mentorProj.student : '—',
+        grade: mentorProj ? mentorProj.grade : '—'
+      });
+    }
+    initStudentProjects();
+  }
+
+  function syncAfterMentorReject(projId) {
+    var p = getProjectById(projId);
+    if (p) {
+      p.status = 'guidance';
+      p.stage = '修改中';
+      p.updated = '2026-03-17';
+    }
+    initStudentProjects();
+  }
+
+  function syncAfterSecretaryIntake(projId) {
+    var p = getProjectById(projId);
+    if (p) {
+      p.status = 'review';
+      p.stage = '专家评审';
+      p.updated = '2026-03-17';
+    }
+    initStudentProjects();
+  }
+
+  function syncAfterSecretaryReject(projId) {
+    var p = getProjectById(projId);
+    if (p) {
+      p.status = 'guidance';
+      p.stage = '修改中';
+      p.updated = '2026-03-17';
+    }
+    initStudentProjects();
+  }
+
   function initStudentProjects() {
     renderStudentProjectSummary();
+    renderMyProjTabs();
     renderMyProjList();
     updateMyProjMeta();
     renderStudentHomeBoard();
@@ -285,13 +374,13 @@
   }
 
   var VERSION_HISTORY = {
-    'PROJ-2025-0087': [
+    'PROJ-2026-0087': [
       {
         id: 'v3',
         current: true,
         locked: true,
         note: '修复逻辑矛盾问题，更新第三章假设表述',
-        meta: '2025-03-14 09:45 · 李明',
+        meta: '2026-03-14 09:45 · 李明',
         title: '申请书正文 · v3',
         content:
           '<h3>一、研究背景与意义</h3>' +
@@ -310,7 +399,7 @@
         current: false,
         locked: false,
         note: '补充创新点说明，修改参考文献格式',
-        meta: '2025-03-12 16:20 · 李明',
+        meta: '2026-03-12 16:20 · 李明',
         title: '申请书正文 · v2',
         content:
           '<h3>一、研究背景与意义</h3>' +
@@ -327,7 +416,7 @@
         current: false,
         locked: false,
         note: '初稿提交',
-        meta: '2025-03-10 11:00 · 李明',
+        meta: '2026-03-10 11:00 · 李明',
         title: '申请书正文 · v1',
         content:
           '<h3>一、研究背景与意义</h3>' +
@@ -347,7 +436,7 @@
       id: 'sample-app-rl',
       type: '范例申请书',
       typeCls: 'sample-type-app',
-      title: '2024年国创优秀项目申请书范例 · 强化学习方向',
+      title: '2026年国创优秀项目申请书范例 · 强化学习方向',
       desc: '含完整章节结构、创新点表述与参考文献格式示范，适合国创计划申报参考。',
       meta: '计算机学院 · 匿名范例 · PDF 28页',
       content:
@@ -381,7 +470,7 @@
   ];
 
   function getVersionHistory(projId) {
-    return VERSION_HISTORY[projId] || VERSION_HISTORY['PROJ-2025-0087'] || [];
+    return VERSION_HISTORY[projId] || VERSION_HISTORY['PROJ-2026-0087'] || [];
   }
 
   function getVersionById(projId, versionId) {
@@ -424,7 +513,7 @@
     listEl.innerHTML = versions.map(function (v) {
       var actions = '<button class="btn btn-sm btn-secondary" type="button" onclick="ARGP_MOCK.openVersionDetail(\'' + v.id + '\')">查看详情</button>';
       if (!v.current) {
-        actions += '<button class="btn btn-sm btn-ghost" type="button" onclick="showToast(\'版本对比功能（Demo）\',\'info\')">对比</button>';
+        actions += '<button class="btn btn-sm btn-ghost" type="button" onclick="ARGP_MOCK.openVersionCompare(\'' + v.id + '\',\'list\')">对比</button>';
         actions += '<button class="btn btn-sm btn-ghost" type="button" onclick="showToast(\'已恢复至 ' + v.id + '（Demo）\',\'success\')">恢复此版本</button>';
       }
       return '<div class="version-item">' +
@@ -453,10 +542,14 @@
   function openVersionDetail(versionId) {
     var v = getVersionById(_currentDetailId, versionId);
     if (!v) return;
+    _studentCompareVersionId = null;
+    _studentCompareReturnTo = 'list';
     var listView = document.getElementById('version-list-view');
     var detailView = document.getElementById('version-detail-view');
+    var diffView = document.getElementById('version-diff-view');
     if (listView) listView.style.display = 'none';
     if (detailView) detailView.style.display = '';
+    if (diffView) diffView.style.display = 'none';
     var titleEl = document.getElementById('version-detail-title');
     var metaEl = document.getElementById('version-detail-meta');
     var bodyEl = document.getElementById('version-detail-body');
@@ -469,7 +562,7 @@
     if (actionsEl) {
       var btns = '<button class="btn btn-secondary" type="button" onclick="ARGP_MOCK.closeVersionDetail()">返回列表</button>';
       if (!v.current) {
-        btns += '<button class="btn btn-ghost" type="button" onclick="showToast(\'版本对比（Demo）\',\'info\')">与当前版本对比</button>';
+        btns += '<button class="btn btn-ghost" type="button" onclick="ARGP_MOCK.openVersionCompare(\'' + v.id + '\',\'detail\')">与当前版本对比</button>';
         btns += '<button class="btn btn-primary" type="button" onclick="showToast(\'已恢复至 ' + v.id + '（Demo）\',\'success\')">恢复此版本</button>';
       }
       actionsEl.innerHTML = btns;
@@ -478,11 +571,75 @@
   }
 
   function closeVersionDetail() {
+    closeVersionCompare(true);
     var listView = document.getElementById('version-list-view');
     var detailView = document.getElementById('version-detail-view');
     if (listView) listView.style.display = '';
     if (detailView) detailView.style.display = 'none';
     window._openVersionId = null;
+  }
+
+  function getCurrentVersionRecord(projId) {
+    var versions = getVersionHistory(projId);
+    for (var i = 0; i < versions.length; i++) {
+      if (versions[i].current) return versions[i];
+    }
+    return versions[0] || null;
+  }
+
+  function openVersionCompare(versionId, returnTo) {
+    returnTo = returnTo || 'list';
+    var currentV = getCurrentVersionRecord(_currentDetailId);
+    if (!currentV || versionId === currentV.id) {
+      if (typeof showToast === 'function') showToast('请选择历史版本与当前版本对比', 'warn');
+      return;
+    }
+    if (!window.ARGP_MENTOR || !window.ARGP_MENTOR.buildVersionDiffHtml) {
+      if (typeof showToast === 'function') showToast('版本对比功能暂不可用', 'warn');
+      return;
+    }
+    _studentCompareVersionId = versionId;
+    _studentCompareReturnTo = returnTo;
+    var listView = document.getElementById('version-list-view');
+    var detailView = document.getElementById('version-detail-view');
+    var diffView = document.getElementById('version-diff-view');
+    if (listView) listView.style.display = 'none';
+    if (detailView) detailView.style.display = 'none';
+    if (diffView) diffView.style.display = '';
+    var badgesEl = document.getElementById('version-diff-badges');
+    if (badgesEl) {
+      badgesEl.innerHTML =
+        '<span class="version-tag mono">' + versionId + ' ↔ ' + currentV.id + '</span>' +
+        '<span class="version-status-pill is-history">版本对比</span>';
+    }
+    var bodyEl = document.getElementById('version-diff-body');
+    if (bodyEl) {
+      bodyEl.innerHTML = window.ARGP_MENTOR.buildVersionDiffHtml(_currentDetailId, versionId);
+    }
+    if (typeof showToast === 'function') showToast('已开启与 ' + versionId + ' 的版本对比', 'info');
+  }
+
+  function closeVersionCompare(silent) {
+    if (!_studentCompareVersionId) return;
+    var returnTo = _studentCompareReturnTo;
+    var versionId = _studentCompareVersionId;
+    _studentCompareVersionId = null;
+    _studentCompareReturnTo = 'list';
+    var diffView = document.getElementById('version-diff-view');
+    if (diffView) diffView.style.display = 'none';
+    if (silent) {
+      var listView = document.getElementById('version-list-view');
+      var detailView = document.getElementById('version-detail-view');
+      if (detailView) detailView.style.display = 'none';
+      if (listView) listView.style.display = '';
+      return;
+    }
+    if (returnTo === 'detail' && versionId) {
+      openVersionDetail(versionId);
+    } else {
+      var listView2 = document.getElementById('version-list-view');
+      if (listView2) listView2.style.display = '';
+    }
   }
 
   function openSamplePaper(paperId) {
@@ -521,11 +678,20 @@
     renderVersionList: renderVersionList,
     openVersionDetail: openVersionDetail,
     closeVersionDetail: closeVersionDetail,
+    openVersionCompare: openVersionCompare,
+    closeVersionCompare: closeVersionCompare,
     openSamplePaper: openSamplePaper,
     openProjectDetail: openProjectDetail,
     applyProjDetailView: applyProjDetailView,
+    getStudentListTab: getStudentListTab,
+    syncAfterSubmitToMentor: syncAfterSubmitToMentor,
+    syncAfterMentorApprove: syncAfterMentorApprove,
+    syncAfterMentorReject: syncAfterMentorReject,
+    syncAfterSecretaryIntake: syncAfterSecretaryIntake,
+    syncAfterSecretaryReject: syncAfterSecretaryReject,
     initStudentProjects: initStudentProjects,
     renderMyProjList: renderMyProjList,
+    renderMyProjTabs: renderMyProjTabs,
     renderStudentProjectSummary: renderStudentProjectSummary,
     renderStudentHomeBoard: renderStudentHomeBoard
   };

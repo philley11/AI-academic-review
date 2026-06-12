@@ -41,9 +41,16 @@
       ],
       'ai-check': [
         { label: '工作台', page: 'home' },
-        { label: 'AI 服务' },
-        { label: 'AI 助手', page: 'ai-assistant' },
-        { label: '质量检测' }
+        { label: '项目中心' },
+        { label: '项目申请', page: 'proj-new' },
+        { label: 'AI 质量自检' }
+      ],
+      'submit-success': [
+        { label: '工作台', page: 'home' },
+        { label: '项目中心' },
+        { label: '项目申请', page: 'proj-new' },
+        { label: 'AI 质量自检', page: 'ai-check' },
+        { label: '提交成功' }
       ],
       'mentor-list': [
         { label: '工作台', page: 'home' },
@@ -54,7 +61,7 @@
         { label: '工作台', page: 'home' },
         { label: '项目中心' },
         { label: '导师工作台', page: 'mentor-list' },
-        { label: '导师审阅' }
+        { label: '项目审阅' }
       ]
     },
     review: {
@@ -74,6 +81,11 @@
       'expert-list': [
         { label: '评审管理' },
         { label: '专家评审' }
+      ],
+      'expert-invite': [
+        { label: '评审管理' },
+        { label: '专家评审', page: 'expert-list' },
+        { label: '邀请响应' }
       ],
       'expert-review': [
         { label: '评审管理' },

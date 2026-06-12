@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -619,6 +619,7 @@ body {
 .step-item.step-clickable:hover .step-circle.s-pending { border-color: var(--primary); color: var(--primary); }
 .step-item.step-clickable:hover .step-lbl { color: var(--primary); }
 .apply-step-section { scroll-margin-top: 80px; transition: box-shadow .3s; }
+#apply-step-ai { margin-bottom: 14px; }
 .apply-step-section.apply-step-flash {
   box-shadow: 0 0 0 2px var(--action-blue, #1677ff);
   border-radius: var(--radius-lg);
@@ -764,6 +765,153 @@ body {
 .issue-title { font-weight: 600; margin-bottom: 3px; color: var(--ink); }
 .issue-desc  { color: var(--text-2); line-height: 1.55; }
 
+/* ─── AI CHECK STANDALONE PAGE ─── */
+.qc-issue-list { padding: 16px 20px 20px; }
+.qc-list-title { font-size: 12.5px; font-weight: 600; margin-bottom: 12px; color: var(--ink-2); }
+.qc-issue-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.qc-issue-card.qc-red   { border-left: 3px solid var(--danger); }
+.qc-issue-card.qc-yellow { border-left: 3px solid var(--warn); }
+.qc-issue-card.qc-green  { border-left: 3px solid var(--success); }
+.qc-issue-card.expanded  { box-shadow: 0 2px 12px rgba(15,31,61,.08); }
+.qc-issue-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+.qc-level-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.qc-lb-red    { background: var(--danger-bg); color: #991b1b; border: 1px solid #fca5a5; }
+.qc-lb-yellow { background: var(--warn-bg); color: #92400e; border: 1px solid #fcd34d; }
+.qc-lb-green  { background: var(--success-bg); color: #065f46; border: 1px solid #6ee7b7; }
+.qc-issue-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.5; flex: 1; }
+.qc-issue-body { padding: 8px 16px 14px; }
+.qc-issue-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.65; margin: 0 0 10px; }
+.qc-issue-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.qc-ack-btn {
+  background: #991b1b !important;
+  color: #fff !important;
+  border-color: #991b1b !important;
+  margin-bottom: 8px;
+}
+.qc-ack-btn:hover { background: #7f1d1d !important; }
+.qc-ack-done {
+  font-size: 12px;
+  color: #991b1b;
+  background: var(--danger-bg);
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.qc-ack-check { font-weight: 700; margin-right: 4px; }
+.qc-expand-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+}
+.qc-expand-btn:hover { text-decoration: underline; }
+.qc-issue-detail {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.qc-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.qc-detail-item { grid-column: span 2; }
+.qc-detail-half { grid-column: span 1; }
+@media (max-width: 640px) {
+  .qc-detail-item, .qc-detail-half { grid-column: span 2; }
+}
+.qc-detail-lbl {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.qc-detail-val { font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+.qc-submit-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.qc-submit-hint {
+  font-size: 12.5px;
+  color: #991b1b;
+  background: var(--danger-bg);
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-top: 14px;
+  line-height: 1.55;
+}
+.form-textarea.locate-flash {
+  box-shadow: 0 0 0 2px var(--primary);
+  animation: locate-pulse 1.6s ease;
+}
+@keyframes locate-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--primary); }
+  50% { box-shadow: 0 0 0 4px rgba(37,99,235,.35); }
+}
+.submit-success-wrap {
+  text-align: center;
+  padding: 48px 24px 32px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.submit-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  color: #059669;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  border: 2px solid #6ee7b7;
+}
+.submit-success-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.submit-success-desc {
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.75;
+  margin: 0;
+}
+
 /* ─── SCORE BAR ─── */
 .score-bar-row { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
 .sbl { width: 78px; font-size: 12px; color: var(--text-2); flex-shrink: 0; }
@@ -812,6 +960,490 @@ body {
 }
 .annotation.a-blue { background: var(--blue-50); border-left-color: var(--primary); color: var(--blue-800); }
 .annotation.a-red  { background: #fff5f5; border-left-color: var(--danger); color: #991b1b; }
+.mentor-annot { position: relative; padding-right: 8px; }
+.mentor-annot .annot-hd {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 3px; flex-wrap: wrap;
+}
+.mentor-annot .annot-author { font-size: 11px; font-weight: 600; color: var(--ink); }
+.mentor-annot .annot-time { font-size: 10px; color: var(--text-3); }
+.mentor-annot .annot-toolbar { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+.mentor-annot .annot-tool-btn {
+  font-size: 10.5px; padding: 2px 8px; border: 1px solid var(--border);
+  border-radius: 4px; background: var(--white); color: var(--text-2);
+  cursor: pointer; font-family: inherit; line-height: 1.4;
+}
+.mentor-annot .annot-tool-btn:hover { border-color: var(--primary); color: var(--primary); }
+.mentor-annot .annot-tool-btn.is-active {
+  background: #fff5f5; border-color: #fca5a5; color: #991b1b; font-weight: 600;
+}
+.mentor-annot .annot-tool-btn.annot-tool-save {
+  background: var(--primary); border-color: var(--primary); color: #fff;
+}
+.mentor-annot .annot-tool-btn.annot-tool-save:hover { background: var(--primary-dark); }
+.mentor-annot .annot-del {
+  background: none; border: none; color: var(--text-3);
+  font-size: 16px; cursor: pointer; line-height: 1; padding: 2px 6px;
+}
+.mentor-annot .annot-del:hover { color: var(--danger); }
+.mentor-annot .annot-body { font-size: 12.5px; line-height: 1.55; }
+.mentor-annot .annot-body.is-editing {
+  outline: 1px dashed var(--primary);
+  background: #fff;
+  border-radius: 4px;
+  padding: 4px 6px;
+  min-height: 1.5em;
+}
+.hl-annot-mark {
+  background: rgba(254, 240, 138, 0.35);
+  border-bottom: 2px solid #ca8a04;
+  padding: 0 1px;
+  border-radius: 0;
+  text-decoration: underline;
+  text-decoration-color: #ca8a04;
+  text-underline-offset: 2px;
+}
+.hl-annot-mark.hl-annot-red {
+  background: rgba(254, 202, 202, 0.45);
+  border-bottom-color: #dc2626;
+  text-decoration-color: #dc2626;
+}
+.annot-inline-draft {
+  display: inline;
+  min-width: 72px;
+  max-width: 100%;
+  outline: none;
+  border: none;
+  border-bottom: 1.5px dashed var(--primary);
+  background: #fffbeb;
+  color: #78350f;
+  font-size: 12.5px;
+  line-height: 1.6;
+  padding: 0 4px;
+  margin: 0 2px;
+  vertical-align: baseline;
+  font-family: inherit;
+}
+.annot-inline-draft:empty::before {
+  content: '输入批注…';
+  color: var(--text-3);
+  font-style: italic;
+  pointer-events: none;
+}
+.annot-compose-panel {
+  margin: 8px 0 12px;
+  padding: 10px 12px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius);
+  border-left: 3px solid #ca8a04;
+}
+.annot-compose-panel .annot-inline-draft {
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  min-height: 32px;
+}
+.annot-compose-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.annot-compose-btn {
+  font-size: 12px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1.4;
+  transition: background .12s, color .12s;
+}
+.annot-compose-btn:hover { background: rgba(15, 31, 61, 0.05); color: var(--ink); }
+.annot-compose-btn.annot-compose-ai {
+  background: rgba(0, 105, 92, 0.08);
+  color: #00695c;
+  font-weight: 500;
+}
+.annot-compose-btn.annot-compose-ai:hover { background: rgba(0, 105, 92, 0.14); }
+.annot-compose-btn.annot-compose-ai.is-open {
+  background: linear-gradient(135deg, #00695c, #00897b);
+  color: #fff;
+}
+.annot-compose-btn.annot-compose-close { color: var(--text-3); }
+.annot-compose-btn.annot-compose-close:hover { color: var(--text-2); background: rgba(15, 31, 61, 0.04); }
+.annot-compose-btn.annot-compose-confirm {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 500;
+  margin-left: auto;
+}
+.annot-compose-btn.annot-compose-confirm:hover { background: var(--primary-dark); color: #fff; }
+.hl-annot-mark[data-temp-mark] {
+  background: rgba(254, 240, 138, 0.2);
+  border-bottom-style: dashed;
+  text-decoration-style: dashed;
+}
+.annot-ai-suggestions {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #fcd34d;
+}
+.annot-ai-suggest-hd {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.annot-ai-suggest-item {
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+}
+.annot-ai-suggest-item:hover {
+  border-color: #00897b;
+  background: #f0fdf4;
+}
+.annot-ai-suggest-item:last-child { margin-bottom: 0; }
+.mentor-diff-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 400px;
+}
+@media (max-width: 768px) {
+  .mentor-diff-layout { grid-template-columns: 1fr; }
+}
+.mentor-diff-pane {
+  padding: 16px 18px;
+  overflow-y: auto;
+  max-height: 520px;
+  font-size: 13px;
+  line-height: 1.85;
+}
+.mentor-diff-pane + .mentor-diff-pane { border-left: 1px solid var(--border); }
+.mentor-diff-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+}
+.mentor-diff-pane h3 { font-size: 13.5px; font-weight: 600; margin: 12px 0 6px; }
+.diff-del {
+  background: #fecaca;
+  color: #991b1b;
+  text-decoration: line-through;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+.diff-ins {
+  background: #bbf7d0;
+  color: #065f46;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+.mentor-diff-legend {
+  display: flex;
+  gap: 14px;
+  padding: 8px 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-2);
+}
+.heritage-seg-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.heritage-color-btn {
+  font-size: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+.heritage-color-btn.active { font-weight: 700; box-shadow: 0 0 0 1px currentColor; }
+.heritage-color-btn.hcb-orange.active { color: #c2410c; border-color: #fdba74; background: #fff7ed; }
+.heritage-color-btn.hcb-blue.active { color: #1d4ed8; border-color: #93c5fd; background: #eff6ff; }
+.heritage-color-btn.hcb-green.active { color: #047857; border-color: #6ee7b7; background: #f0fdf4; }
+.heritage-corrections {
+  margin: 0 20px 12px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.heritage-corrections-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.heritage-correction-item {
+  font-size: 11.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.heritage-correction-item:last-child { border-bottom: none; }
+.heritage-pending-bar {
+  margin: 0 20px 12px;
+  padding: 12px 14px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.heritage-pending-bar .pending-text { font-size: 12.5px; color: #78350f; line-height: 1.5; }
+.mentor-diff-pane .annotation,
+.mentor-diff-pane .mentor-annot {
+  margin: 6px 0 10px;
+  pointer-events: none;
+}
+#version-diff-body {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+}
+#version-diff-body .mentor-diff-pane { max-height: 480px; }
+#mentor-doc-body.annot-mode { cursor: text; }
+#mentor-doc-body.annot-mode ::selection { background: #fde68a; }
+#mentor-btn-annot.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.mentor-review-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .mentor-review-layout { grid-template-columns: 1fr; }
+}
+.mentor-doc-col .doc-body { max-height: 520px; }
+.mentor-ver-switch { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.mentor-ver-btn {
+  font-size: 11px; padding: 3px 10px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--white); color: var(--text-2);
+  cursor: pointer; font-family: 'DM Mono', monospace;
+}
+.mentor-ver-btn.active { border-color: var(--primary); background: var(--blue-50); color: var(--primary); font-weight: 600; }
+.mentor-ai-panel .ai-block { margin-bottom: 12px; }
+.mentor-advisor-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mentor-advisor-stack .ai-cell { width: 100%; box-sizing: border-box; }
+.mentor-ver-change-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  font-family: inherit;
+  color: rgba(255,255,255,0.9);
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+.mentor-ver-change-card:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.28);
+}
+.mentor-ver-change-card.is-active {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(147,197,253,0.35);
+}
+.mentor-ver-change-card.is-empty {
+  cursor: default;
+  opacity: 0.75;
+}
+.mvc-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.mvc-title {
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--blue-200);
+  font-weight: 500;
+}
+.mvc-ver { font-size: 10px; color: rgba(255,255,255,0.55); }
+.mvc-stats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.mvc-stat {
+  font-size: 10.5px;
+  font-family: 'DM Mono', monospace;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.mvc-add { background: rgba(187,247,208,0.2); color: #bbf7d0; }
+.mvc-del { background: rgba(254,202,202,0.2); color: #fecaca; }
+.mvc-mod { background: rgba(254,240,138,0.2); color: #fde68a; }
+.mvc-none { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
+.mvc-summary {
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0 0 8px;
+  color: rgba(255,255,255,0.82);
+}
+.mvc-foot { font-size: 10.5px; color: var(--blue-200); }
+.mentor-ai-panel .meta-card { margin-bottom: 12px; }
+.heritage-entry-btn {
+  width: 100%; text-align: left; padding: 12px 14px;
+  background: linear-gradient(135deg, #fff7ed 0%, #eff6ff 50%, #f0fdf4 100%);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  cursor: pointer; font-family: inherit; transition: box-shadow .15s;
+}
+.heritage-entry-btn:hover { box-shadow: 0 2px 10px rgba(15,31,61,.08); }
+.heritage-entry-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.heritage-entry-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; }
+.heritage-modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(15,31,61,.45); align-items: center; justify-content: center;
+  padding: 24px;
+}
+.heritage-modal-overlay.open { display: flex; }
+.heritage-modal-box {
+  background: var(--white); border-radius: var(--radius-lg);
+  width: 100%; max-width: 720px; max-height: 85vh;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(15,31,61,.2);
+}
+#heritage-modal-body { overflow-y: auto; flex: 1; }
+.heritage-modal-hd {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #00695c 0%, #00897b 100%);
+  color: #fff;
+}
+.heritage-modal-title { font-size: 15px; font-weight: 600; }
+.heritage-modal-sub { font-size: 11px; opacity: .75; margin-top: 4px; font-family: 'DM Mono', monospace; }
+.heritage-modal-close {
+  background: rgba(255,255,255,.15); border: none; color: #fff;
+  width: 32px; height: 32px; border-radius: 50%; font-size: 20px;
+  cursor: pointer; line-height: 1; flex-shrink: 0;
+}
+.heritage-modal-close:hover { background: rgba(255,255,255,.25); }
+.heritage-legend {
+  display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 20px;
+  background: #fafafa; border-bottom: 1px solid var(--border); font-size: 11.5px;
+}
+.heritage-legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-2); }
+.hb-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.hb-orange { background: #ea580c; }
+.hb-blue { background: #2563eb; }
+.hb-green { background: #059669; }
+.heritage-stats {
+  display: flex; gap: 10px; padding: 12px 20px; flex-wrap: wrap;
+}
+.heritage-stat {
+  font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 4px;
+}
+.hs-orange { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+.hs-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
+.hs-green { background: #f0fdf4; color: #047857; border: 1px solid #6ee7b7; }
+.heritage-seg-list { padding: 8px 20px 16px; }
+.heritage-seg {
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px;
+  border-left: 4px solid transparent;
+}
+.heritage-orange { background: #fff7ed; border-left-color: #ea580c; border: 1px solid #fed7aa; border-left-width: 4px; }
+.heritage-blue { background: #eff6ff; border-left-color: #2563eb; border: 1px solid #bfdbfe; border-left-width: 4px; }
+.heritage-green { background: #f0fdf4; border-left-color: #059669; border: 1px solid #a7f3d0; border-left-width: 4px; }
+.heritage-seg-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.heritage-type-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; color: #fff;
+}
+.heritage-type-badge.hb-orange { background: #ea580c; }
+.heritage-type-badge.hb-blue { background: #2563eb; }
+.heritage-type-badge.hb-green { background: #059669; }
+.heritage-type-name { font-size: 11px; color: var(--text-2); font-weight: 500; }
+.heritage-seg-text { font-size: 13px; line-height: 1.7; color: var(--ink); margin-bottom: 8px; }
+.heritage-seg-source { font-size: 11.5px; color: var(--text-2); line-height: 1.55; }
+.heritage-src-lbl {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--text-3); margin-right: 6px;
+}
+.heritage-modal-ft {
+  padding: 10px 20px; font-size: 10.5px; color: var(--text-3);
+  font-family: 'DM Mono', monospace; border-top: 1px solid var(--border);
+  background: #fafafa;
+}
+.heritage-kg-section { padding: 16px 20px 12px; border-top: 1px solid var(--border); }
+.heritage-kg-title { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.heritage-kg-section .kg-wrap {
+  min-height: 228px;
+  height: auto;
+  padding: 18px 14px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #004d40 0%, #00695c 55%, #00897b 100%);
+}
+.heritage-kg-section .kg-wrap svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  height: auto;
+}
+.heritage-kg-caption {
+  font-size: 10.5px; color: var(--text-3); font-family: 'DM Mono', monospace;
+  text-align: center; margin-bottom: 4px;
+}
+.sign-confirm-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10001;
+  background: rgba(15,31,61,.45); align-items: center; justify-content: center; padding: 24px;
+}
+.sign-confirm-overlay.open { display: flex; }
+.sign-confirm-box {
+  background: var(--white); border-radius: var(--radius-lg);
+  width: 100%; max-width: 420px; padding: 24px;
+  box-shadow: 0 20px 60px rgba(15,31,61,.2);
+}
+.sign-confirm-title { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+.sign-confirm-warn {
+  font-size: 13.5px; line-height: 1.75; color: #991b1b;
+  background: var(--danger-bg); border: 1px solid #fca5a5;
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px;
+}
+.sign-confirm-desc { font-size: 13px; color: var(--text-2); line-height: 1.65; margin-bottom: 18px; }
+.sign-confirm-notice {
+  margin: 0 0 18px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+.sign-confirm-notice li { margin-bottom: 8px; }
+.sign-confirm-notice li:last-child { margin-bottom: 0; }
+#mentor-btn-approve.is-awaiting-sign { opacity: 0.65; }
+.sign-confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
 /* ─── VERSION ─── */
 .version-item {
@@ -1141,7 +1773,7 @@ body {
     <div class="gh-feed-wrap" id="gh-feed-wrap">
       <button class="gh-text-btn" type="button" id="gh-feed-btn">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a6 6 0 00-6 6v.5L1 10h14l-1-2.5V7a6 6 0 00-6-6zm-1.5 13a1.5 1.5 0 003 0h-3z"/></svg>
-        站内信
+        <span class="gh-text-btn-label">站内信息</span>
         <span class="gh-badge-inline" id="gh-feed-badge" style="display:none">0</span>
       </button>
       <div class="gh-feed-panel" id="gh-feed-panel">
@@ -1296,7 +1928,7 @@ body {
     <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px;">
       <div>
         <div class="page-title">学生工作台</div>
-        <div class="page-sub">李同学 · 2025年春季 · 第二评审批次</div>
+        <div class="page-sub">李同学 · 2026年春季 · 第二评审批次</div>
       </div>
     </div>
 
@@ -1338,7 +1970,7 @@ body {
     <div class="panel" id="home-stage-board" style="margin-bottom:18px;">
       <div class="panel-hd">
         <div class="panel-title">本批次进展</div>
-        <span class="text-xs text-muted">2025年春季 · 第二批次</span>
+        <span class="text-xs text-muted">2026年春季 · 第二批次</span>
         <a class="panel-ml section-action" onclick="showPage('my-proj')">全部项目</a>
       </div>
       <div id="home-stage-board-body" class="stage-board-body"></div>
@@ -1362,9 +1994,9 @@ body {
           <div class="todo-dot" style="background:#7c3aed"></div>
           <div class="todo-body">
             <div class="todo-title">待参加答辩 · 《联邦学习隐私保护框架》</div>
-            <div class="todo-meta">答辩时间：2025-03-22 14:00 · 第三会议室</div>
+            <div class="todo-meta">答辩时间：2026-03-22 14:00 · 第三会议室</div>
           </div>
-          <button class="todo-cta" onclick="openAiAssistant('defense','PROJ-2025-0045')">查看安排</button>
+          <button class="todo-cta" onclick="openAiAssistant('defense','PROJ-2026-0045')">查看安排</button>
         </div>
         <div class="todo-item">
           <div class="todo-dot" style="background:#059669"></div>
@@ -1372,7 +2004,7 @@ body {
             <div class="todo-title">AI自检完成 · 《强化学习路径规划》发现 2 处黄色风险</div>
             <div class="todo-meta">建议修改后提交导师审核</div>
           </div>
-          <button class="todo-cta" onclick="openAiAssistant('quality','PROJ-2025-0087',true)">查看报告</button>
+          <button class="todo-cta" onclick="openAiAssistant('quality','PROJ-2026-0087',true)">查看报告</button>
         </div>
       </div>
       <div class="panel">
@@ -1488,17 +2120,17 @@ body {
           <div class="todo-dot" style="background:#2563eb"></div>
           <div class="todo-body">
             <div class="todo-title">待审阅 · 《强化学习在机器人路径规划中的应用研究》</div>
-            <div class="todo-meta">学生：李同学 · 提交于 2025-03-14</div>
+            <div class="todo-meta">学生：李同学 · 提交于 2026-03-14</div>
           </div>
-          <button class="todo-cta" onclick="showPage('mentor-review')">立即审阅</button>
+          <button class="todo-cta" onclick="ARGP_MENTOR.openReview('PROJ-2026-0087')">立即审阅</button>
         </div>
         <div class="todo-item">
           <div class="todo-dot" style="background:#b45309"></div>
           <div class="todo-body">
             <div class="todo-title">待审阅 · 《基于自然语言处理的学术摘要生成》</div>
-            <div class="todo-meta">学生：王同学 · 提交于 2025-03-12</div>
+            <div class="todo-meta">学生：王同学 · 提交于 2026-03-12</div>
           </div>
-          <button class="todo-cta" onclick="showPage('mentor-review')">立即审阅</button>
+          <button class="todo-cta" onclick="ARGP_MENTOR.openReview('PROJ-2026-0087')">立即审阅</button>
         </div>
       </div>
       <div class="panel">
@@ -1509,14 +2141,14 @@ body {
         <div class="todo-item">
           <div class="todo-body">
             <div class="todo-title">强化学习在机器人路径规划中的应用研究</div>
-            <div class="todo-meta mono" style="font-size:10.5px;">李同学 · PROJ-2025-0087</div>
+            <div class="todo-meta mono" style="font-size:10.5px;">李同学 · PROJ-2026-0087</div>
           </div>
           <span class="badge b-guidance">待审阅</span>
         </div>
         <div class="todo-item">
           <div class="todo-body">
             <div class="todo-title">基于自然语言处理的学术摘要生成</div>
-            <div class="todo-meta mono" style="font-size:10.5px;">王同学 · PROJ-2025-0071</div>
+            <div class="todo-meta mono" style="font-size:10.5px;">王同学 · PROJ-2026-0071</div>
           </div>
           <span class="badge b-guidance">待审阅</span>
         </div>
@@ -1536,7 +2168,7 @@ body {
               <div class="agent-card-title">风险项目预警</div>
             </div>
             <div class="agent-card-desc">李同学《强化学习路径规划》检测到论点一致性风险，建议重点关注第 3 章表述。</div>
-            <div class="agent-card-link" onclick="showPage('mentor-review')">查看建议</div>
+            <div class="agent-card-link" onclick="ARGP_MENTOR.openReview('PROJ-2026-0087')">查看建议</div>
           </div>
           <div class="agent-card">
             <div class="agent-card-hd">
@@ -1544,7 +2176,7 @@ body {
               <div class="agent-card-title">Advisor Agent 审阅建议</div>
             </div>
             <div class="agent-card-desc">李同学申请书第 2 章研究目标表述可进一步聚焦，已生成 3 条修改建议供参考。</div>
-            <div class="agent-card-link" onclick="showPage('mentor-review')">查看建议</div>
+            <div class="agent-card-link" onclick="ARGP_MENTOR.openReview('PROJ-2026-0087')">查看建议</div>
           </div>
         </div>
       </div>
@@ -1595,7 +2227,11 @@ body {
     <div class="page-sub" id="my-proj-sub">李同学 · 共 6 项</div>
   </div>
 
-  <div class="my-proj-list" id="my-proj-list"></div>
+  <div class="tabs" data-tab-group="my-proj" id="my-proj-tabs"></div>
+  <div data-tab-panel="my-proj">
+    <div class="my-proj-list" id="my-proj-list"></div>
+    <div class="tab-empty-cell" data-tab-empty style="display:none;padding:24px;text-align:center;color:var(--text-3);font-size:13px;">该分类下暂无项目</div>
+  </div>
 </div><!-- /page-my-proj -->
 
 
@@ -1605,7 +2241,7 @@ body {
 <div class="page" id="page-proj-pub">
   <div style="margin-bottom:18px;">
     <div class="page-title">立项项目公示</div>
-    <div class="page-sub">2025年春季 · 第二批次 · 公示期 2025-03-17 至 2025-03-24</div>
+    <div class="page-sub">2026年春季 · 第二批次 · 公示期 2026-03-17 至 2026-03-24</div>
   </div>
 
   <div class="stats-row" style="grid-template-columns:repeat(4,1fr); margin-bottom:16px;">
@@ -1629,11 +2265,11 @@ body {
           <tr><th>项目名称</th><th>申请人</th><th>学院</th><th>立项等级</th><th>综合评分</th></tr>
         </thead>
         <tbody>
-          <tr><td><div class="td-name">量子计算在密码学中的应用探索</div><div class="td-id">PROJ-2025-0029</div></td><td>孙杰</td><td>计算机学院</td><td><span class="badge" style="background:#fef3c7;color:#b45309;">国家级</span></td><td><span class="mono text-green">93</span></td></tr>
-          <tr><td><div class="td-name">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045</div></td><td>陈浩</td><td>计算机学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">88</span></td></tr>
-          <tr><td><div class="td-name">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063</div></td><td>王芳</td><td>信息学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">91</span></td></tr>
-          <tr><td><div class="td-name">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055</div></td><td>黄晨</td><td>软件学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">82</span></td></tr>
-          <tr><td><div class="td-name">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031</div></td><td>赵磊</td><td>信息学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">74</span></td></tr>
+          <tr><td><div class="td-name">量子计算在密码学中的应用探索</div><div class="td-id">PROJ-2026-0029</div></td><td>孙杰</td><td>计算机学院</td><td><span class="badge" style="background:#fef3c7;color:#b45309;">国家级</span></td><td><span class="mono text-green">93</span></td></tr>
+          <tr><td><div class="td-name">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2026-0045</div></td><td>陈浩</td><td>计算机学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">88</span></td></tr>
+          <tr><td><div class="td-name">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2026-0063</div></td><td>王芳</td><td>信息学院</td><td><span class="badge b-blue">校级</span></td><td><span class="mono text-green">91</span></td></tr>
+          <tr><td><div class="td-name">智能合约形式化验证方法</div><div class="td-id">PROJ-2026-0055</div></td><td>黄晨</td><td>软件学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">82</span></td></tr>
+          <tr><td><div class="td-name">多模态情感分析系统设计</div><div class="td-id">PROJ-2026-0031</div></td><td>赵磊</td><td>信息学院</td><td><span class="badge b-green">院级</span></td><td><span class="mono text-warn">74</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1658,7 +2294,7 @@ body {
   <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px;">
     <div>
       <div class="page-title">项目列表</div>
-      <div class="page-sub" id="proj-list-sub">2025年春季 · 第二批次 · 共 12 项</div>
+      <div class="page-sub" id="proj-list-sub">2026年春季 · 第二批次 · 共 12 项</div>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
       <button class="btn btn-sm btn-secondary" type="button" data-roles="secretary" onclick="toggleBatchPanel()">
@@ -1715,10 +2351,10 @@ body {
         </tr>
       </thead>
       <tbody id="proj-list-tbody">
-        <tr data-tab="guidance" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0087">
+        <tr data-tab="guidance" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0087">
           <td>
             <div class="td-name" onclick="showPage('proj-detail')">强化学习在机器人路径规划中的应用研究</div>
-            <div class="td-id">PROJ-2025-0087</div>
+            <div class="td-id">PROJ-2026-0087</div>
           </td>
           <td class="col-applicant" data-roles="teacher,secretary">李明 <span class="text-xs text-muted">研二</span></td>
           <td>张教授</td>
@@ -1727,16 +2363,16 @@ body {
             <span class="mono text-warn" style="font-size:13px; font-weight:500;">82</span>
             <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:82%; background:#b45309;"></div></div>
           </td>
-          <td class="text-xs text-muted">2025-03-14</td>
+          <td class="text-xs text-muted">2026-03-14</td>
           <td style="display:flex; gap:5px;">
             <button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button>
-            <button class="btn btn-sm btn-secondary" data-roles="teacher" data-teacher-caps="mentor" onclick="showPage('mentor-review')">审阅</button>
+            <button class="btn btn-sm btn-secondary" data-roles="teacher" data-teacher-caps="mentor" onclick="ARGP_MENTOR.openReview('PROJ-2026-0087')">审阅</button>
           </td>
         </tr>
-        <tr data-tab="reviewing" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0063">
+        <tr data-tab="reviewing" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0063">
           <td>
             <div class="td-name" onclick="showPage('proj-detail')">基于Transformer的中文医学文本理解</div>
-            <div class="td-id">PROJ-2025-0063</div>
+            <div class="td-id">PROJ-2026-0063</div>
           </td>
           <td class="col-applicant" data-roles="teacher,secretary">王芳 <span class="text-xs text-muted">研三</span></td>
           <td>刘教授</td>
@@ -1745,13 +2381,13 @@ body {
             <span class="mono text-green" style="font-size:13px; font-weight:500;">91</span>
             <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:91%; background:#059669;"></div></div>
           </td>
-          <td class="text-xs text-muted">2025-03-10</td>
+          <td class="text-xs text-muted">2026-03-10</td>
           <td><button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button></td>
         </tr>
-        <tr data-tab="reviewing" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0045">
+        <tr data-tab="reviewing" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0045">
           <td>
             <div class="td-name" onclick="showPage('proj-detail')">联邦学习框架下的数据隐私保护</div>
-            <div class="td-id">PROJ-2025-0045</div>
+            <div class="td-id">PROJ-2026-0045</div>
           </td>
           <td class="col-applicant" data-roles="teacher,secretary">陈浩 <span class="text-xs text-muted">研三</span></td>
           <td>王教授</td>
@@ -1760,16 +2396,16 @@ body {
             <span class="mono text-green" style="font-size:13px; font-weight:500;">88</span>
             <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:88%; background:#059669;"></div></div>
           </td>
-          <td class="text-xs text-muted">2025-03-08</td>
+          <td class="text-xs text-muted">2026-03-08</td>
           <td style="display:flex; gap:5px;">
             <button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button>
             <button class="btn btn-sm btn-secondary" data-roles="teacher,secretary" onclick="location.href='review.html#defense'">答辩详情</button>
           </td>
         </tr>
-        <tr data-tab="submitted" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0031">
+        <tr data-tab="submitted" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0031">
           <td>
             <div class="td-name" onclick="showPage('proj-detail')">多模态情感分析系统</div>
-            <div class="td-id">PROJ-2025-0031</div>
+            <div class="td-id">PROJ-2026-0031</div>
           </td>
           <td class="col-applicant" data-roles="teacher,secretary">赵磊 <span class="text-xs text-muted">研二</span></td>
           <td>陈教授</td>
@@ -1778,13 +2414,13 @@ body {
             <span class="mono text-danger" style="font-size:13px; font-weight:500;">61</span>
             <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:61%; background:#dc2626;"></div></div>
           </td>
-          <td class="text-xs text-muted">2025-03-12</td>
+          <td class="text-xs text-muted">2026-03-12</td>
           <td><button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button></td>
         </tr>
-        <tr data-tab="pub" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0029">
+        <tr data-tab="pub" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0029">
           <td>
             <div class="td-name" onclick="showPage('proj-detail')">量子计算在密码学中的应用</div>
-            <div class="td-id">PROJ-2025-0029</div>
+            <div class="td-id">PROJ-2026-0029</div>
           </td>
           <td class="col-applicant" data-roles="teacher,secretary">孙杰 <span class="text-xs text-muted">研三</span></td>
           <td>张教授</td>
@@ -1793,97 +2429,79 @@ body {
             <span class="mono text-green" style="font-size:13px; font-weight:500;">93</span>
             <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:93%; background:#059669;"></div></div>
           </td>
-          <td class="text-xs text-muted">2025-03-01</td>
+          <td class="text-xs text-muted">2026-03-01</td>
           <td><button class="btn btn-sm btn-secondary" onclick="location.href='review.html#pub-detail'">公示</button></td>
         </tr>
-        <tr data-tab="archived" data-batch="batch-2024-fall-1" data-proj-id="PROJ-2024-0198">
-          <td>
-            <div class="td-name" onclick="showPage('proj-detail')">深度学习图像分割新方法研究</div>
-            <div class="td-id">PROJ-2024-0198</div>
-          </td>
-          <td class="col-applicant" data-roles="teacher,secretary">林晓 <span class="text-xs text-muted">已毕业</span></td>
-          <td>张教授</td>
-          <td><span class="badge b-archived">已归档</span></td>
-          <td>
-            <span class="mono text-green" style="font-size:13px; font-weight:500;">89</span>
-            <div class="prog-wrap" style="margin-top:4px; width:64px;"><div class="prog-fill" style="width:89%; background:#059669;"></div></div>
-          </td>
-          <td class="text-xs text-muted">2024-12-20</td>
-          <td style="display:flex; gap:5px;">
-            <button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button>
-            <button class="btn btn-sm btn-secondary" data-roles="secretary" onclick="showToast('已归档项目不可变更','info')">归档记录</button>
-          </td>
-        </tr>
-        <tr data-tab="draft" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0110">
-          <td><div class="td-name" onclick="showPage('proj-detail')">知识图谱驱动的学术推荐系统</div><div class="td-id">PROJ-2025-0110</div></td>
+        <tr data-tab="draft" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0110">
+          <td><div class="td-name" onclick="showPage('proj-detail')">知识图谱驱动的学术推荐系统</div><div class="td-id">PROJ-2026-0110</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">周航 <span class="text-xs text-muted">研一</span></td>
           <td>李教授</td>
           <td><span class="badge b-draft">草稿</span></td>
           <td><span class="mono text-muted" style="font-size:13px;">—</span></td>
-          <td class="text-xs text-muted">2025-03-15</td>
+          <td class="text-xs text-muted">2026-03-15</td>
           <td><button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button></td>
         </tr>
-        <tr data-tab="draft" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0108">
-          <td><div class="td-name" onclick="showPage('proj-detail')">边缘计算下的物联网安全协议</div><div class="td-id">PROJ-2025-0108</div></td>
+        <tr data-tab="draft" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0108">
+          <td><div class="td-name" onclick="showPage('proj-detail')">边缘计算下的物联网安全协议</div><div class="td-id">PROJ-2026-0108</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">马超 <span class="text-xs text-muted">研二</span></td>
           <td>王教授</td>
           <td><span class="badge b-draft">草稿</span></td>
           <td><span class="mono text-muted" style="font-size:13px;">—</span></td>
-          <td class="text-xs text-muted">2025-03-13</td>
+          <td class="text-xs text-muted">2026-03-13</td>
           <td><button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button></td>
         </tr>
-        <tr data-tab="guidance" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0095">
-          <td><div class="td-name" onclick="showPage('proj-detail')">基于强化学习的智能调度算法</div><div class="td-id">PROJ-2025-0095</div></td>
+        <tr data-tab="guidance" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0095">
+          <td><div class="td-name" onclick="showPage('proj-detail')">基于强化学习的智能调度算法</div><div class="td-id">PROJ-2026-0095</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">韩雪 <span class="text-xs text-muted">研二</span></td>
           <td>张教授</td>
           <td><span class="badge b-guidance">指导中</span></td>
           <td><span class="mono text-warn" style="font-size:13px;font-weight:500;">76</span></td>
-          <td class="text-xs text-muted">2025-03-11</td>
+          <td class="text-xs text-muted">2026-03-11</td>
           <td><button class="btn btn-sm btn-secondary" onclick="showPage('proj-detail')">详情</button></td>
         </tr>
-        <tr data-tab="guidance" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0091">
-          <td><div class="td-name" onclick="showPage('proj-detail')">大语言模型微调与对齐研究</div><div class="td-id">PROJ-2025-0091</div></td>
+        <tr data-tab="guidance" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0091">
+          <td><div class="td-name" onclick="showPage('proj-detail')">大语言模型微调与对齐研究</div><div class="td-id">PROJ-2026-0091</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">郑凯 <span class="text-xs text-muted">研三</span></td>
           <td>刘教授</td>
           <td><span class="badge b-guidance">指导中</span></td>
           <td><span class="mono text-green" style="font-size:13px;font-weight:500;">85</span></td>
-          <td class="text-xs text-muted">2025-03-09</td>
+          <td class="text-xs text-muted">2026-03-09</td>
           <td><button class="btn btn-sm btn-secondary">详情</button></td>
         </tr>
-        <tr data-tab="reviewing" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0031-R">
-          <td><div class="td-name" onclick="showPage('proj-detail')">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031</div></td>
+        <tr data-tab="reviewing" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0031-R">
+          <td><div class="td-name" onclick="showPage('proj-detail')">多模态情感分析系统设计</div><div class="td-id">PROJ-2026-0031</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">赵磊 <span class="text-xs text-muted">研二</span></td>
           <td>陈教授</td>
           <td><span class="badge b-review">评审中</span></td>
           <td><span class="mono text-warn" style="font-size:13px;font-weight:500;">74</span></td>
-          <td class="text-xs text-muted">2025-03-07</td>
+          <td class="text-xs text-muted">2026-03-07</td>
           <td><button class="btn btn-sm btn-secondary">详情</button></td>
         </tr>
-        <tr data-tab="reviewing" data-batch="batch-2025-spring-2" data-proj-id="PROJ-2025-0055">
-          <td><div class="td-name" onclick="showPage('proj-detail')">智能合约形式化验证方法</div><div class="td-id">PROJ-2025-0055</div></td>
+        <tr data-tab="reviewing" data-batch="batch-2026-spring-2" data-proj-id="PROJ-2026-0055">
+          <td><div class="td-name" onclick="showPage('proj-detail')">智能合约形式化验证方法</div><div class="td-id">PROJ-2026-0055</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">黄晨 <span class="text-xs text-muted">研三</span></td>
           <td>王教授</td>
           <td><span class="badge b-review">评审中</span></td>
           <td><span class="mono text-green" style="font-size:13px;font-weight:500;">88</span></td>
-          <td class="text-xs text-muted">2025-03-06</td>
+          <td class="text-xs text-muted">2026-03-06</td>
           <td><button class="btn btn-sm btn-secondary">详情</button></td>
         </tr>
-        <tr data-tab="archived" data-batch="batch-2024-fall-1" data-proj-id="PROJ-2024-0156">
-          <td><div class="td-name" onclick="showPage('proj-detail')">知识图谱构建与推理关键技术</div><div class="td-id">PROJ-2024-0156</div></td>
+        <tr data-tab="archived" data-batch="batch-2026-fall-1" data-proj-id="PROJ-2026-0156">
+          <td><div class="td-name" onclick="showPage('proj-detail')">知识图谱构建与推理关键技术</div><div class="td-id">PROJ-2026-0156</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">何静 <span class="text-xs text-muted">已毕业</span></td>
           <td>刘教授</td>
           <td><span class="badge b-archived">已归档</span></td>
           <td><span class="mono text-green" style="font-size:13px;font-weight:500;">86</span></td>
-          <td class="text-xs text-muted">2024-11-08</td>
+          <td class="text-xs text-muted">2026-11-08</td>
           <td><button class="btn btn-sm btn-secondary">查看</button></td>
         </tr>
-        <tr data-tab="pub" data-batch="batch-2024-fall-1" data-proj-id="PROJ-2024-0172">
-          <td><div class="td-name" onclick="showPage('proj-detail')">面向边缘计算的轻量化神经网络</div><div class="td-id">PROJ-2024-0172</div></td>
+        <tr data-tab="pub" data-batch="batch-2026-fall-1" data-proj-id="PROJ-2026-0172">
+          <td><div class="td-name" onclick="showPage('proj-detail')">面向边缘计算的轻量化神经网络</div><div class="td-id">PROJ-2026-0172</div></td>
           <td class="col-applicant" data-roles="teacher,secretary">宋伟 <span class="text-xs text-muted">已毕业</span></td>
           <td>王教授</td>
           <td><span class="badge b-archived">已归档</span></td>
           <td><span class="mono text-green" style="font-size:13px;font-weight:500;">90</span></td>
-          <td class="text-xs text-muted">2024-12-01</td>
+          <td class="text-xs text-muted">2026-12-01</td>
           <td><button class="btn btn-sm btn-secondary">查看</button></td>
         </tr>
         <tr class="tab-empty-row" data-tab-empty style="display:none;"><td colspan="7" class="tab-empty-cell">该分类下暂无项目</td></tr>
@@ -1968,8 +2586,8 @@ body {
             <label class="form-label">申报批次</label>
             <select class="form-select" id="proj-new-batch-select">
               <option value="" disabled>请选择申报批次</option>
-              <option value="batch-2025-spring-2" selected>2025年春季 · 第二批次（进行中）</option>
-              <option value="batch-2025-spring-3">2025年春季 · 第三批次（筹备中）</option>
+              <option value="batch-2026-spring-2" selected>2026年春季 · 第二批次（进行中）</option>
+              <option value="batch-2026-spring-3">2026年春季 · 第三批次（筹备中）</option>
             </select>
           </div>
         </div>
@@ -1981,13 +2599,13 @@ body {
         <div class="form-grid form-grid-1" style="margin-bottom:12px;">
           <div>
             <label class="form-label">研究背景与意义 <span class="req">*</span></label>
-            <textarea class="form-textarea" style="min-height:100px;" placeholder="请阐述研究背景、意义及国内外研究现状…"></textarea>
-            <div class="ai-assist-bar apply-step-section" id="apply-step-ai">
+            <textarea class="form-textarea" id="apply-text-bg" style="min-height:100px;" placeholder="请阐述研究背景、意义及国内外研究现状…"></textarea>
+            <div class="ai-assist-bar">
               <span class="ai-assist-label">Academic Agent · AI辅助写作</span>
               <div class="ai-assist-btns">
-                <button class="aab" type="button" onclick="event.stopPropagation();showToast('Academic Agent 已生成优化建议（Demo）','info')">优化表达</button>
-                <button class="aab" type="button" onclick="event.stopPropagation();showToast('已推荐 3 篇领域核心文献（Demo）','info')">补充引用</button>
-                <button class="aab" type="button" onclick="event.stopPropagation();showToast('逻辑检查完成，发现 1 处潜在矛盾','warn')">逻辑检查</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('bg','optimize')">优化表达</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('bg','cite')">补充引用</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('bg','logic')">逻辑检查</button>
               </div>
             </div>
           </div>
@@ -1995,13 +2613,29 @@ body {
         <div class="form-grid form-grid-1" style="margin-bottom:12px;">
           <div>
             <label class="form-label">研究目标与内容 <span class="req">*</span></label>
-            <textarea class="form-textarea" placeholder="请描述研究目标、主要内容与技术路线…"></textarea>
+            <textarea class="form-textarea" id="apply-text-goal" placeholder="请描述研究目标、主要内容与技术路线…"></textarea>
+            <div class="ai-assist-bar">
+              <span class="ai-assist-label">Academic Agent · AI辅助写作</span>
+              <div class="ai-assist-btns">
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('goal','optimize')">优化表达</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('goal','cite')">补充引用</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('goal','logic')">逻辑检查</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="form-grid form-grid-1">
           <div>
             <label class="form-label">创新点与预期成果 <span class="req">*</span></label>
-            <textarea class="form-textarea" placeholder="请说明创新点及预期成果…"></textarea>
+            <textarea class="form-textarea" id="apply-text-innov" placeholder="请说明创新点及预期成果…"></textarea>
+            <div class="ai-assist-bar">
+              <span class="ai-assist-label">Academic Agent · AI辅助写作</span>
+              <div class="ai-assist-btns">
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('innov','optimize')">优化表达</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('innov','cite')">补充引用</button>
+                <button class="aab" type="button" onclick="event.stopPropagation();ARGP_AI.runApplyWritingAction('innov','logic')">逻辑检查</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2033,6 +2667,9 @@ body {
         <div class="meta-row"><span class="meta-k">附件</span><span class="meta-v">0 个文件</span></div>
         <div class="meta-row"><span class="meta-k">最后保存</span><span class="meta-v text-xs text-muted">未保存</span></div>
       </div>
+      <div class="apply-step-section" id="apply-step-ai">
+        <div class="ai-suggest-panel" id="apply-ai-suggest-panel"></div>
+      </div>
       <div class="meta-card apply-step-section" id="apply-step-check">
         <div class="meta-title">AI 实时检测
           <span style="margin-left:auto; font-size:10px; color:var(--text-3); font-family:'DM Mono',monospace;">仅供参考</span>
@@ -2045,6 +2682,22 @@ body {
     </div>
   </div>
 </div><!-- /page-proj-new -->
+
+
+<!-- ══════════════════════════
+     AI QUALITY CHECK（独立页 · 项目申请流程）
+══════════════════════════ -->
+<div class="page" id="page-ai-check" data-roles="student">
+  <div id="ai-check-root"></div>
+</div><!-- /page-ai-check -->
+
+
+<!-- ══════════════════════════
+     SUBMIT SUCCESS
+══════════════════════════ -->
+<div class="page" id="page-submit-success" data-roles="student">
+  <div id="submit-success-root"></div>
+</div><!-- /page-submit-success -->
 
 
 <!-- ══════════════════════════
@@ -2081,7 +2734,7 @@ body {
     <div>
       <div class="page-title" id="proj-detail-title">强化学习在机器人路径规划中的应用研究</div>
       <div style="display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap;">
-        <span class="mono text-xs text-muted" id="proj-detail-id">PROJ-2025-0087</span>
+        <span class="mono text-xs text-muted" id="proj-detail-id">PROJ-2026-0087</span>
         <span class="my-proj-status st-guidance" id="proj-detail-status">指导中</span>
       </div>
     </div>
@@ -2104,7 +2757,7 @@ body {
       <div id="dt-overview" class="form-card" style="border-top:none; border-radius:0 0 var(--radius-lg) var(--radius-lg);">
         <div class="form-grid form-grid-2">
           <div><div class="form-label">项目类型</div><div style="margin-top:3px; font-size:13px;">国家级大学生创新创业训练计划</div></div>
-          <div><div class="form-label">申报批次</div><div style="margin-top:3px; font-size:13px;">2025年春季 · 第二批次</div></div>
+          <div><div class="form-label">申报批次</div><div style="margin-top:3px; font-size:13px;">2026年春季 · 第二批次</div></div>
           <div><div class="form-label">申请人</div><div style="margin-top:3px; font-size:13px;">李明（研究生二年级）</div></div>
           <div><div class="form-label">指导导师</div><div style="margin-top:3px; font-size:13px;">张明远 教授 · 计算机学院</div></div>
         </div>
@@ -2122,7 +2775,7 @@ body {
         <div class="doc-viewer" style="border-top:none; border-radius:0 0 var(--radius-lg) var(--radius-lg);">
           <div class="doc-viewer-toolbar">
             <div class="doc-viewer-title">申请书正文 · 强化学习在机器人路径规划中的应用研究</div>
-            <span style="font-size:10.5px; color:var(--text-3); font-family:'DM Mono',monospace;">v3 · 2025-03-14</span>
+            <span style="font-size:10.5px; color:var(--text-3); font-family:'DM Mono',monospace;">v3 · 2026-03-14</span>
           </div>
           <div class="doc-body">
             <h3>一、研究背景与意义</h3>
@@ -2147,14 +2800,14 @@ body {
           <svg width="14" height="14" viewBox="0 0 16 16" fill="#dc2626"><path d="M4 1h5l4 4v9a1 1 0 01-1 1H4a1 1 0 01-1-1V2a1 1 0 011-1zm5 0v4h4"/></svg>
           <span class="file-name">开题报告初稿_v2.pdf</span>
           <span class="file-size">2.4 MB</span>
-          <span style="margin-left:auto; font-size:11px; color:var(--text-3);">2025-03-14</span>
+          <span style="margin-left:auto; font-size:11px; color:var(--text-3);">2026-03-14</span>
           <button class="btn btn-sm btn-secondary">下载</button>
         </div>
         <div class="file-item" style="margin-top:6px;">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="#059669"><path d="M4 1h5l4 4v9a1 1 0 01-1 1H4a1 1 0 01-1-1V2a1 1 0 011-1zm5 0v4h4"/></svg>
           <span class="file-name">实验方案与预期数据.xlsx</span>
           <span class="file-size">0.8 MB</span>
-          <span style="margin-left:auto; font-size:11px; color:var(--text-3);">2025-03-14</span>
+          <span style="margin-left:auto; font-size:11px; color:var(--text-3);">2026-03-14</span>
           <button class="btn btn-sm btn-secondary">下载</button>
         </div>
       </div>
@@ -2169,13 +2822,13 @@ body {
           <div id="version-list-container">
             <div class="version-item">
               <span class="version-tag">v3</span>
-              <div class="v-info"><div class="v-note">修复逻辑矛盾问题，更新第三章假设表述</div><div class="v-meta">2025-03-14 09:45 · 李明</div></div>
+              <div class="v-info"><div class="v-note">修复逻辑矛盾问题，更新第三章假设表述</div><div class="v-meta">2026-03-14 09:45 · 李明</div></div>
               <div class="v-status-group"><span class="version-status-pill is-current">当前版本</span><span class="version-status-pill is-locked">已锁定</span></div>
               <div class="v-actions"><button class="btn btn-sm btn-secondary" type="button" onclick="ARGP_MOCK.openVersionDetail('v3')">查看详情</button></div>
             </div>
             <div class="version-item">
               <span class="version-tag">v2</span>
-              <div class="v-info"><div class="v-note">补充创新点说明，修改参考文献格式</div><div class="v-meta">2025-03-12 16:20 · 李明</div></div>
+              <div class="v-info"><div class="v-note">补充创新点说明，修改参考文献格式</div><div class="v-meta">2026-03-12 16:20 · 李明</div></div>
               <div class="v-status-group"><span class="version-status-pill is-history">历史版本</span></div>
               <div class="v-actions">
                 <button class="btn btn-sm btn-secondary" type="button" onclick="ARGP_MOCK.openVersionDetail('v2')">查看详情</button>
@@ -2185,7 +2838,7 @@ body {
             </div>
             <div class="version-item">
               <span class="version-tag">v1</span>
-              <div class="v-info"><div class="v-note">初稿提交</div><div class="v-meta">2025-03-10 11:00 · 李明</div></div>
+              <div class="v-info"><div class="v-note">初稿提交</div><div class="v-meta">2026-03-10 11:00 · 李明</div></div>
               <div class="v-status-group"><span class="version-status-pill is-history">历史版本</span></div>
               <div class="v-actions">
                 <button class="btn btn-sm btn-secondary" type="button" onclick="ARGP_MOCK.openVersionDetail('v1')">查看详情</button>
@@ -2201,7 +2854,7 @@ body {
               <div class="sample-paper-item">
                 <div class="sample-paper-icon">DOC</div>
                 <div class="sample-paper-body">
-                  <div class="sample-paper-title">2024年国创优秀项目申请书范例 · 强化学习方向</div>
+                  <div class="sample-paper-title">2026年国创优秀项目申请书范例 · 强化学习方向</div>
                   <div class="sample-paper-desc">含完整章节结构、创新点表述与参考文献格式示范，适合国创计划申报参考。</div>
                   <div class="sample-paper-meta">计算机学院 · 匿名范例 · PDF 28页</div>
                 </div>
@@ -2242,6 +2895,16 @@ body {
           </div>
           <div class="btn-group" id="version-detail-actions" style="margin-top:14px;border-top:1px solid var(--border-2);padding-top:14px;"></div>
         </div>
+        <div id="version-diff-view" style="display:none;">
+          <div class="version-detail-hd">
+            <span class="back-btn" onclick="closeVersionCompare()">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M11 2L5 8l6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+              返回
+            </span>
+            <div class="v-status-group" id="version-diff-badges"></div>
+          </div>
+          <div id="version-diff-body"></div>
+        </div>
       </div>
     </div>
 
@@ -2249,8 +2912,8 @@ body {
       <div class="meta-card">
         <div class="meta-title">项目进度</div>
         <div class="timeline">
-          <div class="tl-item"><div class="tl-dot tl-done"></div><div class="tl-title">草稿阶段</div><div class="tl-time">2025-03-10</div><div class="tl-desc">完成初稿，AI自检通过</div></div>
-          <div class="tl-item"><div class="tl-dot tl-active"></div><div class="tl-title">导师指导中</div><div class="tl-time">2025-03-14 · 进行中</div><div class="tl-desc">等待导师张明远审阅批注</div></div>
+          <div class="tl-item"><div class="tl-dot tl-done"></div><div class="tl-title">草稿阶段</div><div class="tl-time">2026-03-10</div><div class="tl-desc">完成初稿，AI自检通过</div></div>
+          <div class="tl-item"><div class="tl-dot tl-active"></div><div class="tl-title">导师指导中</div><div class="tl-time">2026-03-14 · 进行中</div><div class="tl-desc">等待导师张明远审阅批注</div></div>
           <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title">提交受理</div><div class="tl-time">待完成</div></div>
           <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title">专家评审</div><div class="tl-time">待完成</div></div>
           <div class="tl-item"><div class="tl-dot tl-pending"></div><div class="tl-title">答辩评审</div><div class="tl-time">待完成</div></div>
@@ -2261,7 +2924,7 @@ body {
         <div class="meta-row"><span class="meta-k">申请类型</span><span class="meta-v text-xs">国创计划</span></div>
         <div class="meta-row"><span class="meta-k">申请人</span><span class="meta-v">李明</span></div>
         <div class="meta-row"><span class="meta-k">导师</span><span class="meta-v">张明远</span></div>
-        <div class="meta-row"><span class="meta-k">提交日期</span><span class="meta-v mono text-xs">2025-03-14</span></div>
+        <div class="meta-row"><span class="meta-k">提交日期</span><span class="meta-v mono text-xs">2026-03-14</span></div>
         <div class="meta-row"><span class="meta-k">当前版本</span><span class="meta-v mono">v3</span></div>
       </div>
     </div>
@@ -2276,111 +2939,23 @@ body {
   <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px;">
     <div>
       <div class="page-title">导师工作台</div>
-      <div class="page-sub">张明远 教授 · 共指导 8 个项目</div>
+      <div class="page-sub" id="mentor-desk-sub">张明远 教授 · 共指导 8 个项目</div>
     </div>
   </div>
 
   <div class="stats-row" style="grid-template-columns:repeat(2,1fr);">
-    <div class="stat-card c-blue"><div class="stat-num">2</div><div class="stat-lbl">待审核申请</div><div class="stat-hint">最新：李明 · 今天提交</div></div>
-    <div class="stat-card c-teal"><div class="stat-num">8</div><div class="stat-lbl">本学期指导项目</div><div class="stat-hint">国创 3 · 校级 5</div></div>
+    <div class="stat-card c-blue"><div class="stat-num" id="mentor-stat-pending">2</div><div class="stat-lbl">待审核申请</div><div class="stat-hint">最新：李明 · 今天提交</div></div>
+    <div class="stat-card c-teal"><div class="stat-num" id="mentor-stat-total">8</div><div class="stat-lbl">本学期指导项目</div><div class="stat-hint">国创 3 · 校级 5</div></div>
   </div>
 
-  <div class="tabs" data-tab-group="mentor-desk">
-    <div class="tab-item active" data-filter="pending" onclick="activeTab(this)">待审核 (2)</div>
-    <div class="tab-item" data-filter="guiding" onclick="activeTab(this)">指导中 (3)</div>
-    <div class="tab-item" data-filter="reviewed" onclick="activeTab(this)">已审核 (2)</div>
-    <div class="tab-item" data-filter="done" onclick="activeTab(this)">已完成 (1)</div>
-  </div>
+  <div class="tabs" id="mentor-desk-tabs" data-tab-group="mentor-desk"></div>
 
   <div class="data-table-wrap" data-tab-panel="mentor-desk">
     <table class="data-table">
       <thead>
         <tr><th>项目信息</th><th>学生</th><th>状态</th><th>AI自检分</th><th>AI关键问题</th><th>提交时间</th><th>操作</th></tr>
       </thead>
-      <tbody>
-        <tr data-tab="pending" style="background:#fffbeb;">
-          <td>
-            <div class="td-name" onclick="showPage('mentor-review')">强化学习在机器人路径规划中的应用研究</div>
-            <div class="td-id">PROJ-2025-0087 · 国创计划</div>
-          </td>
-          <td>李明 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-guidance">待审核</span></td>
-          <td><span class="mono text-warn" style="font-weight:500;">82分</span></td>
-          <td><span class="text-xs text-danger">1处逻辑矛盾</span></td>
-          <td class="text-xs text-muted">今天 09:30</td>
-          <td><button class="btn btn-sm btn-primary" onclick="showPage('mentor-review')">立即审阅</button></td>
-        </tr>
-        <tr data-tab="pending" style="background:#fffbeb;">
-          <td>
-            <div class="td-name" onclick="showPage('mentor-review')">基于自然语言处理的学术摘要生成</div>
-            <div class="td-id">PROJ-2025-0102 · 校级项目</div>
-          </td>
-          <td>周琳 <span class="text-xs text-muted">研一</span></td>
-          <td><span class="badge b-guidance">待审核</span></td>
-          <td><span class="mono text-danger" style="font-weight:500;">67分</span></td>
-          <td><span class="text-xs text-danger">创新性不足</span></td>
-          <td class="text-xs text-muted">昨天 16:20</td>
-          <td><button class="btn btn-sm btn-primary" onclick="showPage('mentor-review')">立即审阅</button></td>
-        </tr>
-        <tr data-tab="guiding">
-          <td><div class="td-name">基于强化学习的智能调度算法</div><div class="td-id">PROJ-2025-0095 · 校级项目</div></td>
-          <td>韩雪 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-guidance">指导中</span></td>
-          <td><span class="mono text-warn" style="font-weight:500;">76分</span></td>
-          <td><span class="text-xs text-muted">待完善实验部分</span></td>
-          <td class="text-xs text-muted">2025-03-11</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="guiding">
-          <td><div class="td-name">大语言模型微调与对齐研究</div><div class="td-id">PROJ-2025-0091 · 国创计划</div></td>
-          <td>郑凯 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-guidance">指导中</span></td>
-          <td><span class="mono text-green" style="font-weight:500;">85分</span></td>
-          <td><span class="text-xs text-green">进展良好</span></td>
-          <td class="text-xs text-muted">2025-03-09</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="guiding">
-          <td><div class="td-name">联邦学习框架下的数据隐私保护</div><div class="td-id">PROJ-2025-0045 · 国创计划</div></td>
-          <td>陈浩 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-guidance">指导中</span></td>
-          <td><span class="mono text-green" style="font-weight:500;">88分</span></td>
-          <td><span class="text-xs text-green">无重大问题</span></td>
-          <td class="text-xs text-muted">2025-03-05</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="reviewed">
-          <td><div class="td-name">基于Transformer的中文医学文本理解</div><div class="td-id">PROJ-2025-0063 · 校级项目</div></td>
-          <td>王芳 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-submitted">已审核</span></td>
-          <td><span class="mono text-green" style="font-weight:500;">91分</span></td>
-          <td><span class="text-xs text-green">已签字确认</span></td>
-          <td class="text-xs text-muted">2025-03-01</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="reviewed">
-          <td><div class="td-name">多模态情感分析系统设计</div><div class="td-id">PROJ-2025-0031 · 国创计划</div></td>
-          <td>赵磊 <span class="text-xs text-muted">研二</span></td>
-          <td><span class="badge b-submitted">已审核</span></td>
-          <td><span class="mono text-warn" style="font-weight:500;">78分</span></td>
-          <td><span class="text-xs text-muted">附修改意见 2 条</span></td>
-          <td class="text-xs text-muted">2025-02-25</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr data-tab="done">
-          <td>
-            <div class="td-name">量子计算密码学应用研究</div>
-            <div class="td-id">PROJ-2025-0029 · 国创计划</div>
-          </td>
-          <td>孙杰 <span class="text-xs text-muted">研三</span></td>
-          <td><span class="badge b-pub">公示中</span></td>
-          <td><span class="mono text-green" style="font-weight:500;">93分</span></td>
-          <td><span class="text-xs text-green">无重大问题</span></td>
-          <td class="text-xs text-muted">2025-02-20</td>
-          <td><button class="btn btn-sm btn-secondary">查看</button></td>
-        </tr>
-        <tr class="tab-empty-row" data-tab-empty style="display:none;"><td colspan="7" class="tab-empty-cell">该分类下暂无项目</td></tr>
-      </tbody>
+      <tbody id="mentor-desk-tbody"></tbody>
     </table>
   </div>
 </div><!-- /page-mentor-list -->
@@ -2390,156 +2965,126 @@ body {
      MENTOR REVIEW
 ══════════════════════════ -->
 <div class="page" id="page-mentor-review">
-  <div class="breadcrumb">
-    <span class="bc-link" onclick="showPage('mentor-list')">导师工作台</span>
-    <span class="bc-sep">›</span>
-    <span>审阅工作台</span>
-  </div>
   <div style="margin-bottom:18px;">
-    <div class="page-title">导师审阅工作台</div>
-    <div style="display:flex; gap:8px; margin-top:5px;">
-      <span class="mono text-xs text-muted">PROJ-2025-0087</span>
-      <span class="badge b-guidance">待审核</span>
+    <div class="page-title" id="mentor-review-title">导师审阅工作台</div>
+    <div style="display:flex; gap:8px; margin-top:5px; align-items:center;">
+      <span class="mono text-xs text-muted" id="mentor-review-id">PROJ-2026-0087</span>
+      <span class="badge b-guidance" id="mentor-review-badge">待审核</span>
     </div>
   </div>
 
-  <div style="display:grid; grid-template-columns:1fr 300px; gap:18px;">
-    <div>
-      <!-- AI summary for mentor -->
-      <div class="ai-block" style="margin-bottom:16px;">
-        <div class="ai-block-hd">
-          <div class="ai-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="white"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm0 2a1 1 0 00-1 1v2.586l-1.707 1.707a1 1 0 001.414 1.414L8.707 9.707A1 1 0 009 9V6a1 1 0 00-1-1z"/></svg></div>
-          <div class="ai-block-title">Advisor Agent · 导师视角摘要</div>
-          <span class="ai-tag">AI 生成 · 仅供参考</span>
-        </div>
-        <div class="ai-grid">
-          <div class="ai-cell">
-            <div class="ai-cell-lbl">关键问题</div>
-            第3章假设H2与绪论第2段表述逻辑矛盾；研究方案中技术路线图与文字描述有出入
-          </div>
-          <div class="ai-cell">
-            <div class="ai-cell-lbl">质量亮点</div>
-            创新点明确具体；文献综述覆盖近3年主要进展；研究方法可行性描述较充分
-          </div>
-        </div>
-      </div>
-
-      <!-- Annotation Document -->
+  <div class="mentor-review-layout">
+    <!-- 左栏：申请书全文 -->
+    <div class="mentor-doc-col">
       <div class="doc-viewer">
         <div class="doc-viewer-toolbar">
-          <div class="doc-viewer-title">在线批注 · 申请书正文</div>
-          <button class="btn btn-sm btn-secondary">标注黄色</button>
-          <button class="btn btn-sm btn-secondary">标注红色</button>
-          <button class="btn btn-sm btn-secondary">添加批注</button>
+          <div class="doc-viewer-title">申请书正文</div>
+          <div class="mentor-ver-switch" id="mentor-version-switch"></div>
+          <button class="btn btn-sm btn-secondary" type="button" id="mentor-btn-annot" onclick="ARGP_MENTOR.toggleAnnotMode()">添加批注</button>
         </div>
-        <div class="doc-body">
-          <h3>一、研究背景与意义</h3>
-          <p>近年来，随着深度强化学习技术的快速发展，智能机器人在复杂动态环境中的自主导航能力得到了显著提升。<span class="hl-yellow">传统路径规划算法在静态已知地图上表现良好，但在动态障碍物频繁出现的真实场景中存在明显局限性</span>。</p>
-          <div class="annotation">导师批注：请在此处补充具体的定量数据支撑"局限性"的说法，避免主观判断</div>
-          <h3>三、研究假设</h3>
-          <p><span class="hl-red">H2：现有深度强化学习方法无法有效处理动态障碍物避障问题</span>，需要本研究提出的新型课程学习策略。</p>
-          <div class="annotation">AI标注：此处与第一章第2段表述存在逻辑矛盾 · <span style="font-size:10.5px; font-family:'DM Mono',monospace; color:var(--text-3);">AI 生成</span></div>
-          <div class="annotation a-red">导师批注：与绪论第2段矛盾！绪论说"表现优秀"，这里说"无法处理"——请修改，统一表述</div>
-        </div>
+        <div class="doc-body" id="mentor-doc-body"></div>
       </div>
 
-      <!-- Opinion -->
-      <div class="form-card">
+      <div class="form-card" style="margin-top:14px;">
         <div class="form-section-title">审核意见</div>
         <div class="form-grid form-grid-1" style="margin-bottom:12px;">
           <div>
             <label class="form-label">整体评价</label>
-            <select class="form-select"><option>建议修改后重新提交</option><option>同意通过</option><option>不同意，退回</option></select>
+            <select class="form-select" id="mentor-opinion-select">
+              <option>建议修改后重新提交</option>
+              <option>同意通过</option>
+              <option>不同意，退回</option>
+            </select>
           </div>
         </div>
         <div class="form-grid form-grid-1" style="margin-bottom:16px;">
           <div>
             <label class="form-label">详细意见</label>
-            <textarea class="form-textarea" style="min-height:110px;">申请书整体质量较好，研究方向具有创新价值。主要修改点：
-1. 第3章假设H2与绪论第2段存在明显逻辑矛盾，请统一表述立场；
-2. 研究背景部分需补充定量数据；
-3. 技术路线图与文字描述存在出入，建议对照修改。
-
-修改完成后可重新提交审核。</textarea>
+            <textarea class="form-textarea" id="mentor-opinion-text" style="min-height:110px;" oninput="this.dataset.touched='1'"></textarea>
           </div>
         </div>
-
-        <!-- Knowledge Inheritance -->
-        <div style="background:var(--bg-2); border-radius:var(--radius); padding:13px 16px; border:1px solid var(--border);">
-          <div style="font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-            知识传承分析
-            <span style="font-size:10px; color:var(--text-3); font-family:'DM Mono',monospace; font-weight:400;">AI 生成 · 仅供参考</span>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:7px; font-size:12.5px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0;"></div>
-              <span class="text-muted" style="width:34px;">继承</span>
-              <span>PPO算法框架延续导师2023年论文"DRL in Robotic Navigation"的核心思路</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:#059669;flex-shrink:0;"></div>
-              <span class="text-muted" style="width:34px;">引入</span>
-              <span>课程学习策略为本研究新引入的外部方法（Bengio et al., 2009）</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:#b45309;flex-shrink:0;"></div>
-              <span class="text-muted" style="width:34px;">创新</span>
-              <span>多目标奖励函数动态平衡机制为本研究原创贡献，知识图谱中尚无相似工作</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sign -->
-        <div style="border:1.5px dashed var(--border); border-radius:var(--radius); padding:16px; text-align:center; margin-top:14px; background:var(--bg); cursor:pointer; transition:all 0.15s;" onmouseover="this.style.borderColor='#059669'" onmouseout="this.style.borderColor='var(--border)'">
+        <div id="mentor-sign-area" style="border:1.5px dashed var(--border); border-radius:var(--radius); padding:16px; text-align:center; margin-bottom:14px; background:var(--bg);">
           <div style="font-size:13px; color:var(--text-2);">导师电子签字确认</div>
-          <div style="font-size:11.5px; color:var(--text-3); margin-top:3px;">签字后审核意见将自动发送给学生</div>
-          <button class="btn btn-success" type="button" style="margin-top:10px; padding:6px 16px; font-size:13px;" onclick="showToast('电子签字已完成','success')">点击电子签字</button>
+          <div style="font-size:11.5px; color:var(--text-3); margin-top:3px;">审核通过前须先完成电子签名</div>
+          <button class="btn btn-success" type="button" style="margin-top:10px; padding:6px 16px; font-size:13px;" onclick="ARGP_MENTOR.openSignConfirm()">点击电子签字</button>
         </div>
-
-        <div class="btn-group">
+        <div class="btn-group" id="mentor-review-actions" style="border-top:none;padding-top:0;margin-top:0;">
           <button class="btn btn-ghost" type="button" onclick="showToast('审阅意见已暂存','success')">暂存</button>
           <button class="btn btn-secondary" type="button" onclick="rejectToStudent()">退回修改</button>
-          <button class="btn btn-success" type="button" onclick="approveMentor()">签字确认，审核通过</button>
+          <button class="btn btn-success" type="button" id="mentor-btn-approve" onclick="ARGP_MENTOR.requestApprove()">审核通过</button>
         </div>
       </div>
     </div>
 
-    <!-- Side -->
-    <div>
+    <!-- 右栏：AI 辅助面板 -->
+    <div class="mentor-ai-panel">
       <div class="meta-card">
         <div class="meta-title">项目信息</div>
-        <div class="meta-row"><span class="meta-k">申请人</span><span class="meta-v">李明</span></div>
-        <div class="meta-row"><span class="meta-k">年级</span><span class="meta-v">研究生二年级</span></div>
-        <div class="meta-row"><span class="meta-k">提交时间</span><span class="meta-v text-xs">今天 09:30</span></div>
-        <div class="meta-row"><span class="meta-k">当前版本</span><span class="meta-v mono">v3</span></div>
-        <div class="meta-row"><span class="meta-k">AI质量分</span><span class="meta-v mono text-warn">82分</span></div>
-        <div class="meta-row"><span class="meta-k">审阅轮次</span><span class="meta-v">第 1 轮</span></div>
+        <div id="mentor-meta-panel"></div>
       </div>
 
-      <div class="kg-wrap" style="margin-bottom:14px;">
-        <svg viewBox="0 0 280 160" width="100%">
-          <circle cx="140" cy="80" r="20" fill="#2563eb" opacity="0.9"/>
-          <text x="140" y="84" text-anchor="middle" fill="white" font-size="8.5" font-family="'Noto Sans SC',sans-serif">本项目</text>
-          <circle cx="56" cy="38" r="16" fill="#1d4ed8" opacity="0.7"/>
-          <text x="56" y="42" text-anchor="middle" fill="white" font-size="7.5">导师2023</text>
-          <circle cx="224" cy="38" r="16" fill="#0891b2" opacity="0.7"/>
-          <text x="224" y="42" text-anchor="middle" fill="white" font-size="7.5">Bengio09</text>
-          <circle cx="56" cy="122" r="15" fill="#4f46e5" opacity="0.7"/>
-          <text x="56" y="126" text-anchor="middle" fill="white" font-size="7.5">导师2021</text>
-          <circle cx="224" cy="122" r="15" fill="#1e40af" opacity="0.7"/>
-          <text x="224" y="126" text-anchor="middle" fill="white" font-size="7.5">引用文献</text>
-          <line x1="120" y1="68" x2="72" y2="50" stroke="#60a5fa" stroke-width="1.5"/>
-          <line x1="160" y1="68" x2="208" y2="50" stroke="#67e8f9" stroke-width="1.5" stroke-dasharray="4,3"/>
-          <line x1="120" y1="92" x2="71" y2="110" stroke="#818cf8" stroke-width="1" stroke-dasharray="3,3"/>
-          <line x1="160" y1="92" x2="209" y2="110" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3"/>
-          <text x="88" y="50" fill="#93c5fd" font-size="7">继承</text>
-          <text x="186" y="50" fill="#a5f3fc" font-size="7">引入</text>
-        </svg>
+      <div class="ai-block">
+        <div class="ai-block-hd">
+          <div class="ai-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="white"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2a5 5 0 110 10A5 5 0 018 3zm0 2a1 1 0 00-1 1v2.586l-1.707 1.707a1 1 0 001.414 1.414L8.707 9.707A1 1 0 009 9V6a1 1 0 00-1-1z"/></svg></div>
+          <div class="ai-block-title">Advisor Agent · 导师版摘要</div>
+          <span class="ai-tag">AI 生成 · 仅供参考</span>
+        </div>
+        <div class="mentor-advisor-stack" id="mentor-advisor-summary"></div>
       </div>
-      <div style="font-size:10.5px; color:rgba(255,255,255,0.45); font-family:'DM Mono',monospace; text-align:center; margin-top:-10px; margin-bottom:14px; padding:0 4px;">知识传承图谱 · AI 生成 · 仅供参考</div>
+
+      <div class="meta-card">
+        <div class="meta-title">AI 自检报告摘要
+          <span style="margin-left:auto;font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;font-weight:400;">仅供参考</span>
+        </div>
+        <p class="text-xs" id="mentor-ai-check-summary" style="line-height:1.7;color:var(--text-2);margin:0;"></p>
+        <button class="btn btn-sm btn-secondary" type="button" style="width:100%;margin-top:10px;" onclick="showToast('完整 AI 报告（Demo）','info')">查看完整报告</button>
+      </div>
+
+      <button type="button" class="heritage-entry-btn" onclick="ARGP_MENTOR.openHeritageModal()">
+        <div class="heritage-entry-title">传承分析</div>
+        <div class="heritage-entry-desc">查看三色标注报告：橙色传承自导师论文 · 蓝色引入外部文献 · 绿色原创观点</div>
+      </button>
     </div>
   </div>
 </div><!-- /page-mentor-review -->
+
+<!-- 传承分析弹窗 -->
+<div class="heritage-modal-overlay" id="heritage-modal" role="dialog" aria-modal="true" aria-label="传承分析报告">
+  <div class="heritage-modal-box">
+    <div id="heritage-modal-body"></div>
+  </div>
+</div>
+
+<!-- 电子签字确认弹窗 -->
+<div class="sign-confirm-overlay" id="sign-confirm-modal" role="dialog" aria-modal="true" aria-label="电子签字确认">
+  <div class="sign-confirm-box">
+    <div class="sign-confirm-title">电子签字确认</div>
+    <div class="sign-confirm-warn">签字即表示材料质量已达到提交受理的标准</div>
+    <p class="sign-confirm-desc">确认后，您的电子签字将与审阅意见一并记录。完成签名后，方可点击「审核通过」提交至秘书处受理流程。</p>
+    <div class="sign-confirm-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_MENTOR.closeSignConfirm()">取消</button>
+      <button class="btn btn-success" type="button" onclick="ARGP_MENTOR.confirmSign()">确认签字</button>
+    </div>
+  </div>
+</div>
+
+<!-- 审核通过 · 确认提交弹窗 -->
+<div class="sign-confirm-overlay" id="approve-submit-modal" role="dialog" aria-modal="true" aria-label="审核通过确认">
+  <div class="sign-confirm-box">
+    <div class="sign-confirm-title">审核通过 · 确认提交须知</div>
+    <div class="sign-confirm-warn">请确认您已完成批注与意见填写，提交后不可撤回导师审核结论</div>
+    <ul class="sign-confirm-notice">
+      <li>材料将进入<strong>秘书处受理队列</strong>，学生端将收到审阅意见与签字确认推送</li>
+      <li>秘书处受理通过后，项目进入<strong>专家评审</strong>流程</li>
+      <li>评审与答辩阶段材料原则上不可再修改，请确保当前版本为最终提交版</li>
+      <li>若需学生修改，请使用「退回修改」而非审核通过</li>
+    </ul>
+    <div class="sign-confirm-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_MENTOR.closeApproveConfirm()">取消</button>
+      <button class="btn btn-success" type="button" onclick="ARGP_MENTOR.confirmApprove()">确认提交</button>
+    </div>
+  </div>
+</div>
 
   </div><!-- /content -->
 </div><!-- /main -->
@@ -2552,10 +3097,10 @@ body {
 <script src="argp-auth.js"></script>
 <script src="argp-mock-data.js"></script>
 <script src="argp-mock-ai.js"></script>
+<script src="argp-mock-mentor.js"></script>
 <script src="argp-mock-batches.js"></script>
 <script>
 function resolvePageForRole(id) {
-  if (id === 'ai-check') return 'ai-assistant';
   var role = window.ARGP_AUTH && window.ARGP_AUTH.getRole();
   if (id === 'proj-list' && role === 'student') return 'my-proj';
   return id;
@@ -2589,10 +3134,26 @@ function showPage(id) {
     window.ARGP_BATCHES.applyProjListFilter();
   }
   if (id === 'proj-new') {
-    setTimeout(function() { goApplyStep(1, true); }, 50);
+    setTimeout(function() {
+      goApplyStep(1, true);
+      if (window.ARGP_AI) window.ARGP_AI.initApplyPage();
+    }, 50);
+  }
+  if (id === 'ai-check' && window.ARGP_AI) {
+    window.ARGP_AI.renderAiCheckPage();
+  }
+  if (id === 'submit-success' && window.ARGP_AI) {
+    window.ARGP_AI.renderSubmitSuccessPage();
   }
   if (id === 'ai-assistant' && window.ARGP_AI) {
     window.ARGP_AI.render();
+  }
+  if (id === 'mentor-list' && window.ARGP_MENTOR) {
+    window.ARGP_MENTOR.renderMentorList();
+  }
+  if (id === 'mentor-review' && window.ARGP_MENTOR) {
+    window.ARGP_MENTOR.initMentorAnnotEvents();
+    window.ARGP_MENTOR.renderMentorReview();
   }
   window.scrollTo(0,0);
 }
@@ -2714,6 +3275,12 @@ function closeVersionDetail() {
   }
 }
 
+function closeVersionCompare() {
+  if (window.ARGP_MOCK && window.ARGP_MOCK.closeVersionCompare) {
+    window.ARGP_MOCK.closeVersionCompare();
+  }
+}
+
 function showToast(msg, type) {
   type = type || 'success';
   var wrap = document.getElementById('toast-wrap');
@@ -2734,11 +3301,17 @@ function showToast(msg, type) {
   }, 3000);
 }
 
-function runAiCheck(stayOnTab) {
+function runAiCheck() {
   showToast('Academic Agent 正在全文深度扫描…', 'info');
   setTimeout(function() {
-    var projId = window.ARGP_AI ? window.ARGP_AI.getCurrentProjId() : 'PROJ-2025-0087';
-    openAiAssistant('quality', projId, true);
+    var projId = 'PROJ-2026-0087';
+    if (window.ARGP_AI) {
+      projId = window.ARGP_AI.getApplyProjId ? window.ARGP_AI.getApplyProjId() : window.ARGP_AI.getCurrentProjId();
+      window.ARGP_AI.setCurrentProjId(projId);
+      window.ARGP_AI.resetAiCheckState();
+      window.ARGP_AI.renderAiCheckPage();
+    }
+    showPage('ai-check');
     showToast('AI 学术质量自检报告已生成', 'success');
   }, 900);
 }
@@ -2755,18 +3328,26 @@ function submitToMentor() {
     showToast('请先勾选知悉红色风险', 'warn');
     return;
   }
+  if (window.ARGP_MOCK && window.ARGP_MOCK.syncAfterSubmitToMentor && window.ARGP_MOCK.getCurrentDetailId) {
+    window.ARGP_MOCK.syncAfterSubmitToMentor(window.ARGP_MOCK.getCurrentDetailId());
+  }
   showToast('已提交导师审核，Advisor Agent 将推送摘要', 'success');
   setTimeout(function() { showPage('my-proj'); }, 1200);
 }
 
 function rejectToStudent() {
+  if (window.ARGP_MENTOR && window.ARGP_MENTOR.rejectToStudent) {
+    window.ARGP_MENTOR.rejectToStudent();
+    return;
+  }
   showToast('已退回学生修改，通知已发送', 'warn');
   setTimeout(function() { showPage('mentor-list'); }, 1200);
 }
 
 function approveMentor() {
-  showToast('审核通过，材料已进入秘书处受理队列', 'success');
-  setTimeout(function() { location.href = 'review.html'; }, 1500);
+  if (window.ARGP_MENTOR && window.ARGP_MENTOR.requestApprove) {
+    window.ARGP_MENTOR.requestApprove();
+  }
 }
 </script>
 </body>

@@ -1,47 +1,47 @@
-/* ARGP Demo — 申报批次 Mock 与项目列表批次过滤 */
+﻿/* ARGP Demo — 申报批次 Mock 与项目列表批次过滤 */
 (function () {
   var STORAGE_KEY = 'argp_selected_batch';
 
   var BATCHES = [
     {
-      id: 'batch-2025-spring-2',
-      name: '2025年春季 · 第二批次',
-      shortName: '2025春二批',
-      season: '2025年春季',
+      id: 'batch-2026-spring-2',
+      name: '2026年春季 · 第二批次',
+      shortName: '2026春二批',
+      season: '2026年春季',
       period: '第二批次',
       status: 'active',
       statusLabel: '进行中',
-      applyStart: '2025-01-10',
-      applyEnd: '2025-02-28',
-      reviewEnd: '2025-04-30',
+      applyStart: '2026-01-10',
+      applyEnd: '2026-02-28',
+      reviewEnd: '2026-04-30',
       projectCount: 12,
       desc: '当前主评审批次，含受理、评审与答辩全流程'
     },
     {
-      id: 'batch-2024-fall-1',
-      name: '2024年秋季 · 第一批次',
-      shortName: '2024秋一批',
-      season: '2024年秋季',
+      id: 'batch-2026-fall-1',
+      name: '2026年秋季 · 第一批次',
+      shortName: '2026秋一批',
+      season: '2026年秋季',
       period: '第一批次',
       status: 'closed',
       statusLabel: '已结束',
-      applyStart: '2024-09-01',
-      applyEnd: '2024-10-15',
-      reviewEnd: '2024-12-20',
+      applyStart: '2026-09-01',
+      applyEnd: '2026-10-15',
+      reviewEnd: '2026-12-20',
       projectCount: 28,
       desc: '已完成公示与归档，数据仅供查询'
     },
     {
-      id: 'batch-2025-spring-3',
-      name: '2025年春季 · 第三批次',
-      shortName: '2025春三批',
-      season: '2025年春季',
+      id: 'batch-2026-spring-3',
+      name: '2026年春季 · 第三批次',
+      shortName: '2026春三批',
+      season: '2026年春季',
       period: '第三批次',
       status: 'upcoming',
       statusLabel: '筹备中',
-      applyStart: '2025-04-01',
-      applyEnd: '2025-05-15',
-      reviewEnd: '2025-07-31',
+      applyStart: '2026-04-01',
+      applyEnd: '2026-05-15',
+      reviewEnd: '2026-07-31',
       projectCount: 0,
       desc: '批次参数已配置，尚未开放申报'
     }
@@ -55,9 +55,9 @@
 
   function getSelectedBatch() {
     try {
-      return sessionStorage.getItem(STORAGE_KEY) || 'batch-2025-spring-2';
+      return sessionStorage.getItem(STORAGE_KEY) || 'batch-2026-spring-2';
     } catch (e) {
-      return 'batch-2025-spring-2';
+      return 'batch-2026-spring-2';
     }
   }
 
@@ -214,8 +214,8 @@
     var sel = document.getElementById('proj-new-batch-select');
     if (!sel || sel.getAttribute('data-populated') === '1') return;
     sel.setAttribute('data-populated', '1');
-    var active = getBatchById('batch-2025-spring-2');
-    var upcoming = getBatchById('batch-2025-spring-3');
+    var active = getBatchById('batch-2026-spring-2');
+    var upcoming = getBatchById('batch-2026-spring-3');
     sel.innerHTML =
       '<option value="" disabled>请选择申报批次</option>' +
       (active ? '<option value="' + active.id + '" selected>' + active.name + '（进行中）</option>' : '') +
