@@ -209,8 +209,20 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .er-ai-mark{cursor:pointer;border-radius:2px;padding:0 1px;transition:opacity .15s;}
 .er-ai-yellow{background:#fef08a;border-bottom:2px solid #ca8a04;}
 .er-ai-red{background:#fecaca;border-bottom:2px solid #dc2626;}
-.er-ai-mark.is-invalid{opacity:.35;text-decoration:line-through;cursor:default;}
+.er-ai-mark.is-invalid{background:#f3f4f6 !important;border:1px dashed #9ca3af !important;border-bottom:1px dashed #9ca3af !important;color:var(--text-2);opacity:1;text-decoration:none;cursor:default;}
 .er-ref-mark{display:inline;}
+.er-annot-card{display:block;margin:6px 0 10px;padding:8px 10px;border:1px dashed #9ca3af;border-radius:var(--radius);background:#f9fafb;font-size:12px;line-height:1.5;color:var(--text-2);}
+.er-annot-card.is-invalid{border-style:dashed;border-color:#9ca3af;background:#f3f4f6;}
+.er-annot-card-inner{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+.er-annot-card-tag{font-size:11px;font-weight:600;color:#6b7280;}
+.er-annot-card-meta{color:var(--text-3);}
+.er-pop-invalid{background:#f3f4f6;color:#6b7280;}
+.er-invalid-reason-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.er-invalid-reason-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .12s,background .12s;}
+.er-invalid-reason-opt:hover{border-color:var(--primary);}
+.er-invalid-reason-opt.is-selected{border-color:var(--primary);background:var(--blue-50);}
+.er-invalid-reason-opt input{accent-color:var(--primary);flex-shrink:0;}
+.er-invalid-reason-opt label{font-size:13px;cursor:pointer;flex:1;}
 .er-annot-popover{position:fixed;z-index:5000;width:360px;max-width:calc(100vw - 24px);background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 12px 40px rgba(15,31,61,.15);padding:14px 16px;}
 .er-pop-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
 .er-pop-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
@@ -365,7 +377,8 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 .sec-manual-empty{padding:24px 8px;text-align:center;}
 .match-high{color:var(--success);font-weight:600;}
 .match-mid{color:var(--warn);font-weight:600;}
-.sec-finalize-bar .btn-primary:not(:disabled){min-width:140px;}
+.sec-overdue-extend{padding:12px 14px;border:1px solid var(--border-2);border-radius:var(--radius);background:var(--bg-2);}
+.sec-overdue-or{letter-spacing:.05em;}
 .sec-intake-actions .btn-group{margin-top:0;padding-top:0;border-top:none;}
 .sec-prog-group{border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:12px;background:var(--white);}
 .sec-prog-group-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;}
@@ -1564,6 +1577,40 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 
 </div><!-- /app-body -->
 
+<!-- 专家端：AI 标注无效原因 -->
+<div class="sec-modal-overlay" id="er-invalid-reason-modal" role="dialog" aria-modal="true">
+  <div class="sec-modal-box" style="max-width:440px;">
+    <div class="sec-modal-title">标记 AI 标注无效</div>
+    <div class="sec-modal-desc">请选择您认为该标注无效的原因，帮助我们改进 AI 判断能力。</div>
+    <div class="er-invalid-reason-list">
+      <div class="er-invalid-reason-opt" data-reason="misunderstand" onclick="ARGP_EXPERT.selectInvalidReason('misunderstand')">
+        <input type="radio" name="er-invalid-reason" id="er-invalid-r-misunderstand" value="misunderstand">
+        <label for="er-invalid-r-misunderstand">理解偏差</label>
+      </div>
+      <div class="er-invalid-reason-opt" data-reason="context" onclick="ARGP_EXPERT.selectInvalidReason('context')">
+        <input type="radio" name="er-invalid-reason" id="er-invalid-r-context" value="context">
+        <label for="er-invalid-r-context">语境特殊</label>
+      </div>
+      <div class="er-invalid-reason-opt" data-reason="wrong" onclick="ARGP_EXPERT.selectInvalidReason('wrong')">
+        <input type="radio" name="er-invalid-reason" id="er-invalid-r-wrong" value="wrong">
+        <label for="er-invalid-r-wrong">确实是误判</label>
+      </div>
+      <div class="er-invalid-reason-opt" data-reason="other" onclick="ARGP_EXPERT.selectInvalidReason('other')">
+        <input type="radio" name="er-invalid-reason" id="er-invalid-r-other" value="other">
+        <label for="er-invalid-r-other">其他</label>
+      </div>
+    </div>
+    <div id="er-invalid-reason-other-wrap" style="display:none;margin-bottom:12px;">
+      <label class="form-label" for="er-invalid-reason-other">补充说明（可选）</label>
+      <textarea class="form-textarea" id="er-invalid-reason-other" rows="2" placeholder="请简要说明…" style="min-height:60px;font-size:12.5px;"></textarea>
+    </div>
+    <div class="sec-modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="ARGP_EXPERT.closeInvalidReasonModal()">取消</button>
+      <button class="btn btn-primary" type="button" onclick="ARGP_EXPERT.submitInvalidAnnotReason()">提交反馈</button>
+    </div>
+  </div>
+</div>
+
 <!-- 秘书端弹窗 -->
 <div class="sec-modal-overlay" id="sec-reject-modal" role="dialog" aria-modal="true">
   <div class="sec-modal-box">
@@ -1614,11 +1661,14 @@ body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text
 <div class="sec-modal-overlay" id="sec-overdue-modal" role="dialog" aria-modal="true">
   <div class="sec-modal-box">
     <div class="sec-modal-title">超期处理</div>
-    <div class="sec-modal-desc">该项目已超过评审截止日期。请选择处理方式：</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button class="btn btn-secondary" type="button" style="justify-content:flex-start;text-align:left;" onclick="ARGP_SECRETARY.confirmOverdueExtend()">延期 — 重设截止日期并通知专家</button>
-      <button class="btn btn-ghost" type="button" id="sec-overdue-proceed" style="justify-content:flex-start;text-align:left;" onclick="ARGP_SECRETARY.confirmOverdueProceed()">以现有意见推进 — 需半数以上专家已提交</button>
+    <div class="sec-modal-desc" id="sec-overdue-desc">该项目已超过评审截止日期。请选择处理方式：</div>
+    <div class="sec-overdue-extend">
+      <label class="form-label" for="sec-overdue-date">重设评审截止日期</label>
+      <input type="date" class="form-input" id="sec-overdue-date" style="margin-bottom:10px;">
+      <button class="btn btn-secondary" type="button" style="width:100%;justify-content:center;" onclick="ARGP_SECRETARY.confirmOverdueExtend()">确认延期并通知专家</button>
     </div>
+    <div class="sec-overdue-or text-xs text-muted" style="text-align:center;margin:14px 0;">或</div>
+    <button class="btn btn-ghost" type="button" id="sec-overdue-proceed" style="width:100%;justify-content:flex-start;text-align:left;" onclick="ARGP_SECRETARY.confirmOverdueProceed()">以现有意见推进 — 需半数以上专家已提交</button>
     <div class="sec-modal-actions">
       <button class="btn btn-secondary" type="button" onclick="ARGP_SECRETARY.closeOverdueModal()">取消</button>
     </div>

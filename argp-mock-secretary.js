@@ -257,10 +257,61 @@
     return y + '-' + m + '-' + day;
   }
 
+  function formatDateForInput(d) {
+    return formatDate(d);
+  }
+
+  function parseInputDate(value) {
+    if (!value) return null;
+    var parts = value.split('-');
+    if (parts.length !== 3) return null;
+    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  }
+
+  function demoToday() {
+    return new Date(2026, 2, 15);
+  }
+
   function daysUntil(d) {
     if (!d) return null;
-    var now = new Date(2026, 2, 15);
+    var now = demoToday();
     return Math.ceil((d - now) / 86400000);
+  }
+
+  function findProgressProject(id) {
+    for (var i = 0; i < PROGRESS_PROJECTS.length; i++) {
+      if (PROGRESS_PROJECTS[i].id === id) return PROGRESS_PROJECTS[i];
+    }
+    return null;
+  }
+
+  function countProgressTabs() {
+    var c = { reviewing: 0, defense: 0, assign: 0, overdue: 0 };
+    PROGRESS_PROJECTS.forEach(function (p) {
+      if (c[p.tab] != null) c[p.tab]++;
+    });
+    return c;
+  }
+
+  function renderProgressTabs(activeFilter) {
+    var tabs = document.querySelector('#page-sec-progress .tabs[data-tab-group="sec-progress"]');
+    if (!tabs) return activeFilter || 'reviewing';
+    var c = countProgressTabs();
+    if (!activeFilter) {
+      var active = tabs.querySelector('.tab-item.active');
+      activeFilter = active ? active.getAttribute('data-filter') : 'reviewing';
+    }
+    tabs.innerHTML =
+      '<div class="tab-item' + (activeFilter === 'reviewing' ? ' active' : '') + '" data-filter="reviewing" onclick="activeTab(this)">专家评审中 (' + c.reviewing + ')</div>' +
+      '<div class="tab-item' + (activeFilter === 'defense' ? ' active' : '') + '" data-filter="defense" onclick="activeTab(this)">待答辩 (' + c.defense + ')</div>' +
+      '<div class="tab-item' + (activeFilter === 'assign' ? ' active' : '') + '" data-filter="assign" onclick="activeTab(this)">待分配 (' + c.assign + ')</div>' +
+      '<div class="tab-item' + (activeFilter === 'overdue' ? ' active' : '') + '" data-filter="overdue" onclick="activeTab(this)">超期 (' + c.overdue + ')</div>';
+    return activeFilter;
+  }
+
+  function refreshProgressView(activeFilter) {
+    activeFilter = renderProgressTabs(activeFilter);
+    renderProgressBoard(activeFilter);
   }
 
   function riskBadge(risk) {
@@ -869,14 +920,7 @@
   }
 
   function renderProgressPage() {
-    var tabs = document.querySelector('#page-sec-progress .tabs[data-tab-group="sec-progress"]');
-    if (tabs) {
-      tabs.innerHTML =
-        '<div class="tab-item active" data-filter="reviewing" onclick="activeTab(this)">专家评审中 (4)</div>' +
-        '<div class="tab-item" data-filter="defense" onclick="activeTab(this)">待答辩 (1)</div>' +
-        '<div class="tab-item" data-filter="assign" onclick="activeTab(this)">待分配 (1)</div>' +
-        '<div class="tab-item" data-filter="overdue" onclick="activeTab(this)">超期 (1)</div>';
-    }
+    renderProgressTabs('reviewing');
     renderAvoidancePanel();
     renderProgressBoard('reviewing');
     renderReminderLogs();
@@ -1093,11 +1137,26 @@
 
   function openOverdueModal(projId) {
     _pendingOverdueProjId = projId;
-    var p = PROGRESS_PROJECTS.filter(function (x) { return x.id === projId; })[0];
+    var p = findProgressProject(projId);
     var proceedBtn = document.getElementById('sec-overdue-proceed');
     if (proceedBtn) {
       proceedBtn.disabled = !(p && p.submitted >= Math.ceil(p.total / 2));
       proceedBtn.title = proceedBtn.disabled ? '需半数以上专家已提交方可推进' : '';
+    }
+    var desc = document.getElementById('sec-overdue-desc');
+    if (desc && p) {
+      desc.textContent = '该项目已超过评审截止日期（原截止 ' + formatDate(p.deadline) + '）。请重设截止日期或选择其他处理方式。';
+    }
+    var dateInput = document.getElementById('sec-overdue-date');
+    if (dateInput) {
+      var minDate = addDays(1);
+      dateInput.min = formatDateForInput(minDate);
+      var defaultDate = addDays(7);
+      if (p && p.deadline && p.deadline > demoToday()) {
+        defaultDate = p.deadline;
+      }
+      if (defaultDate <= demoToday()) defaultDate = minDate;
+      dateInput.value = formatDateForInput(defaultDate);
     }
     var modal = document.getElementById('sec-overdue-modal');
     if (modal) modal.classList.add('open');
@@ -1110,8 +1169,44 @@
   }
 
   function confirmOverdueExtend() {
+    var id = _pendingOverdueProjId;
+    if (!id) return;
+    var dateInput = document.getElementById('sec-overdue-date');
+    if (!dateInput || !dateInput.value) {
+      if (typeof showToast === 'function') showToast('请选择新的截止日期', 'warn');
+      return;
+    }
+    var newDate = parseInputDate(dateInput.value);
+    if (!newDate) {
+      if (typeof showToast === 'function') showToast('日期格式无效', 'warn');
+      return;
+    }
+    var today = demoToday();
+    if (newDate <= today) {
+      if (typeof showToast === 'function') showToast('新截止日期须晚于今日', 'warn');
+      return;
+    }
+    var p = findProgressProject(id);
+    if (p) {
+      p.deadline = newDate;
+      var days = daysUntil(newDate);
+      p.overdue = days < 0;
+      if (!p.overdue) {
+        p.tab = 'reviewing';
+        if (p.phase === '评审超期') p.phase = '专家评审中';
+      }
+    }
+    REMINDER_LOGS.unshift({
+      time: '2026-03-15 ' + String(new Date().getHours()).padStart(2, '0') + ':' + String(new Date().getMinutes()).padStart(2, '0'),
+      proj: id,
+      type: 'manual',
+      text: '秘书处延期处理：评审截止日已重设为 ' + formatDate(newDate) + '，已向相关专家发送更新通知'
+    });
+    var activeFilter = p && p.overdue ? 'overdue' : 'reviewing';
     closeOverdueModal();
-    if (typeof showToast === 'function') showToast('已延期至 2026-03-25，专家将收到更新通知', 'success');
+    refreshProgressView(activeFilter);
+    renderReminderLogs();
+    if (typeof showToast === 'function') showToast('已延期至 ' + formatDate(newDate) + '，专家将收到更新通知', 'success');
   }
 
   function confirmOverdueProceed() {

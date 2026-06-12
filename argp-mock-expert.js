@@ -499,7 +499,15 @@
     '3. 创新点中的「跨模态注意力门控机制」描述过于笼统，建议补充技术细节与基线对比。\n\n' +
     '综合建议：通过院级立项，建议进一步扩充数据规模后争取校级。';
 
-  var _docMode = 'original';
+  var INVALID_ANNOT_REASONS = [
+    { id: 'misunderstand', label: '理解偏差' },
+    { id: 'context', label: '语境特殊' },
+    { id: 'wrong', label: '确实是误判' },
+    { id: 'other', label: '其他' }
+  ];
+
+  var _pendingInvalidAnnotId = null;
+  var _selectedInvalidReason = null;
   var _draftGenerated = false;
   var _invalidAnnots = {};
   var _activeAttachment = 'main';
@@ -543,6 +551,13 @@
     return DOC_ORIGINAL;
   }
 
+  function getInvalidReasonLabel(reasonId) {
+    for (var i = 0; i < INVALID_ANNOT_REASONS.length; i++) {
+      if (INVALID_ANNOT_REASONS[i].id === reasonId) return INVALID_ANNOT_REASONS[i].label;
+    }
+    return reasonId || '—';
+  }
+
   function renderDocBody() {
     var body = document.getElementById('er-doc-body');
     if (!body) return;
@@ -550,11 +565,25 @@
     if (_docMode === 'annotated' && _activeAttachment === 'main') {
       body.querySelectorAll('.er-ai-mark').forEach(function (el) {
         var id = el.getAttribute('data-annot-id');
+        var ann = ANNOTATIONS[id];
         if (_invalidAnnots[id]) {
           el.classList.add('is-invalid');
+          var info = _invalidAnnots[id];
+          var reasonLbl = getInvalidReasonLabel(info.reason);
+          var metaText = '反馈原因：' + reasonLbl + (info.note ? ' · ' + info.note : '');
+          var card = document.createElement('div');
+          card.className = 'er-annot-card is-invalid';
+          card.setAttribute('data-annot-id', id);
+          card.innerHTML =
+            '<div class="er-annot-card-inner">' +
+              '<span class="er-annot-card-tag">标注已被标记为误判</span>' +
+              '<span class="er-annot-card-meta text-xs text-muted">' + metaText + '</span>' +
+            '</div>';
+          if (el.nextSibling) el.parentNode.insertBefore(card, el.nextSibling);
+          else el.parentNode.appendChild(card);
+          el.setAttribute('title', '已标记为误判 · ' + reasonLbl);
           return;
         }
-        var ann = ANNOTATIONS[id];
         if (!ann) return;
         if (ann.type === 'yellow') {
           el.setAttribute('title', ann.reason);
@@ -776,7 +805,7 @@
     cancelClosePopover();
     if (pin) _pinnedAnnotId = markEl.getAttribute('data-annot-id');
     var rect = markEl.getBoundingClientRect();
-    var dismissLabel = ann.type === 'red' && ann.paraA ? '标记为误判' : '标记无效';
+    var dismissLabel = '标记无效';
     var html =
       '<div class="er-pop-hd">' +
         '<span class="er-pop-tag ' + (ann.type === 'red' ? 'er-pop-red' : 'er-pop-yellow') + '">' +
@@ -802,21 +831,107 @@
     pop.style.left = Math.max(12, Math.min(rect.left, window.innerWidth - 380)) + 'px';
   }
 
-  function markAnnotInvalid(id) {
-    _invalidAnnots[id] = true;
+  function openInvalidReasonModal(id) {
+    _pendingInvalidAnnotId = id;
+    _selectedInvalidReason = null;
     closeAnnotPopover();
+    var modal = document.getElementById('er-invalid-reason-modal');
+    if (modal) {
+      modal.querySelectorAll('.er-invalid-reason-opt').forEach(function (opt) {
+        opt.classList.remove('is-selected');
+        var input = opt.querySelector('input[type="radio"]');
+        if (input) input.checked = false;
+      });
+      var otherTa = document.getElementById('er-invalid-reason-other');
+      if (otherTa) otherTa.value = '';
+      var otherWrap = document.getElementById('er-invalid-reason-other-wrap');
+      if (otherWrap) otherWrap.style.display = 'none';
+      modal.classList.add('open');
+    }
+  }
+
+  function closeInvalidReasonModal() {
+    var modal = document.getElementById('er-invalid-reason-modal');
+    if (modal) modal.classList.remove('open');
+    _pendingInvalidAnnotId = null;
+    _selectedInvalidReason = null;
+  }
+
+  function selectInvalidReason(reasonId) {
+    _selectedInvalidReason = reasonId;
+    var modal = document.getElementById('er-invalid-reason-modal');
+    if (!modal) return;
+    modal.querySelectorAll('.er-invalid-reason-opt').forEach(function (opt) {
+      var rid = opt.getAttribute('data-reason');
+      var selected = rid === reasonId;
+      opt.classList.toggle('is-selected', selected);
+      var input = opt.querySelector('input[type="radio"]');
+      if (input) input.checked = selected;
+    });
+    var otherWrap = document.getElementById('er-invalid-reason-other-wrap');
+    if (otherWrap) otherWrap.style.display = reasonId === 'other' ? '' : 'none';
+  }
+
+  function submitInvalidAnnotReason() {
+    if (!_pendingInvalidAnnotId) return;
+    if (!_selectedInvalidReason) {
+      if (typeof showToast === 'function') showToast('请选择反馈原因', 'warn');
+      return;
+    }
+    var note = '';
+    if (_selectedInvalidReason === 'other') {
+      var otherTa = document.getElementById('er-invalid-reason-other');
+      note = (otherTa && otherTa.value.trim()) || '';
+    }
+    _invalidAnnots[_pendingInvalidAnnotId] = { reason: _selectedInvalidReason, note: note };
+    closeInvalidReasonModal();
     renderDocBody();
     bindAnnotEvents();
-    if (typeof showToast === 'function') showToast('已标记该 AI 标注为无效', 'info');
+    if (typeof showToast === 'function') showToast('反馈已记录，感谢您帮助改进 AI', 'success');
+  }
+
+  function markAnnotInvalid(id) {
+    openInvalidReasonModal(id);
+  }
+
+  function showInvalidAnnotPopover(markEl, ann, info) {
+    var pop = document.getElementById('er-annot-popover');
+    if (!pop || !markEl) return;
+    cancelClosePopover();
+    var reasonLbl = getInvalidReasonLabel(info.reason);
+    pop.innerHTML =
+      '<div class="er-pop-hd">' +
+        '<span class="er-pop-tag er-pop-invalid">已标记为误判</span>' +
+        '<button type="button" class="er-pop-close" onclick="ARGP_EXPERT.closeAnnotPopover()">×</button></div>' +
+      '<div class="er-pop-reason text-muted">该 AI 标注已被您标记为无效，不影响正文阅读。</div>' +
+      '<div class="text-xs text-muted">反馈原因：' + reasonLbl +
+        (info.note ? '（' + info.note + '）' : '') + '</div>';
+    pop.onmouseenter = cancelClosePopover;
+    pop.onmouseleave = scheduleClosePopover;
+    pop.style.display = 'block';
+    var rect = markEl.getBoundingClientRect();
+    pop.style.top = Math.min(rect.bottom + 8, window.innerHeight - 200) + 'px';
+    pop.style.left = Math.max(12, Math.min(rect.left, window.innerWidth - 380)) + 'px';
   }
 
   function bindAnnotEvents() {
     var body = document.getElementById('er-doc-body');
     if (!body || _docMode !== 'annotated' || _activeAttachment !== 'main') return;
-    body.querySelectorAll('.er-ai-mark:not(.is-invalid)').forEach(function (el) {
+    body.querySelectorAll('.er-ai-mark').forEach(function (el) {
       var id = el.getAttribute('data-annot-id');
       var ann = ANNOTATIONS[id];
-      if (!ann) return;
+      if (!ann && !_invalidAnnots[id]) return;
+      if (_invalidAnnots[id]) {
+        var info = _invalidAnnots[id];
+        el.onmouseenter = function () { showInvalidAnnotPopover(el, ann, info); };
+        el.onmouseleave = scheduleClosePopover;
+        el.onclick = function (e) {
+          e.stopPropagation();
+          _pinnedAnnotId = id;
+          showInvalidAnnotPopover(el, ann, info);
+        };
+        return;
+      }
       el.onmouseenter = function () {
         showAnnotPopover(el, ann, false);
       };
@@ -834,6 +949,7 @@
     _invalidAnnots = {};
     _activeAttachment = 'main';
     _pinnedAnnotId = null;
+    closeInvalidReasonModal();
     cancelClosePopover();
     closeAnnotPopover();
     initScoreValues();
@@ -859,11 +975,15 @@
     generateDraft: generateDraft,
     onOpinionInput: onOpinionInput,
     closeAnnotPopover: closeAnnotPopover,
-    markAnnotInvalid: markAnnotInvalid
+    markAnnotInvalid: markAnnotInvalid,
+    openInvalidReasonModal: openInvalidReasonModal,
+    closeInvalidReasonModal: closeInvalidReasonModal,
+    selectInvalidReason: selectInvalidReason,
+    submitInvalidAnnotReason: submitInvalidAnnotReason
   };
 
   document.addEventListener('click', function (e) {
-    if (!e.target.closest('.er-ai-mark') && !e.target.closest('#er-annot-popover')) {
+    if (!e.target.closest('.er-ai-mark') && !e.target.closest('#er-annot-popover') && !e.target.closest('#er-invalid-reason-modal')) {
       _pinnedAnnotId = null;
       closeAnnotPopover();
     }
